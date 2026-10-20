@@ -41,18 +41,28 @@ The strategic direction of RuFaS, including its vision, mission, strategic pilla
 
 1. **Install Python 3.12 or 3.13** - Make sure you have one of these versions installed on your system.
 2. **Set up a virtual environment**
-```bash
-python -m venv venv
-source venv/bin/activate on Mac/Linux or venv\Scripts\activate on Windows
+```powershell
+python -m venv .venv
 ```
-3. **Install dependencies**
-```bash
-pip install .
+3. **Install dependencies in editable mode**
+```powershell
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]" `
+  "pandas==2.3.2" "numba==0.61.2" "scipy==1.16.2" "matplotlib==3.10.5"
 ```
+> Use `-e` (editable): the published wheel does not include the `RUFAS`
+> subpackages (`RUFAS.biophysical`, `RUFAS.EEE`, etc.). The pins keep
+> `pandas`, `numba` and `scipy` on versions validated for v1.0.5.
+> Do not use `constraints-release.txt` (v1.0.0): it conflicts with the
+> current `pyproject.toml`.
+>
+> On macOS/Linux, replace `.\\.venv\\Scripts\\python.exe` with
+> `.venv/bin/python`.
+
 4. **Enable output display** - Navigate to `output/output_filters/` and rename `_csv_all_variables.txt` → `csv_all_variables.txt` (remove the leading underscore).
 5. **Run RuFaS**
-```bash
-python main.py
+```powershell
+.\.venv\Scripts\python.exe main.py
 ```
 6. **Learn more** if you have further questions read through the documentation on our [GitHub Pages site](https://ruminantfarmsystems.github.io/RuFaS/) or watch our [onboarding video series](https://www.youtube.com/playlist?list=PLqq6i4QOoueR-a2mxVX3Gc78s1wvTRfr1).
 
