@@ -10,64 +10,103 @@ simulação com um único comando.
 - **Estado / clima:** Goiás (GO)
 - **Período da simulação:** 2015 a 2019 (5 anos)
 - **Tipo de simulação:** `full_farm`
+- **Última execução de referência:** 0 erros, 443 avisos
 
 ---
 
-## Pré-requisitos
+## Como rodar (Windows · PowerShell)
 
-- RuFaS clonado, com o ambiente Python (venv) e as dependências instaladas.
-- O arquivo **`GO_campo_dourado.zip`** colocado na **raiz do RuFaS**
-  (a pasta onde fica o `main.py`).
+### 1. Pré-requisitos
 
----
+- Python **3.12 ou 3.13**
+- Git
+- ~1 GB de espaço livre
 
-## Como executar
+### 2. Criar o ambiente e instalar
 
-### 1. Entre na raiz do RuFaS
-```bash
-cd /caminho/para/RuFaS
+```powershell
+cd C:\caminho\para\RuFaS
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]" `
+  "pandas==2.3.2" "numba==0.61.2" "scipy==1.16.2" "matplotlib==3.10.5"
 ```
-Confirme que o `GO_campo_dourado.zip` está aqui, ao lado do `main.py`.
 
-### 2. Extraia o ZIP
-```bash
-unzip GO_campo_dourado.zip
-```
-Isso cria a pasta `GO_campo_dourado/`. Confira o conteúdo:
-```bash
-ls GO_campo_dourado/
-```
-Você deve ver: `farm_metadata.json`, `_pipeline_task_manager_metadata.json`,
-`_pipeline_tasks.json`, `README.md` e a pasta `inputs_resolvidos/`.
+> Use `-e` (instalação editável). O `pip install .` normal gera um pacote
+> sem os subpacotes (`RUFAS.biophysical`, `RUFAS.EEE` etc.).
+> Não use `constraints-release.txt`: ele é da v1.0.0 e conflita com o
+> `pyproject.toml` atual.
 
-### 3. Rode a simulação
-```bash
-venv/bin/python main.py -p GO_campo_dourado/_pipeline_task_manager_metadata.json
-```
-> Se o seu ambiente não usa o venv em `venv/bin/python`, troque pelo Python
-> onde as dependências do RuFaS estão instaladas (ex.: `python main.py -p ...`).
+### 3. Verificar a instalação
 
-### 4. Resultado
-Ao concluir, aparecerá no terminal:
+```powershell
+.\.venv\Scripts\python.exe -c "import numpy, pandas, numba, SALib, RUFAS.biophysical; print('OK')"
 ```
-Finished task: 1/1 (GO_campo_dourado) with 0 error(s), ...
+
+### 4. Rodar a simulação
+
+```powershell
+.\.venv\Scripts\python.exe main.py -p .\GO_campo_dourado\_pipeline_task_manager_metadata.json -v warnings
 ```
-O CSV com os resultados é gravado em:
+
+Rode **da raiz do RuFaS**, não de dentro de `GO_campo_dourado/`.
+A simulação de 5 anos leva alguns minutos e consome CPU/RAM.
+
+### 5. Conferir o resultado
+
+```powershell
+Get-ChildItem output\CSVs, output\logs -File |
+  Sort-Object LastWriteTime -Descending |
+  Select-Object -First 10
 ```
-output/CSVs/GO_campo_dourado_saved_variables_csv_all_variables.txt_<DATA>.csv
+
+Saídas:
+
 ```
+output/CSVs/GO_campo_dourado_*.csv     variáveis diárias
+output/logs/GO_campo_dourado_*         avisos, erros e logs
+```
+
+O infográfico está em `INFOGRAFICO_RESULTADOS.pdf` (e `.png`);
+o estado e as pendências estão em `PENDENCIAS.md`.
+
+> A task já está corrigida para `"random_seeds": [44]`. A execução que
+> gerou o infográfico usou a seed automática `2.857.049.512`; a próxima
+> execução será a linha de base reproduzível.
 
 ---
 
 ## Observações importantes
 
-- **Extraia o ZIP na raiz do RuFaS** (junto do `main.py`). Os caminhos dentro
-  do `farm_metadata.json` são relativos a essa pasta
-  (ex.: `GO_campo_dourado/inputs_resolvidos/config.json`). Extrair em outro
-  local faz a simulação não encontrar os arquivos.
-- **Rode o comando a partir da raiz do RuFaS**, e não de dentro de
-  `GO_campo_dourado/`.
-- A simulação de 5 anos leva alguns minutos e consome bastante CPU/RAM.
+- A pasta `GO_campo_dourado/` já está no repositório; **não é necessário
+  extrair ZIP**. Os caminhos no `farm_metadata.json` são relativos à raiz
+  do RuFaS (ex.: `GO_campo_dourado/inputs_resolvidos/config.json`).
+- Rode o comando a partir da raiz do RuFaS.
+- A pasta `output/` não é versionada: o CSV pode passar de 500 MB.
+- A task usa `random_seeds: [44]` para reprodutibilidade.
+
+---
+
+## Resultados de referência (execução de 19/10/2026)
+
+| Indicador | Valor |
+|---|---:|
+| Leite médio | 3.701 kg/dia |
+| Leite por vaca em lactação | 41,2 kg/dia |
+| Leite total (5 anos) | 6.758 t |
+| Vacas em lactação / secas | 89,9 / 11,6 |
+| Consumo de MS | 3.418 kg/dia |
+| Metano entérico | 20,1 t CH₄/ano |
+| Metano de armazenamento | 30,0 t CH₄/ano |
+| Metano total | 50,9 t CH₄/ano |
+| CO₂e estimado | 1.477 t/ano |
+| Intensidade | 1,09 kg CO₂e/kg leite |
+| Ração comprada | 94,4% |
+| Custo de ração | US$ 0,22/kg leite |
+| Erros / avisos | 0 / 443 |
+
+> Leia as ressalvas em `PENDENCIAS.md`: seed, FIPS/latitude/feed dos EUA,
+> armazenamento de dejetos e carbono do solo ainda precisam de validação.
 
 ---
 
@@ -80,4 +119,6 @@ output/CSVs/GO_campo_dourado_saved_variables_csv_all_variables.txt_<DATA>.csv
 | `_pipeline_tasks.json` | Define a task de simulação (output_prefix, seed, etc.). |
 | `inputs_resolvidos/` | Todos os arquivos de entrada usados na simulação. |
 | `parametrizacao.json` / `.md` | Resumo da parametrização / cenário da fazenda. |
+| `INFOGRAFICO_RESULTADOS.pdf` / `.png` | Infográfico com os resultados. |
+| `PENDENCIAS.md` | Estado da execução e o que falta validar. |
 | `README.md` | Este arquivo. |
