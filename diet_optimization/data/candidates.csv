@@ -1,0 +1,20 @@
+rufas_id,feed,min_pct,max_pct,include,group
+51,Silagem de milho,15.0,50.0,true,Forragem
+110,Silagem de leguminosa,0.0,30.0,true,Forragem
+44,Milho grão,0.0,35.0,true,Energia
+154,Sorgo grão,0.0,25.0,true,Energia
+167,Farelo de soja 48%,0.0,25.0,true,Proteína
+58,Caroço de algodão,0.0,12.0,true,Proteína/gordura
+169,Soja em grão,0.0,10.0,true,Proteína/gordura
+112,Farelo de linhaça,0.0,10.0,true,Proteína
+36,Glúten de milho (CGF),0.0,15.0,true,Subproduto
+193,Farelo de trigo,0.0,12.0,true,Subproduto
+33,Polpa cítrica seca,0.0,10.0,true,Subproduto
+181,Farelo de girassol,0.0,12.0,true,Proteína
+31,Farelo de canola,0.0,12.0,true,Proteína
+60,Farelo de algodão,0.0,12.0,true,Proteína
+163,Casca de soja,0.0,12.0,true,Fibra
+119,Melaço de cana,0.0,4.0,true,Subproduto
+307,Ureia pecuária,0.0,0.6,true,NPN
+234,Calcário calcítico,0.0,2.0,true,Mineral
+301,Mistura mineral,0.5,2.5,true,Mineral

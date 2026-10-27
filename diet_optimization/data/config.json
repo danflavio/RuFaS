@@ -1,0 +1,78 @@
+{
+  "paths": {
+    "composition": "GO_campo_dourado/inputs_resolvidos/NASEM_Comp.csv",
+    "prices": "diet_optimization/data/prices_go_2026-10-27.csv",
+    "candidates": "diet_optimization/data/candidates.csv",
+    "baseline": "diet_optimization/data/baseline_diet.json",
+    "scenarios": "diet_optimization/data/scenarios.json",
+    "baseline_daily": "GO_campo_dourado/baseline_daily.csv",
+    "validation_daily": "GO_campo_dourado/validacao_diaria.csv",
+    "rufas_feed_config": "GO_campo_dourado/inputs_resolvidos/feed.json",
+    "rufas_farm_metadata": "GO_campo_dourado/farm_metadata.json",
+    "rufas_config": "GO_campo_dourado/inputs_resolvidos/config.json",
+    "rufas_main": "main.py"
+  },
+  "output_dir": "GO_campo_dourado/otimizacao_dieta",
+  "farm": {
+    "name": "Fazenda Campo Dourado (GO)",
+    "state": "GO",
+    "lactating_cows": 88.56,
+    "days_per_year": 365,
+    "milk_price_brl_l": 2.9692,
+    "milk_price_source": "CEPEA, leite ao produtor, GO, ago/2026",
+    "milk_density_kg_l": 1.03,
+    "usd_brl": 5.35,
+    "usd_brl_source": "Notícias Agrícolas, 27/10/2026"
+  },
+  "cow": {
+    "body_weight_kg": 650.0,
+    "mature_body_weight_kg": 700.0,
+    "day_of_pregnancy": null,
+    "body_condition_score_5": 3.0,
+    "days_in_milk": 150,
+    "average_daily_gain_heifer_g": 0.0,
+    "animal_type": "LAC_COW",
+    "parity": 2,
+    "calving_interval_days": 400,
+    "milk_fat_pct": 4.0,
+    "milk_true_protein_pct": 3.2,
+    "milk_lactose_pct": 4.8,
+    "milk_production_kg": 41.3,
+    "housing": "barn",
+    "distance_m": 0.0,
+    "lactating": true,
+    "ndf_percentage": 28.0,
+    "process_based_phosphorus_requirement": 0.0
+  },
+  "requirements": {
+    "dmi_kg": 25.3,
+    "cp_min_pct": 17.5,
+    "cp_mp_conversion": 0.64,
+    "cp_safety_factor": 1.10,
+    "ndf_min_pct": 28.0,
+    "ndf_max_pct": 33.0,
+    "forage_ndf_min_pct": 18.0,
+    "starch_min_pct": 25.0,
+    "starch_max_pct": 35.0,
+    "ee_min_pct": 3.0,
+    "ee_max_pct": 6.0,
+    "ca_total_min_pct": 0.60,
+    "ca_p_min": 1.5,
+    "ca_p_max": 2.5,
+    "rup_min_kg": 1.20,
+    "tdn_min_pct": null
+  },
+  "sensitivity": {
+    "sobol_n": 512,
+    "sobol_seed": 42,
+    "price_shock_pct": 20.0,
+    "oat_pct": 25.0,
+    "bootstrap_resamples": 2000,
+    "bootstrap_seed": 42
+  },
+  "report": {
+    "title": "Otimização da dieta e efeito econômico — Fazenda Campo Dourado (GO)",
+    "author": "Análise integrada ao RuFaS",
+    "date": "2026-10-27"
+  }
+}

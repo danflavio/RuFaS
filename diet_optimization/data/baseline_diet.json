@@ -1,0 +1,26 @@
+{
+  "name": "Dieta basal do RuFaS — GO_campo_dourado",
+  "source": "GO_campo_dourado/inputs_resolvidos/feed.json (ração lac_cow)",
+  "animal_combination": "lac_cow",
+  "dmi_kg": 25.3,
+  "milk_kg_cow_day": 41.3,
+  "cows_lactating": 88.56,
+  "rations_pct": {
+    "51": 30.0,
+    "110": 18.0,
+    "44": 24.0,
+    "167": 16.0,
+    "58": 9.0,
+    "301": 3.0
+  },
+  "adjusted_rations_pct": {
+    "51": 30.0,
+    "110": 18.0,
+    "44": 25.0,
+    "167": 16.0,
+    "58": 9.0,
+    "301": 1.0,
+    "234": 1.0
+  },
+  "note": "A dieta 'adjusted' corrige a mistura mineral de 3% para 1% + 1% de calcário, mantendo o mesmo perfil de ingredientes. Serve para separar o efeito da formulação do efeito da correção mineral."
+}

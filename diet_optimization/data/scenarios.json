@@ -1,0 +1,109 @@
+{
+  "iso_energetico": {
+    "label": "Iso-energético (recomendado)",
+    "description": "Mantém o mesmo aporte de energia, proteína e fibra da dieta basal, minimizando o custo. É o cenário com maior economia validada no RuFaS.",
+    "overrides": {
+      "requirements": {
+        "tdn_min_pct": 72.12,
+        "cp_min_pct": 17.5,
+        "rup_min_kg": 1.20,
+        "ca_total_min_pct": 0.60,
+        "ca_p_min": 1.5,
+        "ca_p_max": 2.5
+      }
+    }
+  },
+  "nasem": {
+    "label": "Atende NASEM (segurança nutricional)",
+    "description": "Exige a energia líquida calculada pelo NASEM para 41,3 kg de leite/dia. Corrige o déficit teórico da dieta basal, com economia menor.",
+    "overrides": {
+      "requirements": {
+        "tdn_min_pct": null,
+        "cp_min_pct": 17.5,
+        "rup_min_kg": 1.20,
+        "ca_total_min_pct": 0.60,
+        "ca_p_min": 1.5,
+        "ca_p_max": 2.5
+      }
+    }
+  },
+  "intermediario": {
+    "label": "Intermediário (74% TDN)",
+    "description": "Compromisso entre a energia da dieta basal (72,1% TDN) e a exigência NASEM (76,8% TDN).",
+    "overrides": {
+      "requirements": {
+        "tdn_min_pct": 74.0,
+        "cp_min_pct": 17.5,
+        "rup_min_kg": 1.20,
+        "ca_total_min_pct": 0.60,
+        "ca_p_min": 1.5,
+        "ca_p_max": 2.5
+      }
+    }
+  },
+  "com_milho_15": {
+    "label": "Iso-energético com 15% de milho",
+    "description": "Mantém o milho na dieta em pelo menos 15% da MS para preservar operação e logística da fazenda.",
+    "overrides": {
+      "requirements": {
+        "tdn_min_pct": 72.12,
+        "cp_min_pct": 17.5,
+        "rup_min_kg": 1.20,
+        "ca_total_min_pct": 0.60,
+        "ca_p_min": 1.5,
+        "ca_p_max": 2.5
+      },
+      "bounds": {
+        "44": {"min_pct": 15.0}
+      }
+    }
+  },
+  "com_linhaca_5": {
+    "label": "Iso-energético com 5% de linhaça",
+    "description": "Inclui farelo de linhaça em 5% da MS para avaliar o custo de uma dieta com apelo funcional (ômega-3).",
+    "overrides": {
+      "requirements": {
+        "tdn_min_pct": 72.12,
+        "cp_min_pct": 17.5,
+        "rup_min_kg": 1.20,
+        "ca_total_min_pct": 0.60,
+        "ca_p_min": 1.5,
+        "ca_p_max": 2.5
+      },
+      "bounds": {
+        "112": {"min_pct": 5.0}
+      }
+    }
+  },
+  "sem_sorgo": {
+    "label": "Iso-energético sem sorgo",
+    "description": "Simula indisponibilidade de sorgo; o milho e outros concentrados passam a competir.",
+    "overrides": {
+      "requirements": {
+        "tdn_min_pct": 72.12,
+        "cp_min_pct": 17.5,
+        "rup_min_kg": 1.20,
+        "ca_total_min_pct": 0.60,
+        "ca_p_min": 1.5,
+        "ca_p_max": 2.5
+      },
+      "bounds": {
+        "154": {"max_pct": 0.0}
+      }
+    }
+  },
+  "max_economia": {
+    "label": "Máxima economia (sem RUP mínimo)",
+    "description": "Remove a restrição de proteína não degradável e reduz a exigência de proteína bruta. Menor custo, mas maior risco nutricional.",
+    "overrides": {
+      "requirements": {
+        "tdn_min_pct": 72.12,
+        "cp_min_pct": 17.0,
+        "rup_min_kg": 0.0,
+        "ca_total_min_pct": 0.50,
+        "ca_p_min": 1.2,
+        "ca_p_max": 2.5
+      }
+    }
+  }
+}
