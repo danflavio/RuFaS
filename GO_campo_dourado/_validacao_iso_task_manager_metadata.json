@@ -1,0 +1,11 @@
+{
+  "files": {
+    "tasks": {
+      "title": "Task manager data",
+      "description": "Validacao dieta iso-energetica",
+      "path": "GO_campo_dourado/_validacao_iso_tasks.json",
+      "type": "json",
+      "properties": "tasks_properties"
+    }
+  }
+}

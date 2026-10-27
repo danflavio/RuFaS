@@ -1,0 +1,11 @@
+{
+  "files": {
+    "tasks": {
+      "title": "Task manager data",
+      "description": "Validacao baseline",
+      "path": "GO_campo_dourado/_validacao_baseline_tasks.json",
+      "type": "json",
+      "properties": "tasks_properties"
+    }
+  }
+}

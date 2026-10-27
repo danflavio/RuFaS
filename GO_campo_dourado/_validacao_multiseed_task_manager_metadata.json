@@ -1,0 +1,11 @@
+{
+  "files": {
+    "tasks": {
+      "title": "Task manager data",
+      "description": "Validacao multiseed baseline vs iso",
+      "path": "GO_campo_dourado/_validacao_multiseed_tasks.json",
+      "type": "json",
+      "properties": "tasks_properties"
+    }
+  }
+}
