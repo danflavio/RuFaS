@@ -11,6 +11,10 @@
 > **Versão temática alternativa:** `drops_aprendizado_pirulito.html`, com uma
 > estética original de fazenda de doces inspirada no universo pop dos pirulitos
 > (sem uso de marca ou logo Chupa Chups).
+>
+> **Versão recomendada para estudar:** `drops_aprendizado_v3.html`, com fontes
+> maiores, glossário clicável, anotações salvas no navegador, controle de tamanho
+> do texto e revisão de 30 segundos entre capítulos.
 
 ---
 
