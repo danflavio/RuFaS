@@ -999,6 +999,7 @@ def _section_entregaveis() -> str:
 | Testes pareados | Seção 5.6, `pairwise_cenarios.csv`, `pairwise_break_even.csv` |
 | Validação biológica no RuFaS | Seção 4.5 e 6, `validacao_resumo.csv`, `validacao_testes.csv` |
 | Relatório | `RELATORIO_OTIMIZACAO_DIETA.md`, `.html`, `.pdf` |
+| Aula interativa | `drops_aprendizado.html` (10 drops com quiz e fazenda ilustrada) |
 | Testes automatizados | `tests/test_diet_optimization/` (14 testes) |
 """
 

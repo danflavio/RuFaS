@@ -3,307 +3,404 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Drops de campo — Otimização da dieta no RuFaS</title>
+<title>Trilha da Fazenda — Otimização da dieta no RuFaS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Spline+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #14251f;
-    --ink-soft: #3f554b;
-    --paper: #eaf0e6;
-    --card: #fbfcf7;
-    --line: #c9d6c8;
-    --line-strong: #9fb29e;
-    --pasture: #2f6b4f;
-    --pasture-dark: #1c4533;
-    --copper: #b96335;
-    --wheat: #cfae67;
+    --ink: #1d2a21;
+    --ink-soft: #4d5f51;
+    --paper: #f3eddc;
+    --paper-deep: #e7dcc5;
+    --card: #fbf8ef;
+    --line: #d7cbb4;
+    --line-strong: #b9aa8d;
+    --pasture: #4f7a4a;
+    --pasture-dark: #1f3d2b;
+    --pasture-mid: #2f5a3f;
+    --barn: #a64b3c;
+    --barn-dark: #7f352b;
+    --hay: #d8b36a;
+    --hay-soft: #ead6a8;
+    --sky: #dce9e4;
     --danger: #a8442e;
     --ok: #2f7d5a;
-    --shadow: 0 18px 45px rgba(20, 37, 31, .10);
     --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     --sans: "Spline Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
     --display: "Fraunces", Georgia, "Times New Roman", serif;
   }
 
   * { box-sizing: border-box; }
-
   html { scroll-behavior: smooth; }
-
   body {
     margin: 0;
     color: var(--ink);
     background-color: var(--paper);
     background-image:
-      linear-gradient(rgba(47, 107, 79, .045) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(47, 107, 79, .045) 1px, transparent 1px);
-    background-size: 28px 28px;
+      radial-gradient(circle at 12% 8%, rgba(216,179,106,.16), transparent 28%),
+      radial-gradient(circle at 88% 18%, rgba(79,122,74,.10), transparent 32%),
+      repeating-linear-gradient(0deg, rgba(120,100,70,.035) 0 1px, transparent 1px 26px);
     font-family: var(--sans);
     font-size: 16px;
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
   }
+  ::selection { background: rgba(166,75,60,.22); }
+  button { font: inherit; }
+  button:focus-visible, input:focus-visible {
+    outline: 3px solid rgba(216,179,106,.85);
+    outline-offset: 2px;
+  }
 
-  ::selection { background: rgba(185, 99, 53, .22); }
-
-  a { color: var(--pasture-dark); }
-
-  .shell {
-    width: min(1240px, calc(100% - 40px));
+  .app {
+    width: min(1360px, calc(100% - 36px));
     margin: 0 auto;
-    padding: 26px 0 70px;
+    padding: 18px 0 40px;
+    display: grid;
+    grid-template-columns: 336px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
   }
 
-  /* ---------- HEADER ---------- */
+  /* ================= SIDEBAR / FARM MAP ================= */
 
-  .field-header {
-    position: relative;
-    overflow: hidden;
+  .sidebar {
+    position: sticky;
+    top: 18px;
+    height: calc(100vh - 36px);
+    min-height: 620px;
     background: var(--pasture-dark);
-    color: #f5f7ef;
+    color: #f6f1e4;
     border-radius: 22px;
-    padding: clamp(26px, 4vw, 48px);
-    box-shadow: var(--shadow);
+    padding: 18px;
+    box-shadow: 0 22px 50px rgba(31,61,43,.24);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
 
-  .field-header::after {
-    content: "";
-    position: absolute;
-    right: -90px;
-    top: -120px;
-    width: 360px;
-    height: 360px;
-    border: 1px solid rgba(255,255,255,.14);
-    border-radius: 50%;
-    box-shadow: 0 0 0 34px rgba(255,255,255,.045), 0 0 0 68px rgba(255,255,255,.03);
-    pointer-events: none;
-  }
-
-  .eyebrow {
-    display: inline-flex;
+  .brand {
+    display: flex;
     align-items: center;
-    gap: 9px;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 2px 2px 12px;
+    border-bottom: 1px solid rgba(246,241,228,.14);
+    flex: 0 0 auto;
+    min-width: 0;
+  }
+
+  .brand-mark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .brand-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--hay);
+    color: var(--pasture-dark);
+    display: grid;
+    place-items: center;
+    font-family: var(--display);
+    font-size: 18px;
+    font-weight: 700;
+    flex: 0 0 auto;
+  }
+
+  .brand-text {
+    min-width: 0;
+  }
+
+  .brand-text b {
+    display: block;
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: 9.5px;
     letter-spacing: .16em;
     text-transform: uppercase;
-    color: var(--wheat);
-    margin: 0 0 16px;
+    color: var(--hay);
   }
 
-  .eyebrow::before {
-    content: "";
-    width: 22px;
-    height: 1px;
-    background: currentColor;
+  .brand-text span {
+    display: block;
+    font-size: 12px;
+    color: rgba(246,241,228,.72);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  h1 {
-    font-family: var(--display);
-    font-weight: 600;
-    font-size: clamp(34px, 5.2vw, 62px);
-    line-height: 1.02;
-    letter-spacing: -.025em;
-    margin: 0;
-    max-width: 840px;
-  }
-
-  h1 em {
-    font-style: italic;
-    color: var(--wheat);
-  }
-
-  .header-sub {
-    max-width: 650px;
-    margin: 18px 0 0;
-    color: rgba(245,247,239,.82);
-    font-size: clamp(15px, 1.4vw, 18px);
-  }
-
-  .header-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px 24px;
-    margin-top: 28px;
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: .06em;
-    color: rgba(245,247,239,.62);
-  }
-
-  .header-meta span { white-space: nowrap; }
-
-  .header-meta strong { color: #f5f7ef; font-weight: 500; }
-
-  .progress-rail {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 8px;
-    margin-top: 34px;
-    max-width: 760px;
-  }
-
-  .progress-step {
-    min-width: 0;
-    padding-top: 9px;
-    border-top: 2px solid rgba(255,255,255,.18);
+  .brand-count {
     font-family: var(--mono);
     font-size: 10px;
-    color: rgba(245,247,239,.45);
-    transition: color .2s ease, border-color .2s ease;
-  }
-
-  .progress-step.is-active {
-    border-color: var(--wheat);
-    color: #f5f7ef;
-  }
-
-  .progress-step.is-next { color: rgba(245,247,239,.72); }
-
-  .progress-step b {
-    display: block;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: .04em;
-    margin-bottom: 2px;
-  }
-
-  /* ---------- INTRO NOTE ---------- */
-
-  .intro {
-    display: flex;
-    gap: 18px;
-    align-items: flex-start;
-    margin: 22px 0 34px;
-    padding: 0 4px;
-  }
-
-  .intro-mark {
+    color: rgba(246,241,228,.65);
+    white-space: nowrap;
     flex: 0 0 auto;
-    font-family: var(--display);
-    font-size: 46px;
-    line-height: .8;
-    color: var(--copper);
   }
 
-  .intro p {
-    margin: 0;
-    max-width: 760px;
-    color: var(--ink-soft);
-    font-size: 15px;
+  .map-wrap {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    margin: 10px -4px 0;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #cfe2d7;
   }
 
-  .intro strong { color: var(--ink); }
+  .map-wrap svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
 
-  /* ---------- DROP LAYOUT ---------- */
+  .map-caption {
+    flex: 0 0 auto;
+    padding: 12px 2px 0;
+    font-family: var(--mono);
+    font-size: 9px;
+    line-height: 1.5;
+    color: rgba(246,241,228,.62);
+  }
+
+  .map-caption strong { color: var(--hay); font-weight: 500; }
+
+  .sidebar-foot {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 12px;
+    margin-top: 8px;
+    border-top: 1px solid rgba(246,241,228,.14);
+  }
+
+  .current-pill {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .08em;
+    color: rgba(246,241,228,.72);
+  }
+
+  .current-pill b { color: #f6f1e4; font-weight: 500; }
+
+  .reset-btn {
+    appearance: none;
+    background: transparent;
+    color: rgba(246,241,228,.55);
+    border: 1px solid rgba(246,241,228,.22);
+    border-radius: 999px;
+    padding: 5px 9px;
+    font-family: var(--mono);
+    font-size: 8.5px;
+    cursor: pointer;
+  }
+
+  .reset-btn:hover { color: #f6f1e4; border-color: rgba(246,241,228,.5); }
+
+  /* mapa */
+  .stop { cursor: pointer; }
+  .stop circle { transition: fill .25s ease, stroke .25s ease; }
+  .stop text {
+    font-family: var(--mono);
+    font-size: 8px;
+    font-weight: 600;
+    pointer-events: none;
+  }
+  .stop.locked { cursor: not-allowed; }
+  .stop.locked circle { fill: #5d6f5e; stroke: #93a394; }
+  .stop.locked text { fill: #d5dfd3; }
+  .stop.available circle { fill: #e8e0c9; stroke: #f6f1e4; }
+  .stop.available text { fill: var(--pasture-dark); }
+  .stop.done circle { fill: var(--hay); stroke: #f6f1e4; }
+  .stop.done text { fill: var(--pasture-dark); }
+  .stop:focus-visible circle { stroke: var(--hay); stroke-width: 3; }
+  .stop.current circle { fill: var(--barn); stroke: #f6f1e4; }
+  .stop.current text { fill: #fff8ec; }
+  .stop.current .pulse {
+    animation: pulse 1.9s ease-out infinite;
+    transform-origin: center;
+  }
+  @keyframes pulse {
+    0% { opacity: .65; transform: scale(.9); }
+    70% { opacity: 0; transform: scale(1.9); }
+    100% { opacity: 0; transform: scale(1.9); }
+  }
+  #cowMarker { transition: transform .55s cubic-bezier(.22,.8,.3,1); }
+
+  /* ================= CONTENT ================= */
+
+  .content {
+    min-width: 0;
+    padding: 6px 0 20px;
+  }
+
+  .mobile-head {
+    display: none;
+  }
+
+  .mobile-trail {
+    display: none;
+  }
 
   .drop {
-    margin-top: 34px;
-    scroll-margin-top: 20px;
+    display: none;
+    animation: rise .35s ease both;
+  }
+
+  .drop.is-active { display: block; }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .drop-head {
     display: flex;
-    align-items: baseline;
-    gap: 18px;
-    margin-bottom: 16px;
+    align-items: flex-start;
+    gap: 16px;
+    margin: 0 0 16px;
+    min-width: 0;
   }
 
+  .drop-head > div { min-width: 0; }
+
   .drop-number {
-    font-family: var(--display);
-    font-size: clamp(54px, 7vw, 92px);
-    line-height: .78;
-    color: rgba(47, 107, 79, .18);
-    letter-spacing: -.04em;
     flex: 0 0 auto;
+    font-family: var(--display);
+    font-size: clamp(58px, 7vw, 92px);
+    line-height: .78;
+    letter-spacing: -.05em;
+    color: rgba(79,122,74,.22);
   }
 
   .drop-kicker {
     font-family: var(--mono);
     font-size: 10px;
-    letter-spacing: .16em;
+    letter-spacing: .15em;
     text-transform: uppercase;
-    color: var(--copper);
+    color: var(--barn);
     margin-bottom: 5px;
   }
 
-  h2 {
+  h1 {
     font-family: var(--display);
     font-weight: 600;
-    font-size: clamp(25px, 3vw, 39px);
-    line-height: 1.08;
-    letter-spacing: -.02em;
+    font-size: clamp(27px, 3.5vw, 43px);
+    line-height: 1.05;
+    letter-spacing: -.025em;
     margin: 0;
+    max-width: 760px;
+    overflow-wrap: anywhere;
   }
 
-  .drop-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    gap: 20px;
-    align-items: start;
+  .drop-sub {
+    margin: 10px 0 0;
+    max-width: 700px;
+    color: var(--ink-soft);
+    font-size: 15px;
   }
+
+  .lesson-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    gap: 16px;
+    align-items: start;
+    min-width: 0;
+  }
+
+  .lesson-grid > * { min-width: 0; }
 
   .card {
     background: var(--card);
     border: 1px solid var(--line);
-    border-radius: 18px;
-    box-shadow: 0 1px 0 rgba(255,255,255,.7) inset;
+    border-radius: 16px;
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+    min-width: 0;
   }
 
-  .concept {
-    padding: clamp(20px, 2.5vw, 30px);
-    position: sticky;
-    top: 18px;
+  .lesson {
+    padding: clamp(18px, 2.2vw, 26px);
   }
 
-  .concept h3 {
+  .lesson h3 {
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: 9.5px;
+    letter-spacing: .15em;
     text-transform: uppercase;
-    letter-spacing: .14em;
     color: var(--pasture);
-    margin: 0 0 14px;
-  }
-
-  .concept p {
     margin: 0 0 13px;
-    color: var(--ink-soft);
-    font-size: 14.5px;
   }
 
-  .concept p:last-child { margin-bottom: 0; }
+  .lesson p {
+    margin: 0 0 12px;
+    color: var(--ink-soft);
+    font-size: 14.2px;
+    overflow-wrap: anywhere;
+  }
 
-  .concept strong { color: var(--ink); }
+  .farm-note, .option, .claim, .drop-sub { overflow-wrap: anywhere; }
 
-  .concept ul {
-    margin: 14px 0 0;
+  .lesson p:last-child { margin-bottom: 0; }
+  .lesson strong { color: var(--ink); }
+
+  .lesson ul {
+    margin: 12px 0 0;
     padding: 0;
     list-style: none;
     display: grid;
-    gap: 10px;
+    gap: 8px;
   }
 
-  .concept li {
+  .lesson li {
     position: relative;
-    padding-left: 20px;
+    padding-left: 19px;
     color: var(--ink-soft);
-    font-size: 14px;
+    font-size: 13.6px;
   }
 
-  .concept li::before {
+  .lesson li::before {
     content: "";
     position: absolute;
     left: 0;
     top: .58em;
     width: 7px;
     height: 7px;
-    border: 1.5px solid var(--copper);
+    border: 1.5px solid var(--barn);
     transform: rotate(45deg);
   }
 
+  .farm-note {
+    margin-top: 16px;
+    padding: 13px 14px;
+    border: 1px dashed var(--line-strong);
+    border-radius: 10px;
+    background: #f7eeda;
+    color: var(--ink-soft);
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+
+  .farm-note b {
+    display: block;
+    font-family: var(--mono);
+    font-size: 8.5px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--barn);
+    margin-bottom: 5px;
+  }
+
+  .farm-note strong { color: var(--ink); }
+
   .bench {
-    padding: clamp(18px, 2.3vw, 28px);
+    padding: clamp(16px, 2vw, 24px);
     overflow: hidden;
   }
 
@@ -311,168 +408,58 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 14px;
-    margin-bottom: 18px;
+    gap: 10px;
+    margin-bottom: 14px;
   }
 
   .bench-title {
     font-family: var(--mono);
-    font-size: 10px;
-    text-transform: uppercase;
+    font-size: 9.5px;
     letter-spacing: .14em;
+    text-transform: uppercase;
     color: var(--pasture);
     margin: 0;
   }
 
   .bench-note {
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: 9px;
     color: var(--ink-soft);
     opacity: .75;
     text-align: right;
   }
 
-  /* ---------- DROP 1: THREE JARS ---------- */
-
-  .choice-row {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 9px;
-    margin-bottom: 18px;
-  }
-
-  .choice {
-    appearance: none;
-    border: 1px solid var(--line);
-    background: #f4f6ee;
-    color: var(--ink-soft);
-    border-radius: 12px;
-    padding: 11px 10px;
-    min-height: 72px;
-    text-align: left;
-    cursor: pointer;
-    font-family: var(--sans);
-    font-size: 12px;
-    line-height: 1.25;
-    transition: border-color .18s ease, background .18s ease, color .18s ease, transform .18s ease;
-  }
-
-  .choice:hover { border-color: var(--line-strong); transform: translateY(-1px); }
-
-  .choice b {
-    display: block;
-    color: var(--ink);
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 3px;
-  }
-
-  .choice span {
-    display: block;
-    font-family: var(--mono);
-    font-size: 9.5px;
-    color: var(--ink-soft);
-    opacity: .8;
-    margin-top: 4px;
-  }
-
-  .choice.is-active {
-    border-color: var(--pasture);
-    background: #e7f0e8;
-    box-shadow: 0 0 0 2px rgba(47, 107, 79, .10);
-    color: var(--ink);
-  }
-
-  .choice.is-active b { color: var(--pasture-dark); }
-
-  .choice:focus-visible,
-  button:focus-visible,
-  input:focus-visible {
-    outline: 3px solid rgba(185, 99, 53, .55);
-    outline-offset: 2px;
-  }
-
-  /* ---------- SHARED BARS ---------- */
-
-  .bar-label {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--ink-soft);
-    margin-bottom: 7px;
-  }
-
-  .bar-label strong { color: var(--ink); font-weight: 500; }
-
-  .feed-bar {
-    position: relative;
-    display: flex;
-    height: 26px;
-    border-radius: 8px;
-    overflow: hidden;
-    background: #dfe6da;
-    border: 1px solid #d2dccf;
-  }
-
-  .feed-bar .seg {
-    height: 100%;
-    transition: width .25s ease;
-  }
-
-  .seg-silage { background: linear-gradient(180deg, #d9bd78, #c6a45e); }
-  .seg-soy { background: linear-gradient(180deg, #c97747, #ab5b31); }
-
-  .feed-bar .ticks {
-    position: absolute;
-    inset: 0;
-    background-image: repeating-linear-gradient(90deg, transparent 0 24px, rgba(20,37,31,.12) 24px 25px);
-    pointer-events: none;
-  }
-
-  .mix-readout {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    margin-top: 7px;
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--ink-soft);
-  }
-
-  /* ---------- METRICS ---------- */
-
+  /* métricas */
   .metric-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
-    margin: 18px 0 14px;
+    gap: 8px;
+    margin: 12px 0;
   }
 
   .metric {
     border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 12px;
-    background: #f7f8f2;
+    border-radius: 10px;
+    padding: 9px 10px;
+    background: #f8f4e8;
     min-width: 0;
   }
 
   .metric-label {
     display: block;
     font-family: var(--mono);
-    font-size: 9px;
+    font-size: 8px;
     letter-spacing: .08em;
     text-transform: uppercase;
     color: var(--ink-soft);
-    margin-bottom: 4px;
+    margin-bottom: 3px;
     white-space: nowrap;
   }
 
   .metric-value {
     display: block;
     font-family: var(--mono);
-    font-size: clamp(15px, 1.7vw, 20px);
+    font-size: clamp(14px, 1.6vw, 18px);
     font-weight: 500;
     color: var(--ink);
     letter-spacing: -.03em;
@@ -482,382 +469,355 @@
   .metric-note {
     display: block;
     font-family: var(--mono);
-    font-size: 9px;
+    font-size: 8px;
     color: var(--ink-soft);
-    margin-top: 3px;
+    margin-top: 2px;
   }
 
   .status-line {
     display: flex;
     align-items: center;
-    gap: 9px;
-    padding: 10px 12px;
-    border-radius: 10px;
-    font-size: 12.5px;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 12px;
     background: #f0f4ec;
     border: 1px solid var(--line);
     color: var(--ink-soft);
-    margin-bottom: 4px;
   }
 
   .status-line strong { color: var(--ink); }
-
   .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--ink-soft);
-    flex: 0 0 auto;
+    width: 7px; height: 7px; border-radius: 50%; background: var(--ink-soft); flex: 0 0 auto;
   }
-
   .dot.ok { background: var(--ok); }
   .dot.bad { background: var(--danger); }
-  .dot.warn { background: var(--copper); }
 
-  /* ---------- DROP 2: SLIDER ---------- */
+  /* barra de mistura */
+  .bar-label {
+    display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+    font-family: var(--mono); font-size: 8.5px; color: var(--ink-soft);
+    margin: 12px 0 6px;
+  }
+  .bar-label strong { color: var(--ink); font-weight: 500; }
 
-  .slider-wrap {
-    margin: 18px 0 8px;
+  .feed-bar {
+    position: relative; display: flex; height: 22px;
+    border-radius: 7px; overflow: hidden;
+    background: #dfe6da; border: 1px solid #d2dccf;
+  }
+  .feed-bar .seg { height: 100%; transition: width .25s ease; }
+  .seg-silage { background: linear-gradient(180deg, #d9bd78, #c6a45e); }
+  .seg-soy { background: linear-gradient(180deg, #c97747, #ab5b31); }
+  .feed-bar .ticks {
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(90deg, transparent 0 24px, rgba(20,37,31,.12) 24px 25px);
+    pointer-events: none;
+  }
+  .mix-readout {
+    display: flex; justify-content: space-between; gap: 8px;
+    margin-top: 5px; font-family: var(--mono); font-size: 8.5px; color: var(--ink-soft);
   }
 
+  /* botões de cenário */
+  .choice-row {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px;
+    margin-bottom: 10px;
+  }
+  .choice {
+    appearance: none; border: 1px solid var(--line); background: #f5f0e2;
+    color: var(--ink-soft); border-radius: 9px; padding: 8px 8px; min-height: 58px;
+    text-align: left; cursor: pointer; font-size: 11px; line-height: 1.25;
+    transition: border-color .18s ease, background .18s ease, transform .18s ease;
+  }
+  .choice:hover { border-color: var(--line-strong); transform: translateY(-1px); }
+  .choice b { display: block; color: var(--ink); font-size: 12px; margin-bottom: 2px; }
+  .choice span { display: block; font-family: var(--mono); font-size: 8.5px; opacity: .8; margin-top: 3px; }
+  .choice.is-active { border-color: var(--pasture); background: #e8f0e5; box-shadow: 0 0 0 2px rgba(79,122,74,.12); }
+
+  /* slider */
   input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 30px;
-    background: transparent;
-    margin: 0;
-    cursor: pointer;
+    -webkit-appearance: none; appearance: none; width: 100%; height: 28px;
+    background: transparent; margin: 0; cursor: pointer;
   }
-
   input[type="range"]::-webkit-slider-runnable-track {
-    height: 8px;
-    border-radius: 999px;
-    background: linear-gradient(90deg, var(--wheat) 0 50%, var(--copper) 50% 100%);
+    height: 7px; border-radius: 999px;
+    background: linear-gradient(90deg, var(--hay) 0 50%, var(--barn) 50% 100%);
     border: 1px solid rgba(20,37,31,.14);
   }
-
   input[type="range"]::-moz-range-track {
-    height: 8px;
-    border-radius: 999px;
-    background: linear-gradient(90deg, var(--wheat) 0 50%, var(--copper) 50% 100%);
+    height: 7px; border-radius: 999px;
+    background: linear-gradient(90deg, var(--hay) 0 50%, var(--barn) 50% 100%);
   }
-
   input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    margin-top: -7px;
-    border-radius: 50%;
-    background: var(--card);
-    border: 3px solid var(--pasture-dark);
-    box-shadow: 0 2px 8px rgba(20,37,31,.18);
+    -webkit-appearance: none; appearance: none; width: 18px; height: 18px;
+    margin-top: -6px; border-radius: 50%; background: var(--card);
+    border: 3px solid var(--pasture-dark); box-shadow: 0 2px 7px rgba(20,37,31,.18);
   }
-
   input[type="range"]::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: var(--card);
+    width: 14px; height: 14px; border-radius: 50%; background: var(--card);
     border: 3px solid var(--pasture-dark);
-    box-shadow: 0 2px 8px rgba(20,37,31,.18);
   }
-
   .tick-row {
-    display: flex;
-    justify-content: space-between;
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--ink-soft);
-    margin-top: 2px;
+    display: flex; justify-content: space-between;
+    font-family: var(--mono); font-size: 8px; color: var(--ink-soft); margin-top: 1px;
   }
 
   .prompt {
-    margin: 12px 0 0;
-    padding: 9px 12px;
-    border-left: 3px solid var(--copper);
-    background: #f7f2e8;
-    border-radius: 0 8px 8px 0;
-    font-family: var(--mono);
-    font-size: 10px;
-    line-height: 1.5;
-    color: var(--ink-soft);
+    margin: 9px 0 0; padding: 8px 10px;
+    border-left: 3px solid var(--barn); background: #f7eeda;
+    border-radius: 0 7px 7px 0;
+    font-family: var(--mono); font-size: 9px; line-height: 1.5; color: var(--ink-soft);
   }
-
   .prompt strong { color: var(--ink); }
 
-  /* ---------- CHARTS ---------- */
-
-  .charts {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-    margin-top: 16px;
+  /* região viável */
+  .feasible-wrap { margin-top: 12px; }
+  .feasible-track {
+    position: relative; height: 28px; border-radius: 7px;
+    background: #e4e9df; border: 1px solid #d2dccf; overflow: hidden;
+  }
+  .feasible-band {
+    position: absolute; top: 0; bottom: 0; background: rgba(79,122,74,.22);
+    border-left: 1px dashed var(--pasture); border-right: 1px dashed var(--pasture);
+  }
+  .feasible-marker {
+    position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--barn);
+    transition: left .2s ease;
+  }
+  .feasible-marker::after {
+    content: ""; position: absolute; left: -4px; top: -1px;
+    width: 10px; height: 10px; border-radius: 50%; background: var(--barn);
+    border: 2px solid var(--card);
+  }
+  .feasible-legend {
+    display: flex; justify-content: space-between; gap: 8px;
+    font-family: var(--mono); font-size: 8px; color: var(--ink-soft); margin-top: 4px;
   }
 
-  .chart-card {
+  /* simplex */
+  .simplex-box {
+    border: 1px solid var(--line); border-radius: 10px; background: #f8f4e8;
+    padding: 12px; margin-top: 10px;
+  }
+  .simplex-line {
+    position: relative; height: 36px; margin: 12px 0 6px;
+  }
+  .simplex-track {
+    position: absolute; left: 0; right: 0; top: 16px; height: 3px; background: var(--line-strong);
+  }
+  .simplex-point {
+    position: absolute; top: 8px; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--card); border: 3px solid var(--pasture); transform: translateX(-50%);
+    font-family: var(--mono); font-size: 8px; display: grid; place-items: center; color: var(--ink);
+  }
+  .simplex-point.best { background: var(--hay); border-color: var(--barn); }
+  .simplex-labels {
+    display: flex; justify-content: space-between; font-family: var(--mono);
+    font-size: 8px; color: var(--ink-soft);
+  }
+  .simplex-result {
+    margin-top: 10px; font-family: var(--mono); font-size: 10px; color: var(--ink-soft);
+    min-height: 30px;
+  }
+
+  /* break-even */
+  .breakeven-box { margin-top: 10px; }
+  .breakeven-track {
+    position: relative; height: 28px; border-radius: 7px;
+    background: linear-gradient(90deg, #e8f0e5 0 40.7%, #f4e3df 40.7% 100%);
     border: 1px solid var(--line);
-    border-radius: 12px;
-    background: #f8faf4;
-    padding: 10px 10px 6px;
-    min-width: 0;
-  }
-
-  .chart-title {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-    font-family: var(--mono);
-    font-size: 9.5px;
-    color: var(--ink-soft);
-    margin: 0 2px 4px;
-  }
-
-  .chart-title strong { color: var(--ink); font-weight: 500; }
-
-  .chart-card svg { width: 100%; height: auto; display: block; }
-
-  .legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin: 2px 2px 0;
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--ink-soft);
-  }
-
-  .legend span { display: inline-flex; align-items: center; gap: 5px; }
-
-  .swatch {
-    width: 15px;
-    height: 2px;
-    display: inline-block;
-    border-radius: 2px;
-  }
-
-  .swatch.silage { background: var(--wheat); }
-  .swatch.soy { background: var(--copper); }
-  .swatch.ndf { background: var(--pasture); }
-  .swatch.cp { background: var(--copper); }
-  .swatch.full { background: var(--ink-soft); }
-
-  /* ---------- BUTTONS / PANELS ---------- */
-
-  .action-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 14px;
-  }
-
-  .btn {
-    appearance: none;
-    border: 1px solid var(--pasture);
-    background: var(--pasture);
-    color: #f5f7ef;
-    border-radius: 999px;
-    padding: 9px 14px;
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: .04em;
-    cursor: pointer;
-    transition: background .18s ease, color .18s ease, transform .18s ease;
-  }
-
-  .btn:hover { background: var(--pasture-dark); transform: translateY(-1px); }
-
-  .btn.secondary {
-    background: transparent;
-    color: var(--pasture-dark);
-    border-color: var(--line-strong);
-  }
-
-  .btn.secondary:hover { background: #e7f0e8; }
-
-  .comparison {
-    display: none;
-    margin-top: 14px;
-    border: 1px dashed var(--line-strong);
-    border-radius: 12px;
-    padding: 14px;
-    background: #f5f8f0;
-  }
-
-  .comparison.is-open { display: block; }
-
-  .comparison h4 {
-    margin: 0 0 6px;
-    font-family: var(--display);
-    font-size: 18px;
-    font-weight: 600;
-  }
-
-  .comparison p {
-    margin: 0 0 10px;
-    color: var(--ink-soft);
-    font-size: 12.5px;
-  }
-
-  .comparison-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12px;
-  }
-
-  .comparison-table th,
-  .comparison-table td {
-    text-align: left;
-    padding: 6px 7px;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .comparison-table th {
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: .07em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
-    font-weight: 500;
-  }
-
-  .comparison-table td:last-child,
-  .comparison-table th:last-child { text-align: right; }
-
-  .big-number {
-    font-family: var(--mono);
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--pasture-dark);
-  }
-
-  /* ---------- TAKEAWAYS / NEXT ---------- */
-
-  .takeaway {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-    margin-top: 18px;
-  }
-
-  .takeaway .card {
-    padding: 14px;
-    border-radius: 12px;
-    background: #f4f7ee;
-  }
-
-  .takeaway b {
-    display: block;
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--copper);
-    margin-bottom: 5px;
-  }
-
-  .takeaway p {
-    margin: 0;
-    color: var(--ink-soft);
-    font-size: 12.5px;
-    line-height: 1.4;
-  }
-
-  .next-drops {
-    margin-top: 44px;
-  }
-
-  .next-drops h2 {
-    font-size: clamp(24px, 2.6vw, 32px);
-    margin-bottom: 14px;
-  }
-
-  .next-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  .next-card {
-    border: 1px dashed var(--line-strong);
-    border-radius: 14px;
-    padding: 15px;
-    background: rgba(251,252,247,.55);
-    color: var(--ink-soft);
-    min-height: 120px;
-  }
-
-  .next-card .num {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--copper);
-    letter-spacing: .1em;
-    display: block;
-    margin-bottom: 8px;
-  }
-
-  .next-card b {
-    display: block;
-    font-family: var(--display);
-    font-size: 18px;
-    color: var(--ink);
-    margin-bottom: 5px;
-  }
-
-  .next-card p {
-    margin: 0;
-    font-size: 12px;
-    line-height: 1.4;
-  }
-
-  .page-foot {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 10px;
-    margin-top: 42px;
-    padding-top: 14px;
-    border-top: 1px solid var(--line);
-    font-family: var(--mono);
-    font-size: 9.5px;
-    color: var(--ink-soft);
-    opacity: .8;
-  }
-
-  .sr-only {
-    position: absolute;
-    width: 1px; height: 1px;
-    padding: 0; margin: -1px;
     overflow: hidden;
-    clip: rect(0,0,0,0);
-    white-space: nowrap;
-    border: 0;
+  }
+  .breakeven-threshold {
+    position: absolute; top: 0; bottom: 0; width: 2px; background: var(--barn);
+  }
+  .breakeven-marker {
+    position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--pasture-dark);
+    transition: left .2s ease;
+  }
+  .breakeven-labels {
+    display: flex; justify-content: space-between; font-family: var(--mono);
+    font-size: 8px; color: var(--ink-soft); margin-top: 4px;
   }
 
-  /* ---------- RESPONSIVE ---------- */
+  /* cenários */
+  .scenario-bars { margin-top: 10px; display: grid; gap: 7px; }
+  .scenario-row {
+    display: grid; grid-template-columns: 92px minmax(0, 1fr) 68px;
+    gap: 7px; align-items: center;
+    font-family: var(--mono); font-size: 9px; color: var(--ink-soft);
+  }
+  .scenario-track { height: 12px; border-radius: 999px; background: #e6e9df; overflow: hidden; }
+  .scenario-fill { height: 100%; width: 0; border-radius: 999px; transition: width .35s ease; }
+  .scenario-row.is-best .scenario-fill { background: var(--pasture); }
+  .scenario-row.is-base .scenario-fill { background: var(--line-strong); }
+  .scenario-row.is-nasem .scenario-fill { background: #6f8fb0; }
+  .scenario-row.is-other .scenario-fill { background: var(--hay); }
+  .scenario-row.is-max .scenario-fill { background: var(--barn); }
+  .scenario-value { text-align: right; font-size: 9px; color: var(--ink); }
 
-  @media (max-width: 940px) {
-    .drop-grid { grid-template-columns: 1fr; }
-    .concept { position: static; }
-    .next-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .takeaway { grid-template-columns: 1fr; }
+  /* semáforo */
+  .claim-grid { display: grid; gap: 7px; margin-top: 10px; }
+  .claim {
+    padding: 9px 10px; border-radius: 8px; font-size: 11.5px; line-height: 1.4;
+    border-left: 4px solid var(--line-strong); background: #f7f4e9; color: var(--ink-soft);
+  }
+  .claim b { display: block; font-family: var(--mono); font-size: 8px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 2px; }
+  .claim.green { border-color: var(--ok); background: #edf6ef; }
+  .claim.green b { color: var(--ok); }
+  .claim.yellow { border-color: var(--hay); background: #fbf4df; }
+  .claim.yellow b { color: #9a711e; }
+  .claim.red { border-color: var(--danger); background: #fbeeeb; }
+  .claim.red b { color: var(--danger); }
+
+  /* ================= QUIZ ================= */
+
+  .quiz {
+    margin-top: 16px;
+    background: var(--pasture-dark);
+    color: #f6f1e4;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 12px 26px rgba(31,61,43,.16);
   }
 
-  @media (max-width: 620px) {
-    .shell { width: min(100% - 24px, 1240px); padding-top: 12px; }
-    .field-header { border-radius: 16px; }
+  .quiz-kicker {
+    font-family: var(--mono);
+    font-size: 8.5px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--hay);
+    margin: 0 0 6px;
+  }
+
+  .quiz-q {
+    font-family: var(--display);
+    font-size: clamp(18px, 2vw, 23px);
+    line-height: 1.2;
+    margin: 0 0 12px;
+    font-weight: 600;
+  }
+
+  .options { display: grid; gap: 7px; }
+
+  .option {
+    display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 9px; align-items: start;
+    width: 100%; text-align: left; border: 1px solid rgba(246,241,228,.16);
+    background: rgba(246,241,228,.07); color: #f6f1e4;
+    border-radius: 9px; padding: 9px 10px; cursor: pointer;
+    font-size: 12px; line-height: 1.4;
+    transition: background .18s ease, border-color .18s ease, transform .18s ease;
+  }
+  .option:hover { background: rgba(246,241,228,.13); border-color: rgba(246,241,228,.35); transform: translateY(-1px); }
+  .option .letter {
+    width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center;
+    border: 1px solid rgba(246,241,228,.3); font-family: var(--mono); font-size: 9px;
+    color: var(--hay); flex: 0 0 auto;
+  }
+  .option.is-wrong { background: rgba(168,68,46,.28); border-color: #d58a77; }
+  .option.is-wrong .letter { background: var(--danger); border-color: var(--danger); color: white; }
+  .option.is-correct { background: rgba(79,122,74,.45); border-color: #9fc39b; }
+  .option.is-correct .letter { background: var(--ok); border-color: var(--ok); color: white; }
+  .option:disabled { cursor: default; opacity: .9; }
+
+  .quiz-feedback { margin-top: 10px; min-height: 0; }
+  .feedback {
+    padding: 9px 11px; border-radius: 8px; font-size: 11.5px; line-height: 1.45;
+  }
+  .feedback.bad { background: rgba(168,68,46,.24); border: 1px solid rgba(213,138,119,.5); color: #ffe9e3; }
+  .feedback.ok { background: rgba(216,179,106,.16); border: 1px solid rgba(216,179,106,.5); color: #fff5dc; }
+  .feedback strong { color: white; }
+
+  .next-btn {
+    appearance: none; margin-top: 10px; border: 0; border-radius: 999px;
+    background: var(--hay); color: var(--pasture-dark); padding: 10px 15px;
+    font-family: var(--mono); font-size: 9.5px; letter-spacing: .06em;
+    cursor: pointer; font-weight: 600;
+  }
+  .next-btn:hover { background: #e8c984; }
+
+  /* ================= FINAL ================= */
+
+  .final {
+    display: none;
+    background: var(--pasture-dark); color: #f6f1e4;
+    border-radius: 22px; padding: clamp(24px, 4vw, 48px);
+    box-shadow: var(--shadow, 0 22px 50px rgba(31,61,43,.24));
+  }
+  .final.is-active { display: block; }
+  .final .eyebrow {
+    font-family: var(--mono); font-size: 9px; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--hay); margin: 0 0 10px;
+  }
+  .final h2 {
+    font-family: var(--display); font-size: clamp(30px, 4vw, 50px);
+    line-height: 1.05; margin: 0 0 12px; font-weight: 600;
+  }
+  .final p { color: rgba(246,241,228,.82); max-width: 680px; }
+  .final-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; }
+  .final-card { background: rgba(246,241,228,.08); border: 1px solid rgba(246,241,228,.16); border-radius: 12px; padding: 12px; }
+  .final-card b { display: block; font-family: var(--mono); font-size: 8px; letter-spacing: .1em; text-transform: uppercase; color: var(--hay); margin-bottom: 4px; }
+  .final-card span { font-family: var(--mono); font-size: 18px; }
+  .final-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .final-actions button {
+    appearance: none; border: 1px solid rgba(246,241,228,.3); background: transparent;
+    color: #f6f1e4; border-radius: 999px; padding: 9px 13px;
+    font-family: var(--mono); font-size: 9px; cursor: pointer;
+  }
+  .final-actions button.primary { background: var(--hay); color: var(--pasture-dark); border-color: var(--hay); font-weight: 600; }
+
+  /* ================= RESPONSIVE ================= */
+
+  @media (max-width: 1040px) {
+    .app { grid-template-columns: 280px minmax(0, 1fr); gap: 16px; }
+    .sidebar { padding: 14px; }
+    .lesson-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 860px) {
+    body { overflow-x: hidden; }
+    .app {
+      display: block; width: 100%; max-width: 760px;
+      margin: 0 auto; padding: 10px 11px 40px;
+    }
+    .content { width: 100%; max-width: 100%; overflow-x: hidden; }
+    .sidebar { display: none; }
+    .mobile-head {
+      display: block; width: 100%; max-width: 100%;
+      background: var(--pasture-dark); color: #f6f1e4;
+      border-radius: 16px; padding: 14px 16px 12px; margin-bottom: 12px;
+    }
+    .mobile-head .brand { border: 0; padding: 0 0 8px; }
+    .mobile-head .current-pill { display: block; margin-top: 8px; }
+    .mobile-trail {
+      display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 3px;
+      margin: 10px 0 0; width: 100%;
+    }
+    .mobile-stop {
+      appearance: none; border: 0; border-radius: 4px; padding: 5px 1px;
+      background: rgba(246,241,228,.12); color: rgba(246,241,228,.5);
+      font-family: var(--mono); font-size: 8px; cursor: pointer;
+      min-width: 0;
+    }
+    .mobile-stop.done { background: var(--hay); color: var(--pasture-dark); }
+    .mobile-stop.current { background: var(--barn); color: white; }
+    .mobile-stop.locked { cursor: not-allowed; }
+    .drop-number { font-size: 54px; }
+    .metric-grid { grid-template-columns: 1fr; }
+    .metric { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+    .metric-note { display: none; }
     .choice-row { grid-template-columns: 1fr; }
     .choice { min-height: 0; }
-    .metric-grid { grid-template-columns: 1fr; }
-    .metric { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
-    .metric-label { margin: 0; }
-    .metric-value { font-size: 17px; }
-    .metric-note { display: none; }
-    .next-grid { grid-template-columns: 1fr; }
-    .drop-head { gap: 10px; align-items: flex-start; }
-    .drop-number { font-size: 54px; }
-    .progress-rail { grid-template-columns: repeat(3, 1fr); }
+    .scenario-row { grid-template-columns: 78px minmax(0, 1fr) 62px; }
+    .final-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 520px) {
+    .drop-head { gap: 8px; }
+    .drop-number { font-size: 46px; }
+    .quiz { padding: 14px; }
+    .option { font-size: 11.5px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -871,305 +831,992 @@
 </style>
 </head>
 <body>
-<div class="shell">
 
-  <header class="field-header">
-    <p class="eyebrow">Caderno de campo · RuFaS</p>
-    <h1>Como se formula uma dieta de <em>mínimo custo</em></h1>
-    <p class="header-sub">Dois drops para enxergar o problema sem decorar equações: uma dieta é uma receita; a conta é uma otimização.</p>
-    <div class="header-meta">
-      <span><strong>88,6</strong> vacas em lactação</span>
-      <span><strong>41,3 kg</strong> leite/vaca/dia</span>
-      <span><strong>25,3 kg</strong> MS/vaca/dia</span>
-      <span><strong>19</strong> alimentos candidatos</span>
-    </div>
-    <nav class="progress-rail" aria-label="Progresso dos drops">
-      <div class="progress-step is-active"><b>01</b>O problema</div>
-      <div class="progress-step is-active"><b>02</b>A conta</div>
-      <div class="progress-step is-next"><b>03</b>Simplex</div>
-      <div class="progress-step"><b>04</b>Preço sombra</div>
-      <div class="progress-step"><b>05</b>Sensibilidade</div>
-      <div class="progress-step"><b>06</b>Validação</div>
-    </nav>
-  </header>
-
-  <div class="intro">
-    <div class="intro-mark" aria-hidden="true">“</div>
-    <p>Não precisa começar pela matemática. Comece pela decisão: <strong>qual mistura de alimentos a vaca deve comer?</strong> O resto é traduzir essa decisão para uma conta que o computador consegue resolver.</p>
-  </div>
-
-  <!-- ================= DROP 1 ================= -->
-  <section class="drop" id="drop-1">
-    <div class="drop-head">
-      <div class="drop-number" aria-hidden="true">01</div>
-      <div>
-        <div class="drop-kicker">Drop 01 · O problema</div>
-        <h2>Uma dieta é uma receita com travas.</h2>
+<div class="app">
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar" aria-label="Trilha da fazenda">
+    <div class="brand">
+      <div class="brand-mark">
+        <div class="brand-icon" aria-hidden="true">R</div>
+        <div class="brand-text">
+          <b>RuFaS · Campo Dourado</b>
+          <span>Trilha da fazenda</span>
+        </div>
       </div>
+      <span class="brand-count" id="brandCount">0/10</span>
     </div>
 
-    <div class="drop-grid">
-      <article class="card concept">
-        <h3>Conceito</h3>
-        <p>O instinto é escolher o alimento mais barato por quilo. Mas a vaca não come “preço”: ela precisa de <strong>energia, proteína e fibra ao mesmo tempo</strong>.</p>
-        <p>Uma dieta é a <strong>proporção de cada alimento</strong>. O problema é achar a proporção que fecha a conta nutricional pelo menor custo.</p>
-        <ul>
-          <li><strong>Objetivo:</strong> minimizar o custo da mistura.</li>
-          <li><strong>Restrições:</strong> o que a vaca precisa (energia, proteína, fibra, minerais).</li>
-          <li><strong>Limites práticos:</strong> não dá para colocar 100% de ureia ou de farelo de soja.</li>
-        </ul>
-      </article>
+    <div class="map-wrap">
+      <svg id="farmMap" viewBox="0 0 320 520" role="img" aria-label="Mapa da Fazenda Campo Dourado com a trilha de dez drops">
+        <defs>
+          <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#dce9e4"/>
+            <stop offset="65%" stop-color="#eef0df"/>
+            <stop offset="100%" stop-color="#f5e6c8"/>
+          </linearGradient>
+          <linearGradient id="fieldGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#8aa878"/>
+            <stop offset="100%" stop-color="#5e8155"/>
+          </linearGradient>
+        </defs>
+        <rect width="320" height="520" fill="url(#skyGrad)"/>
+        <circle cx="258" cy="64" r="24" fill="#e9c878" opacity=".9"/>
+        <circle cx="258" cy="64" r="38" fill="#e9c878" opacity=".18"/>
+        <path d="M0 260 C55 225 100 245 145 230 C195 213 245 230 320 205 L320 520 L0 520 Z" fill="#7f9e6d" opacity=".55"/>
+        <path d="M0 330 C50 300 100 320 155 300 C220 277 270 300 320 285 L320 520 L0 520 Z" fill="url(#fieldGrad)"/>
+        <path d="M0 430 C60 415 110 435 170 420 C230 405 275 425 320 410 L320 520 L0 520 Z" fill="#486b43" opacity=".55"/>
 
-      <article class="card bench" aria-labelledby="bench1-title">
-        <div class="bench-head">
-          <p class="bench-title" id="bench1-title">Bancada · escolha uma mistura</p>
-          <span class="bench-note">2 alimentos · 25,3 kg MS</span>
-        </div>
+        <!-- barn -->
+        <g opacity=".95">
+          <rect x="30" y="300" width="58" height="44" fill="#f0e3c6" stroke="#b9aa8d" stroke-width="1"/>
+          <path d="M22 300 L59 272 L96 300 Z" fill="#a64b3c"/>
+          <rect x="52" y="318" width="14" height="26" fill="#7f352b"/>
+          <rect x="38" y="312" width="8" height="8" fill="#d8b36a"/>
+          <rect x="72" y="312" width="8" height="8" fill="#d8b36a"/>
+          <line x1="59" y1="272" x2="59" y2="262" stroke="#7f352b" stroke-width="2"/>
+        </g>
 
-        <div class="choice-row" role="group" aria-label="Escolha uma dieta">
-          <button class="choice" type="button" data-choice="silagem">
-            <b>Só silagem</b>
-            O mais barato por kg
-            <span>R$ 15,74/dia</span>
-          </button>
-          <button class="choice" type="button" data-choice="farelo">
-            <b>Só farelo</b>
-            O mais proteico
-            <span>R$ 57,25/dia</span>
-          </button>
-          <button class="choice is-active" type="button" data-choice="mistura">
-            <b>Mistura pensada</b>
-            Silagem + farelo
-            <span>R$ 26,77/dia</span>
-          </button>
-        </div>
+        <!-- silo -->
+        <g opacity=".95">
+          <rect x="246" y="300" width="26" height="46" rx="3" fill="#c9c1aa" stroke="#a69b83" stroke-width="1"/>
+          <ellipse cx="259" cy="300" rx="13" ry="5" fill="#e2d8c0" stroke="#a69b83" stroke-width="1"/>
+          <path d="M250 346 L250 360 M268 346 L268 360" stroke="#8d8068" stroke-width="2"/>
+        </g>
 
-        <div class="bar-label">
-          <span>Composição da mistura</span>
-          <strong id="d1MixLabel">18,6 kg silagem + 6,7 kg farelo</strong>
-        </div>
-        <div class="feed-bar" aria-hidden="true">
-          <div class="seg seg-silage" id="d1Silage" style="width:73.5%"></div>
-          <div class="seg seg-soy" id="d1Soy" style="width:26.5%"></div>
-          <div class="ticks"></div>
-        </div>
-        <div class="mix-readout">
-          <span>silagem de milho</span>
-          <span>farelo de soja</span>
-        </div>
+        <!-- fence -->
+        <g stroke="#8b6b4a" stroke-width="2" opacity=".7">
+          <line x1="104" y1="360" x2="220" y2="350"/>
+          <line x1="112" y1="356" x2="112" y2="374"/>
+          <line x1="140" y1="354" x2="140" y2="372"/>
+          <line x1="168" y1="352" x2="168" y2="370"/>
+          <line x1="196" y1="350" x2="196" y2="368"/>
+        </g>
 
-        <div class="metric-grid">
-          <div class="metric">
-            <span class="metric-label">Custo</span>
-            <span class="metric-value" id="d1Cost">R$ 26,77</span>
-            <span class="metric-note">por vaca/dia</span>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Proteína</span>
-            <span class="metric-value" id="d1Cp">19,6%</span>
-            <span class="metric-note">mínimo 17,5%</span>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Fibra (NDF)</span>
-            <span class="metric-value" id="d1Ndf">33,0%</span>
-            <span class="metric-note">faixa 28–33%</span>
-          </div>
-        </div>
+        <!-- pasture cows -->
+        <g opacity=".55" fill="#f6f1e4">
+          <ellipse cx="188" cy="405" rx="10" ry="5"/>
+          <circle cx="198" cy="402" r="3.5"/>
+          <ellipse cx="230" cy="430" rx="9" ry="4.5"/>
+          <circle cx="239" cy="427" r="3.2"/>
+        </g>
 
-        <div class="status-line" id="d1Status" aria-live="polite">
-          <span class="dot ok" id="d1Dot"></span>
-          <span><strong>A conta fecha.</strong> Proteína e fibra dentro da faixa.</span>
-        </div>
-
-        <div class="takeaway" style="grid-template-columns:1fr; margin-top:14px">
-          <div class="card">
-            <b>O ponto do drop</b>
-            <p>A opção mais barata (<strong>R$ 15,74</strong>) não serve: falta proteína e sobra fibra. A mistura que atende custa <strong>R$ 26,77</strong>. O problema não é achar o insumo barato; é achar a combinação viável.</p>
-          </div>
-        </div>
-      </article>
+        <!-- trail -->
+        <path id="trailPath" d="M62 500 L95 460 L140 430 L185 400 L220 360 L200 320 L160 285 L120 250 L150 200 L220 150"
+              fill="none" stroke="#f6e7c2" stroke-width="3" stroke-dasharray="6 7" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
+        <g id="trailStops"></g>
+        <g id="cowMarker" aria-hidden="true">
+          <g transform="translate(0,0)">
+            <ellipse cx="0" cy="0" rx="13" ry="7" fill="#f6f1e4" stroke="#1f3d2b" stroke-width="1.4"/>
+            <circle cx="14" cy="-7" r="5.5" fill="#f6f1e4" stroke="#1f3d2b" stroke-width="1.4"/>
+            <path d="M17 -11 L20 -15 M11 -11 L8 -15" stroke="#1f3d2b" stroke-width="1.3" stroke-linecap="round"/>
+            <circle cx="15.5" cy="-8" r="1" fill="#1f3d2b"/>
+            <path d="M-8 6 L-8 13 M2 6 L2 13 M8 6 L8 13" stroke="#1f3d2b" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M-12 -3 C-16 -5 -17 0 -13 1" fill="none" stroke="#1f3d2b" stroke-width="1.2"/>
+            <ellipse cx="-4" cy="-2" rx="4" ry="3" fill="#b96335" opacity=".8"/>
+          </g>
+        </g>
+      </svg>
     </div>
-  </section>
 
-  <!-- ================= DROP 2 ================= -->
-  <section class="drop" id="drop-2">
-    <div class="drop-head">
-      <div class="drop-number" aria-hidden="true">02</div>
-      <div>
-        <div class="drop-kicker">Drop 02 · A conta</div>
-        <h2>A receita vira uma conta de otimização.</h2>
+    <div class="map-caption">
+      <strong>10 portões.</strong> Cada checagem abre o próximo. Clique em um portão já concluído para revisar.
+    </div>
+
+    <div class="sidebar-foot">
+      <span class="current-pill">DROP <b id="currentDropLabel">01</b> / 10</span>
+      <button class="reset-btn" id="resetBtn" type="button">Reiniciar trilha</button>
+    </div>
+  </aside>
+
+  <!-- ================= CONTENT ================= -->
+  <main class="content">
+    <div class="mobile-head">
+      <div class="brand">
+        <div class="brand-mark">
+          <div class="brand-icon" aria-hidden="true">R</div>
+          <div class="brand-text"><b>RuFaS · Campo Dourado</b><span>Trilha da fazenda</span></div>
+        </div>
+        <span class="brand-count" id="mobileBrandCount">0/10</span>
       </div>
+      <span class="current-pill">DROP <b id="mobileCurrentDropLabel">01</b> / 10</span>
+      <div class="mobile-trail" id="mobileTrail" aria-label="Progresso dos drops"></div>
     </div>
 
-    <div class="drop-grid">
-      <article class="card concept">
-        <h3>Conceito</h3>
-        <p>Com dois alimentos, a conta fica visível. Se <strong>x</strong> é a silagem de milho, o farelo de soja é <strong>25,3 − x</strong>.</p>
-        <p>O custo é uma linha reta. A proteína e a fibra são outras duas linhas. O ponto onde todas as travas se encontram é a <strong>região viável</strong>.</p>
-        <p>O simplex faz isso com <strong>19 alimentos e 37 restrições</strong>. A lógica é a mesma; muda o tamanho.</p>
-        <ul>
-          <li><strong>Variável:</strong> kg de MS de cada alimento.</li>
-          <li><strong>Objetivo:</strong> minimizar o custo total.</li>
-          <li><strong>Restrição:</strong> o que a vaca precisa.</li>
-        </ul>
-      </article>
-
-      <article class="card bench" aria-labelledby="bench2-title">
-        <div class="bench-head">
-          <p class="bench-title" id="bench2-title">Bancada · mova a silagem</p>
-          <span class="bench-note">o farelo completa os 25,3 kg</span>
+    <!-- ================= DROP 1 ================= -->
+    <section class="drop" data-drop="1" aria-labelledby="d1-title">
+      <div class="drop-head">
+        <div class="drop-number" aria-hidden="true">01</div>
+        <div>
+          <div class="drop-kicker">Portão 01 · Ponto de partida</div>
+          <h1 id="d1-title">A Fazenda Campo Dourado e o problema que ela nos deu.</h1>
+          <p class="drop-sub">Antes da conta, entenda o cenário: quem são os animais, o que o RuFaS simula e qual é o objetivo do módulo.</p>
         </div>
+      </div>
 
-        <div class="bar-label">
-          <span>Régua da ração</span>
-          <strong id="d2MixLabel">18,6 kg silagem + 6,7 kg farelo</strong>
-        </div>
-        <div class="feed-bar" aria-hidden="true">
-          <div class="seg seg-silage" id="d2Silage" style="width:73.5%"></div>
-          <div class="seg seg-soy" id="d2Soy" style="width:26.5%"></div>
-          <div class="ticks"></div>
-        </div>
-
-        <div class="slider-wrap">
-          <label class="sr-only" for="d2Slider">Quantidade de silagem de milho em kg de MS por dia</label>
-          <input id="d2Slider" type="range" min="0" max="25.3" step="0.01" value="18.58">
-          <div class="tick-row" aria-hidden="true">
-            <span>0 kg · só farelo</span>
-            <span>12,65</span>
-            <span>25,3 kg · só silagem</span>
+      <div class="lesson-grid">
+        <article class="card lesson">
+          <h3>O cenário</h3>
+          <p>O RuFaS é um simulador de fazenda leiteira. A branch <strong>go-campo-dourado</strong> traz uma fazenda sintética em Goiás, com <strong>100 vacas</strong> no rebanho e <strong>88,6 vacas em lactação</strong> em média.</p>
+          <p>Cada vaca produz cerca de <strong>41,3 kg de leite/dia</strong> e consome <strong>25,3 kg de matéria seca (MS)/dia</strong>. A dieta basal está no <code>feed.json</code>; os preços que usamos são de Goiás, outubro/2026.</p>
+          <p>O objetivo do módulo não é “aumentar o leite” nem “reduzir o rebanho”. É escolher a <strong>mistura de alimentos de menor custo</strong> que atenda às exigências nutricionais.</p>
+          <div class="farm-note">
+            <b>Campo Dourado</b>
+            Cada <strong>R$ 0,01/kg de MS</strong> na ração vale cerca de <strong>R$ 22,41/dia</strong> para as 88,6 vacas — ou <strong>R$ 8.180/ano</strong>. Por isso pequenas diferenças de formulação importam.
           </div>
-          <p class="prompt"><strong>Sua vez:</strong> mova o slider. O custo cai quando você aumenta a silagem, mas a fibra estoura em 33%. A faixa verde é a região viável.</p>
-        </div>
+        </article>
 
-        <div class="metric-grid">
-          <div class="metric">
-            <span class="metric-label">Custo</span>
-            <span class="metric-value" id="d2Cost">R$ 26,77</span>
-            <span class="metric-note">por vaca/dia</span>
+        <article class="card bench">
+          <div class="bench-head">
+            <p class="bench-title">Painel da fazenda</p>
+            <span class="bench-note">médias do cenário</span>
           </div>
-          <div class="metric">
-            <span class="metric-label">Proteína</span>
-            <span class="metric-value" id="d2Cp">19,6%</span>
-            <span class="metric-note">mínimo 17,5%</span>
+          <div class="metric-grid">
+            <div class="metric"><span class="metric-label">Vacas</span><span class="metric-value">100</span><span class="metric-note">88,6 em lactação</span></div>
+            <div class="metric"><span class="metric-label">Leite</span><span class="metric-value">41,3 kg</span><span class="metric-note">por vaca/dia</span></div>
+            <div class="metric"><span class="metric-label">Consumo</span><span class="metric-value">25,3 kg</span><span class="metric-note">MS/vaca/dia</span></div>
+            <div class="metric"><span class="metric-label">Dieta basal</span><span class="metric-value">6</span><span class="metric-note">ingredientes principais</span></div>
+            <div class="metric"><span class="metric-label">Custo basal</span><span class="metric-value">R$ 32,17</span><span class="metric-note">vaca/dia</span></div>
+            <div class="metric"><span class="metric-label">Alimentos</span><span class="metric-value">19</span><span class="metric-note">candidatos no PL</span></div>
           </div>
-          <div class="metric">
-            <span class="metric-label">Fibra (NDF)</span>
-            <span class="metric-value" id="d2Ndf">33,0%</span>
-            <span class="metric-note">faixa 28–33%</span>
+          <div class="status-line"><span class="dot ok"></span><span><strong>O alvo:</strong> menor custo, com leite e saúde ruminal preservados.</span></div>
+          <div class="farm-note">
+            <b>O que o RuFaS já faz</b>
+            Ele simula rebanho, reprodução, lactação, exigências, dejetos e emissões. O módulo de otimização entra antes: escolhe a dieta que o RuFaS vai testar.
           </div>
-        </div>
+        </article>
+      </div>
 
-        <div class="status-line" id="d2Status" aria-live="polite">
-          <span class="dot ok" id="d2Dot"></span>
-          <span><strong>Dentro da região viável.</strong> Esta mistura atende às duas travas.</span>
+      <div class="quiz" data-drop="1" data-correct="b" data-locked="false"
+           data-success="O módulo é uma ferramenta de decisão: escolhe a mistura de menor custo que atende às exigências. O RuFaS continua sendo o simulador.">
+        <p class="quiz-kicker">Checagem · Portão 01</p>
+        <p class="quiz-q">Qual é o objetivo principal do módulo de otimização?</p>
+        <div class="options">
+          <button class="option" data-opt="a" data-feedback="A produção é uma meta do manejo, não do módulo. A curva de lactação e o mérito genético são entradas do RuFaS; o módulo não decide aumentar o leite."><span class="letter">A</span><span>Aumentar a produção para 45 kg/vaca/dia.</span></button>
+          <button class="option" data-opt="b"><span class="letter">B</span><span>Escolher a mistura de alimentos de menor custo que atenda às exigências.</span></button>
+          <button class="option" data-opt="c" data-feedback="O número de vacas é uma característica do cenário. O módulo otimiza a ração para o rebanho que já existe; ele não decide reduzir o rebanho."><span class="letter">C</span><span>Reduzir o rebanho para diminuir o custo.</span></button>
+          <button class="option" data-opt="d" data-feedback="O módulo é um complemento do RuFaS, não um substituto. Ele lê os arquivos do simulador e devolve uma dieta para ser validada nele."><span class="letter">D</span><span>Substituir o RuFaS por uma planilha.</span></button>
         </div>
+        <div class="quiz-feedback" aria-live="polite"></div>
+        <button class="next-btn" type="button" hidden>Abrir o portão 02 →</button>
+      </div>
+    </section>
 
-        <div class="action-row">
-          <button class="btn" id="d2OptimalBtn" type="button">Levar ao ótimo de 2 alimentos</button>
-          <button class="btn secondary" id="d2CompareBtn" type="button" aria-expanded="false">Comparar com o modelo completo</button>
+    <!-- ================= DROP 2 ================= -->
+    <section class="drop" data-drop="2" aria-labelledby="d2-title">
+      <div class="drop-head">
+        <div class="drop-number" aria-hidden="true">02</div>
+        <div>
+          <div class="drop-kicker">Portão 02 · O problema</div>
+          <h1 id="d2-title">Dieta é uma receita com travas.</h1>
+          <p class="drop-sub">O instinto é escolher o alimento mais barato. A vaca não come preço: ela precisa de energia, proteína e fibra ao mesmo tempo.</p>
         </div>
+      </div>
 
-        <div class="charts">
-          <div class="chart-card">
-            <div class="chart-title"><span><strong>Custo</strong> da ração</span><span>R$/vaca/dia</span></div>
-            <svg id="costChart" viewBox="0 0 520 220" role="img" aria-label="Gráfico do custo da ração em função da quantidade de silagem de milho"></svg>
+      <div class="lesson-grid">
+        <article class="card lesson">
+          <h3>O conceito</h3>
+          <p>Uma dieta é a <strong>proporção de cada alimento</strong>. O problema é achar a proporção que fecha a conta nutricional pelo menor custo.</p>
+          <ul>
+            <li><strong>Objetivo:</strong> minimizar o custo da mistura.</li>
+            <li><strong>Restrições:</strong> o que a vaca precisa (energia, proteína, fibra, minerais).</li>
+            <li><strong>Limites práticos:</strong> não dá para colocar 100% de ureia ou de farelo de soja.</li>
+          </ul>
+          <div class="farm-note">
+            <b>Dieta basal do RuFaS</b>
+            30% silagem de milho · 18% silagem de leguminosa · 24% milho grão · 16% farelo de soja · 9% caroço de algodão · 3% mistura mineral.
           </div>
-          <div class="chart-card">
-            <div class="chart-title"><span><strong>Proteína e fibra</strong> da mistura</span><span>% da MS</span></div>
-            <svg id="nutrientChart" viewBox="0 0 520 220" role="img" aria-label="Gráfico de proteína e fibra em função da quantidade de silagem de milho"></svg>
-            <div class="legend" aria-hidden="true">
-              <span><i class="swatch cp"></i>Proteína bruta</span>
-              <span><i class="swatch ndf"></i>Fibra (NDF)</span>
-              <span><i class="swatch" style="background:#2f6b4f;opacity:.18"></i>Faixa de fibra</span>
+        </article>
+
+        <article class="card bench">
+          <div class="bench-head">
+            <p class="bench-title">Bancada · escolha uma mistura</p>
+            <span class="bench-note">2 alimentos · 25,3 kg MS</span>
+          </div>
+          <div class="choice-row" role="group" aria-label="Escolha uma dieta">
+            <button class="choice" type="button" data-d2choice="silagem"><b>Só silagem</b>O mais barato por kg<span>R$ 15,74/dia</span></button>
+            <button class="choice" type="button" data-d2choice="farelo"><b>Só farelo</b>O mais proteico<span>R$ 57,25/dia</span></button>
+            <button class="choice is-active" type="button" data-d2choice="mistura"><b>Mistura pensada</b>Silagem + farelo<span>R$ 26,77/dia</span></button>
+          </div>
+          <div class="bar-label"><span>Composição</span><strong id="d2MixLabel">18,6 kg silagem + 6,7 kg farelo</strong></div>
+          <div class="feed-bar" aria-hidden="true">
+            <div class="seg seg-silage" id="d2SilageBar" style="width:73.5%"></div>
+            <div class="seg seg-soy" id="d2SoyBar" style="width:26.5%"></div>
+            <div class="ticks"></div>
+          </div>
+          <div class="metric-grid">
+            <div class="metric"><span class="metric-label">Custo</span><span class="metric-value" id="d2Cost">R$ 26,77</span><span class="metric-note">vaca/dia</span></div>
+            <div class="metric"><span class="metric-label">Proteína</span><span class="metric-value" id="d2Cp">19,6%</span><span class="metric-note">mín. 17,5%</span></div>
+            <div class="metric"><span class="metric-label">Fibra</span><span class="metric-value" id="d2Ndf">33,0%</span><span class="metric-note">28–33%</span></div>
+          </div>
+          <div class="status-line" id="d2Status"><span class="dot ok"></span><span><strong>A conta fecha.</strong> Proteína e fibra dentro da faixa.</span></div>
+          <div class="prompt"><strong>O ponto:</strong> a opção mais barata (R$ 15,74) não serve. A mistura viável custa R$ 26,77. O problema não é o insumo barato; é a combinação viável.</div>
+        </article>
+      </div>
+
+      <div class="quiz" data-drop="2" data-correct="d" data-locked="false"
+           data-success="Preço baixo não garante dieta viável. A silagem sozinha falta proteína e sobra fibra; a mistura precisa equilibrar as duas travas.">
+        <p class="quiz-kicker">Checagem · Portão 02</p>
+        <p class="quiz-q">Por que a opção “só silagem” não serve, mesmo sendo a mais barata?</p>
+        <div class="options">
+          <button class="option" data-opt="a" data-feedback="O consumo é fixo em 25,3 kg de MS. O problema não é a quantidade que a vaca come, mas a qualidade nutricional da mistura."><span class="letter">A</span><span>Porque a vaca come pouco.</span></button>
+          <button class="option" data-opt="b" data-feedback="O RuFaS aceita silagem de milho; ela é a base da dieta basal. O problema é a proporção, não o ingrediente."><span class="letter">B</span><span>Porque o RuFaS não aceita silagem.</span></button>
+          <button class="option" data-opt="c" data-feedback="A silagem é justamente o alimento mais barato por kg de MS. O problema dela é nutricional: pouca proteína e muita fibra."><span class="letter">C</span><span>Porque a silagem é o alimento mais caro.</span></button>
+          <button class="option" data-opt="d"><span class="letter">D</span><span>Porque falta proteína e sobra fibra, o que prejudica a produção e o rúmen.</span></button>
+        </div>
+        <div class="quiz-feedback" aria-live="polite"></div>
+        <button class="next-btn" type="button" hidden>Abrir o portão 03 →</button>
+      </div>
+    </section>
+
+    <!-- ================= DROP 3 ================= -->
+    <section class="drop" data-drop="3" aria-labelledby="d3-title">
+      <div class="drop-head">
+        <div class="drop-number" aria-hidden="true">03</div>
+        <div>
+          <div class="drop-kicker">Portão 03 · Os alimentos</div>
+          <h1 id="d3-title">Matéria seca, proteína, fibra e energia: o que entra na conta.</h1>
+          <p class="drop-sub">A composição dos alimentos é a “tabela nutricional” do problema. Sem ela, o otimizador não tem como comparar maçã com laranja.</p>
+        </div>
+      </div>
+
+      <div class="lesson-grid">
+        <article class="card lesson">
+          <h3>Por que MS?</h3>
+          <p>A silagem de milho tem muita água: só <strong>35,4%</strong> é matéria seca. O farelo de soja tem <strong>89,3%</strong>. Comparar preço por kg de alimento fresco distorce a conta.</p>
+          <p>Por isso o modelo trabalha em <strong>kg de MS</strong>. A vaca come 25,3 kg de MS; isso equivale a cerca de <strong>71,5 kg de silagem fresca</strong> se a dieta fosse só silagem.</p>
+          <p>Os nutrientes também são expressos em % da MS: proteína bruta (PB), fibra em detergente neutro (NDF), amido, extrato etéreo (EE), TDN, cálcio e fósforo.</p>
+          <div class="farm-note">
+            <b>Conversão que importa</b>
+            Silagem: R$ 220/t fresca ÷ 35,4% MS ≈ <strong>R$ 0,622/kg MS</strong>. Farelo: R$ 2.020/t fresca ÷ 89,3% MS ≈ <strong>R$ 2,263/kg MS</strong>.
+          </div>
+        </article>
+
+        <article class="card bench">
+          <div class="bench-head">
+            <p class="bench-title">Bancada · comparar na mesma base</p>
+            <span class="bench-note">preços de out/2026</span>
+          </div>
+          <div class="choice-row" role="group" aria-label="Ver base de comparação">
+            <button class="choice" type="button" data-dm="fresco"><b>Por kg fresco</b>Como o mercado vende<span>R$ 0,22 / R$ 2,02</span></button>
+            <button class="choice is-active" type="button" data-dm="ms"><b>Por kg de MS</b>Como o modelo compara<span>R$ 0,62 / R$ 2,26</span></button>
+          </div>
+          <div class="metric-grid">
+            <div class="metric"><span class="metric-label">Silagem</span><span class="metric-value" id="dmSilage">R$ 0,622</span><span class="metric-note">por kg MS</span></div>
+            <div class="metric"><span class="metric-label">Farelo</span><span class="metric-value" id="dmSoy">R$ 2,263</span><span class="metric-note">por kg MS</span></div>
+            <div class="metric"><span class="metric-label">Relação</span><span class="metric-value" id="dmRatio">3,6×</span><span class="metric-note">farelo/silagem</span></div>
+          </div>
+          <div class="status-line"><span class="dot ok"></span><span><strong>Na mesma base:</strong> o farelo é ~3,6 vezes mais caro por kg de MS.</span></div>
+          <div class="prompt"><strong>Por que não comparar fresco?</strong> A silagem parece “muito mais barata” porque é 65% água. Na base de MS, a diferença real aparece.</div>
+        </article>
+      </div>
+
+      <div class="quiz" data-drop="3" data-correct="a" data-locked="false"
+           data-success="A MS remove a água da comparação. É a única base justa para comparar alimentos com umidades diferentes.">
+        <p class="quiz-kicker">Checagem · Portão 03</p>
+        <p class="quiz-q">Por que a conta da dieta é feita em kg de MS, e não em kg de alimento fresco?</p>
+        <div class="options">
+          <button class="option" data-opt="a"><span class="letter">A</span><span>Porque a silagem tem muita água e o farelo tem pouca; comparar fresco distorce.</span></button>
+          <button class="option" data-opt="b" data-feedback="O RuFaS usa MS internamente, mas o motivo principal é econômico e nutricional: comparar alimentos com umidades diferentes exige a mesma base."><span class="letter">B</span><span>Porque o RuFaS só aceita MS.</span></button>
+          <button class="option" data-opt="c" data-feedback="A água que a vaca bebe é outra coisa. A água do alimento dilui os nutrientes e precisa ser descontada para comparar preço e composição."><span class="letter">C</span><span>Porque a vaca bebe água.</span></button>
+          <button class="option" data-opt="d" data-feedback="O preço menor da silagem por kg fresco é justamente o efeito da água. A base de MS mostra o custo real por nutriente."><span class="letter">D</span><span>Porque o preço da silagem é menor.</span></button>
+        </div>
+        <div class="quiz-feedback" aria-live="polite"></div>
+        <button class="next-btn" type="button" hidden>Abrir o portão 04 →</button>
+      </div>
+    </section>
+
+    <!-- ================= DROP 4 ================= -->
+    <section class="drop" data-drop="4" aria-labelledby="d4-title">
+      <div class="drop-head">
+        <div class="drop-number" aria-hidden="true">04</div>
+        <div>
+          <div class="drop-kicker">Portão 04 · As exigências</div>
+          <h1 id="d4-title">O que a vaca precisa — e o que o NASEM calcula.</h1>
+          <p class="drop-sub">As restrições não são “opinião do nutricionista”: saem do NASEM e de faixas práticas de formulação.</p>
+        </div>
+      </div>
+
+      <div class="lesson-grid">
+        <article class="card lesson">
+          <h3>As travas principais</h3>
+          <p>Para a vaca de 650 kg, 41,3 kg de leite/dia, o NASEM estima <strong>44,69 Mcal de NEl/dia</strong>, <strong>2.557 g de proteína metabolizável/dia</strong>, <strong>66,8 g de Ca absorvível</strong> e <strong>64,1 g de P absorvível</strong>.</p>
+          <p>Além disso, o modelo impõe faixas práticas: PB ≥ 17,5%, NDF 28–33%, NDF de forragem ≥ 18%, amido 25–35%, EE 3–6%, RUP ≥ 1,2 kg/dia, Ca total ≥ 0,60% e Ca:P 1,5–2,5.</p>
+          <div class="farm-note">
+            <b>A conta do TDN</b>
+            A basal entrega <strong>41,67 Mcal</strong> (TDN 72,12%). O NASEM pede <strong>44,69 Mcal</strong> (TDN 76,99%). É por isso que existem dois cenários: iso-energético (mantém a basal) e NASEM (corrige o déficit).
+          </div>
+        </article>
+
+        <article class="card bench">
+          <div class="bench-head">
+            <p class="bench-title">Painel de exigências</p>
+            <span class="bench-note">vaca de 650 kg · 41,3 kg leite</span>
+          </div>
+          <div class="metric-grid">
+            <div class="metric"><span class="metric-label">NEl</span><span class="metric-value">44,69</span><span class="metric-note">Mcal/dia</span></div>
+            <div class="metric"><span class="metric-label">PM</span><span class="metric-value">2.557</span><span class="metric-note">g/dia</span></div>
+            <div class="metric"><span class="metric-label">Ca abs.</span><span class="metric-value">66,8</span><span class="metric-note">g/dia</span></div>
+            <div class="metric"><span class="metric-label">P abs.</span><span class="metric-value">64,1</span><span class="metric-note">g/dia</span></div>
+            <div class="metric"><span class="metric-label">PB mín.</span><span class="metric-value">17,5%</span><span class="metric-note">da MS</span></div>
+            <div class="metric"><span class="metric-label">NDF</span><span class="metric-value">28–33%</span><span class="metric-note">da MS</span></div>
+          </div>
+          <div class="status-line"><span class="dot ok"></span><span><strong>Nem toda exigência é igual:</strong> a RUP é a restrição mais cara; a fibra é a que mais limita a silagem.</span></div>
+          <div class="prompt"><strong>Pense:</strong> se a dieta é 100% silagem, qual trava estoura primeiro? A proteína e o NDF máximo.</div>
+        </article>
+      </div>
+
+      <div class="quiz" data-drop="4" data-correct="c" data-locked="false"
+           data-success="A silagem sozinha tem pouca proteína e muita fibra. As duas travas — PB mínima e NDF máximo — impedem a dieta 100% silagem.">
+        <p class="quiz-kicker">Checagem · Portão 04</p>
+        <p class="quiz-q">Qual combinação de restrições impede uma dieta 100% silagem de milho?</p>
+        <div class="options">
+          <button class="option" data-opt="a" data-feedback="O custo não impede: a silagem é barata. O problema é nutricional, não econômico."><span class="letter">A</span><span>Custo e preço do leite.</span></button>
+          <button class="option" data-opt="b" data-feedback="Ureia e calcário são ingredientes, não as restrições que impedem a silagem pura. Eles podem até ajudar a corrigir a dieta."><span class="letter">B</span><span>Ureia e calcário.</span></button>
+          <button class="option" data-opt="c"><span class="letter">C</span><span>Proteína mínima (17,5%) e NDF máximo (33%).</span></button>
+          <button class="option" data-opt="d" data-feedback="O consumo é fixo em 25,3 kg de MS e as ordenhas não entram no PL. A trava é a composição da silagem."><span class="letter">D</span><span>Consumo de MS e número de ordenhas.</span></button>
+        </div>
+        <div class="quiz-feedback" aria-live="polite"></div>
+        <button class="next-btn" type="button" hidden>Abrir o portão 05 →</button>
+      </div>
+    </section>
+
+    <!-- ================= DROP 5 ================= -->
+    <section class="drop" data-drop="5" aria-labelledby="d5-title">
+      <div class="drop-head">
+        <div class="drop-number" aria-hidden="true">05</div>
+        <div>
+          <div class="drop-kicker">Portão 05 · A formulação</div>
+          <h1 id="d5-title">A receita vira uma conta de otimização.</h1>
+          <p class="drop-sub">Agora a intuição vira matemática: variáveis, objetivo, restrição de MS, restrições nutricionais e limites.</p>
+        </div>
+      </div>
+
+      <div class="lesson-grid">
+        <article class="card lesson">
+          <h3>A formulação</h3>
+          <p><strong>Variáveis:</strong> kg de MS/dia de cada alimento. No modelo completo, 19 alimentos.</p>
+          <p><strong>Objetivo:</strong> minimizar o custo total da ração.</p>
+          <p><strong>Igualdade:</strong> a soma das MS tem de ser 25,3 kg/dia.</p>
+          <p><strong>Desigualdades:</strong> PB, NDF, amido, EE, TDN, Ca, P, RUP e limites de inclusão.</p>
+          <p>Com dois alimentos, a conta fica visível: se <strong>x</strong> é a silagem, o farelo é <strong>25,3 − x</strong>. O custo é uma reta; a proteína e a fibra são outras duas.</p>
+          <div class="farm-note">
+            <b>No modelo completo</b>
+            19 variáveis e 37 restrições de desigualdade, além da igualdade de MS. O solver é o <code>linprog</code> do SciPy, método dual simplex.
+          </div>
+        </article>
+
+        <article class="card bench">
+          <div class="bench-head">
+            <p class="bench-title">Bancada · régua de 2 alimentos</p>
+            <span class="bench-note">o farelo completa 25,3 kg</span>
+          </div>
+          <div class="bar-label"><span>Mistura</span><strong id="d5MixLabel">18,6 kg silagem + 6,7 kg farelo</strong></div>
+          <div class="feed-bar" aria-hidden="true">
+            <div class="seg seg-silage" id="d5SilageBar" style="width:73.5%"></div>
+            <div class="seg seg-soy" id="d5SoyBar" style="width:26.5%"></div>
+            <div class="ticks"></div>
+          </div>
+          <input id="d5Slider" type="range" min="0" max="25.3" step="0.01" value="18.58" aria-label="Quantidade de silagem de milho em kg de MS por dia">
+          <div class="tick-row" aria-hidden="true"><span>0 kg</span><span>12,65</span><span>25,3 kg</span></div>
+          <div class="feasible-wrap">
+            <div class="bar-label"><span>Região viável</span><span>verde = PB e fibra OK</span></div>
+            <div class="feasible-track">
+              <div class="feasible-band" id="d5Band"></div>
+              <div class="feasible-marker" id="d5Marker"></div>
+            </div>
+            <div class="feasible-legend"><span>0 kg · só farelo</span><span>25,3 kg · só silagem</span></div>
+          </div>
+          <div class="metric-grid">
+            <div class="metric"><span class="metric-label">Custo</span><span class="metric-value" id="d5Cost">R$ 26,77</span><span class="metric-note">vaca/dia</span></div>
+            <div class="metric"><span class="metric-label">Proteína</span><span class="metric-value" id="d5Cp">19,6%</span><span class="metric-note">mín. 17,5%</span></div>
+            <div class="metric"><span class="metric-label">Fibra</span><span class="metric-value" id="d5Ndf">33,0%</span><span class="metric-note">28–33%</span></div>
+          </div>
+          <div class="status-line" id="d5Status"><span class="dot ok"></span><span><strong>Dentro da região viável.</strong></span></div>
+          <div class="prompt"><strong>Sua vez:</strong> mova o slider até a região verde. O custo cai com mais silagem, mas a fibra estoura em 33%.</div>
+        </article>
+      </div>
+
+      <div class="quiz" data-drop="5" data-correct="a" data-locked="false"
+           data-success="O objetivo é o custo total que queremos minimizar. As exigências e o consumo são as restrições.">
+        <p class="quiz-kicker">Checagem · Portão 05</p>
+        <p class="quiz-q">Na formulação, o que é a função objetivo?</p>
+        <div class="options">
+          <button class="option" data-opt="a"><span class="letter">A</span><span>O custo total da ração que queremos minimizar.</span></button>
+          <button class="option" data-opt="b" data-feedback="A lista de exigências são as restrições. O objetivo é a função que queremos minimizar."><span class="letter">B</span><span>A lista de exigências da vaca.</span></button>
+          <button class="option" data-opt="c" data-feedback="O consumo de MS é uma restrição de igualdade: a dieta tem de fechar 25,3 kg. Não é o objetivo."><span class="letter">C</span><span>O consumo de MS.</span></button>
+          <button class="option" data-opt="d" data-feedback="O preço do leite entra na avaliação econômica e no IOFC, não no custo da ração."><span class="letter">D</span><span>O preço do leite.</span></button>
+        </div>
+        <div class="quiz-feedback" aria-live="polite"></div>
+        <button class="next-btn" type="button" hidden>Abrir o portão 06 →</button>
+      </div>
+    </section>
+
+    <!-- ================= DROP 6 ================= -->
+    <section class="drop" data-drop="6" aria-labelledby="d6-title">
+      <div class="drop-head">
+        <div class="drop-number" aria-hidden="true">06</div>
+        <div>
+          <div class="drop-kicker">Portão 06 · O simplex</div>
+          <h1 id="d6-title">Como o simplex escolhe: andar de vértice em vértice.</h1>
+          <p class="drop-sub">O simplex não testa todas as combinações. Ele usa a geometria do problema para melhorar a solução passo a passo.</p>
+        </div>
+      </div>
+
+      <div class="lesson-grid">
+        <article class="card lesson">
+          <h3>A ideia</h3>
+          <p>A região viável é o conjunto de dietas que atende às restrições. O ótimo de um problema linear está em um <strong>vértice</strong> dessa região (ou numa combinação de vértices).</p>
+          <p>O simplex começa em um vértice viável e caminha para um vértice vizinho com custo menor. Quando nenhum vizinho melhora, ele para: achou o ótimo.</p>
+          <p>Com 2 alimentos, a região viável é um segmento. Os “vértices” são os extremos: <strong>14,35 kg</strong> de silagem (custo R$ 33,70) e <strong>18,58 kg</strong> (custo R$ 26,77). O simplex escolhe o segundo.</p>
+          <div class="farm-note">
+            <b>O quadro final</b>
+            O último quadro do simplex mostra a solução e os <strong>preços sombra</strong>: quanto custa apertar ou relaxar cada restrição. É a leitura de negócio do algoritmo.
+          </div>
+        </article>
+
+        <article class="card bench">
+          <div class="bench-head">
+            <p class="bench-title">Bancada · dois vértices</p>
+            <span class="bench-note">região viável de 2 alimentos</span>
+          </div>
+          <div class="simplex-box">
+            <div class="simplex-line">
+              <div class="simplex-track"></div>
+              <div class="simplex-point" style="left:14.35%" id="vertexA">A</div>
+              <div class="simplex-point best" style="left:73.5%" id="vertexB">B</div>
+            </div>
+            <div class="simplex-labels"><span>14,35 kg silagem · R$ 33,70</span><span>18,58 kg · R$ 26,77</span></div>
+            <div class="simplex-result" id="simplexResult">Clique em um vértice para avaliar o custo.</div>
+            <div class="action-row" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+              <button class="btn secondary" type="button" id="evalA">Avaliar A</button>
+              <button class="btn secondary" type="button" id="evalB">Avaliar B</button>
             </div>
           </div>
+          <div class="status-line" style="margin-top:10px"><span class="dot ok"></span><span><strong>O simplex vai para B:</strong> mesmo atendendo às travas, B custa R$ 6,93/dia menos.</span></div>
+        </article>
+      </div>
+
+      <div class="quiz" data-drop="6" data-correct="d" data-locked="false"
+           data-success="O simplex é um caminho inteligente entre vértices: ele não enumera todas as combinações; ele melhora até não haver vizinho melhor.">
+        <p class="quiz-kicker">Checagem · Portão 06</p>
+        <p class="quiz-q">O que o simplex faz para encontrar o ótimo?</p>
+        <div class="options">
+          <button class="option" data-opt="a" data-feedback="Testar todas as combinações seria força bruta. O simplex usa a geometria e evita enumerar o espaço inteiro."><span class="letter">A</span><span>Testa todas as combinações possíveis.</span></button>
+          <button class="option" data-opt="b" data-feedback="Escolher o alimento mais barato pode violar as restrições. O simplex considera todas as travas ao mesmo tempo."><span class="letter">B</span><span>Escolhe o alimento mais barato.</span></button>
+          <button class="option" data-opt="c" data-feedback="A simulação no RuFaS é outra etapa. O simplex resolve o problema de programação linear, não simula a vaca."><span class="letter">C</span><span>Simula a vaca no RuFaS.</span></button>
+          <button class="option" data-opt="d"><span class="letter">D</span><span>Começa viável e troca para um vértice vizinho melhor até não haver melhora.</span></button>
         </div>
+        <div class="quiz-feedback" aria-live="polite"></div>
+        <button class="next-btn" type="button" hidden>Abrir o portão 07 →</button>
+      </div>
+    </section>
 
-        <div class="comparison" id="d2Comparison">
-          <h4>Se o modelo usar os 19 alimentos</h4>
-          <p>A conta de 2 alimentos já mostra o mecanismo. Com mais ingredientes, o modelo tem mais espaço para trocar energia, proteína e fibra sem pagar o preço do farelo de soja.</p>
-          <table class="comparison-table">
-            <thead>
-              <tr><th>Dieta</th><th>Custo</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>2 alimentos (ótimo didático)</td><td class="big-number">R$ 26,77</td></tr>
-              <tr><td>19 alimentos (modelo completo)</td><td class="big-number">R$ 26,07</td></tr>
-            </tbody>
-          </table>
-          <p style="margin-top:10px;margin-bottom:0">A diferença parece pequena, mas vem de substituir parte do farelo de soja por sorgo, glúten de milho e farelo de algodão — e de trocar a mistura mineral por calcário + fontes mais baratas de fósforo.</p>
+    <!-- ================= DROP 7 ================= -->
+    <section class="drop" data-drop="7" aria-labelledby="d7-title">
+      <div class="drop-head">
+        <div class="drop-number" aria-hidden="true">07</div>
+        <div>
+          <div class="drop-kicker">Portão 07 · Preço sombra</div>
+          <h1 id="d7-title">O último quadro fala em dinheiro: preço sombra.</h1>
+          <p class="drop-sub">Preço sombra é quanto o custo muda quando uma restrição é apertada ou relaxada em uma unidade. É a leitura de negócio do simplex.</p>
         </div>
+      </div>
 
-        <div class="takeaway">
-          <div class="card">
-            <b>Região viável</b>
-            <p>Com 2 alimentos, a silagem precisa ficar entre <strong>14,4 e 18,6 kg</strong> para proteína e fibra fecharem.</p>
+      <div class="lesson-grid">
+        <article class="card lesson">
+          <h3>Como ler</h3>
+          <p>Se a restrição está <strong>ativa</strong> (folga zero), o preço sombra pode ser diferente de zero. Se ela tem folga, o preço sombra é zero: relaxar não muda o custo.</p>
+          <p>Exemplos da dieta iso-energética:</p>
+          <ul>
+            <li>+1 p.p. de TDN ≈ <strong>R$ 0,625/vaca/dia</strong>;</li>
+            <li>+1 p.p. de PB ≈ <strong>R$ 0,150/vaca/dia</strong>;</li>
+            <li>+1 kg de RUP digestível ≈ <strong>R$ 6,407/vaca/dia</strong>;</li>
+            <li>+1 kg de MS de mistura mineral ≈ <strong>R$ 6,052/vaca/dia</strong>.</li>
+          </ul>
+          <div class="farm-note">
+            <b>Decisão de negócio</b>
+            Se o nutritionista quer subir 1 p.p. de TDN, o custo sobe ~R$ 0,63/vaca/dia. Se o ganho de leite esperado não cobrir isso, não vale apertar a energia.
           </div>
-          <div class="card">
-            <b>Ótimo didático</b>
-            <p>O menor custo dentro da região é <strong>R$ 26,77</strong>, no limite de fibra (33%).</p>
+        </article>
+
+        <article class="card bench">
+          <div class="bench-head">
+            <p class="bench-title">Painel de alavancas</p>
+            <span class="bench-note">preços sombra · dieta iso</span>
           </div>
-          <div class="card">
-            <b>Modelo completo</b>
-            <p>Com 19 alimentos, o custo cai para <strong>R$ 26,07</strong>: mais espaço de manobra.</p>
+          <div class="claim-grid">
+            <div class="claim green"><b>Energia (TDN)</b>+1 p.p. → <strong>R$ 0,625/vaca/dia</strong></div>
+            <div class="claim green"><b>Proteína bruta</b>+1 p.p. → <strong>R$ 0,150/vaca/dia</strong></div>
+            <div class="claim yellow"><b>RUP digestível</b>+1 kg → <strong>R$ 6,407/vaca/dia</strong> (a mais cara)</div>
+            <div class="claim yellow"><b>Mistura mineral</b>+1 kg MS → <strong>R$ 6,052/vaca/dia</strong></div>
           </div>
+          <div class="status-line" style="margin-top:10px"><span class="dot ok"></span><span><strong>Regra:</strong> preço sombra zero = restrição com folga; preço sombra positivo = restrição apertando.</span></div>
+        </article>
+      </div>
+
+      <div class="quiz" data-drop="7" data-correct="c" data-locked="false"
+           data-success="Preço sombra zero significa folga: a restrição não está limitando a dieta. Você pode apertar ou relaxar um pouco sem mudar o custo.">
+        <p class="quiz-kicker">Checagem · Portão 07</p>
+        <p class="quiz-q">Se uma restrição tem preço sombra zero, o que isso significa?</p>
+        <div class="options">
+          <button class="option" data-opt="a" data-feedback="Se estivesse apertando, o preço sombra seria diferente de zero. Preço sombra zero indica folga."><span class="letter">A</span><span>A restrição está apertando a dieta.</span></button>
+          <button class="option" data-opt="b" data-feedback="Preço sombra é da restrição, não do alimento. Ele não diz que o alimento é grátis."><span class="letter">B</span><span>O alimento é grátis.</span></button>
+          <button class="option" data-opt="c"><span class="letter">C</span><span>Ela não está limitando; relaxar ou apertar um pouco não muda o custo.</span></button>
+          <button class="option" data-opt="d" data-feedback="É um resultado normal: a restrição tem folga. O solver não errou."><span class="letter">D</span><span>O solver errou.</span></button>
         </div>
-      </article>
-    </div>
-  </section>
+        <div class="quiz-feedback" aria-live="polite"></div>
+        <button class="next-btn" type="button" hidden>Abrir o portão 08 →</button>
+      </div>
+    </section>
 
-  <!-- ================= NEXT ================= -->
-  <section class="next-drops" aria-labelledby="next-title">
-    <h2 id="next-title">Próximos drops</h2>
-    <div class="next-grid">
-      <div class="next-card">
-        <span class="num">03</span>
-        <b>Simplex</b>
-        <p>Como o algoritmo anda de vértice em vértice até não achar nada mais barato.</p>
+    <!-- ================= DROP 8 ================= -->
+    <section class="drop" data-drop="8" aria-labelledby="d8-title">
+      <div class="drop-head">
+        <div class="drop-number" aria-hidden="true">08</div>
+        <div>
+          <div class="drop-kicker">Portão 08 · Custo reduzido</div>
+          <h1 id="d8-title">Quanto o milho precisa cair para entrar?</h1>
+          <p class="drop-sub">Para um alimento fora da dieta, o custo reduzido é o desconto de preço necessário para ele se tornar competitivo.</p>
+        </div>
       </div>
-      <div class="next-card">
-        <span class="num">04</span>
-        <b>Preço sombra</b>
-        <p>Quanto custa apertar cada trava. É a leitura de negócio do último quadro.</p>
-      </div>
-      <div class="next-card">
-        <span class="num">05</span>
-        <b>Sensibilidade</b>
-        <p>Sobol para os preços, pairwise para comparar cenários e break-even para ingredientes.</p>
-      </div>
-      <div class="next-card">
-        <span class="num">06</span>
-        <b>Validação</b>
-        <p>O que o RuFaS confirma — e o que ainda não podemos afirmar.</p>
-      </div>
-    </div>
-  </section>
 
-  <footer class="page-foot">
-    <span>Baseado no módulo <code>diet_optimization</code> do RuFaS · dados NASEM + preços de out/2026.</span>
-    <span>Drops 01–02 · versão didática</span>
-  </footer>
+      <div class="lesson-grid">
+        <article class="card lesson">
+          <h3>Preço de indiferença</h3>
+          <p>O modelo não usa milho grão aos preços atuais. O custo reduzido diz quanto o preço dele precisa cair para entrar.</p>
+          <ul>
+            <li>Milho: entra a <strong>R$ 1,079/kg MS</strong> ≈ <strong>R$ 56/saca</strong> (−13,2%).</li>
+            <li>Farelo de linhaça: entra a <strong>R$ 1,831/kg MS</strong> (−34,4%).</li>
+            <li>Sorgo pode subir <strong>≈17%</strong> antes de o milho assumir.</li>
+            <li>Farelo de algodão pode subir <strong>≈3,3%</strong> antes de o farelo de soja voltar.</li>
+          </ul>
+          <div class="farm-note">
+            <b>Cuidado com a praça</b>
+            O preço usado é CEPEA Campinas (R$ 64,87/saca). Em Goiás, o preço posto pode ser diferente. O critério prático é: <strong>abaixo de ~R$ 56/saca, o milho passa a competir</strong>.
+          </div>
+        </article>
+
+        <article class="card bench">
+          <div class="bench-head">
+            <p class="bench-title">Bancada · preço do milho</p>
+            <span class="bench-note">ponto de indiferença do modelo</span>
+          </div>
+          <div class="breakeven-box">
+            <div class="bar-label"><span>Preço do milho (R$/saca)</span><strong id="cornPriceLabel">R$ 64,87</strong></div>
+            <input id="cornSlider" type="range" min="40" max="80" step="0.01" value="64.87" aria-label="Preço do milho em reais por saca">
+            <div class="breakeven-track">
+              <div class="breakeven-threshold" style="left:40.7%" title="Ponto de indiferença: R$ 56/saca"></div>
+              <div class="breakeven-marker" id="cornMarker" style="left:62.25%"></div>
+            </div>
+            <div class="breakeven-labels"><span>R$ 40</span><span>R$ 56 (indiferença)</span><span>R$ 80</span></div>
+            <div class="status-line" id="cornStatus" style="margin-top:10px"><span class="dot bad"></span><span><strong>Fora da dieta.</strong> Acima de R$ 56/saca, o sorgo e o glúten de milho entregam energia mais barata.</span></div>
+          </div>
+          <div class="prompt"><strong>Leitura:</strong> o slider não reotimiza a dieta; ele mostra o preço em que o milho passaria a ser competitivo no modelo.</div>
+        </article>
+      </div>
+
+      <div class="quiz" data-drop="8" data-correct="b" data-locked="false"
+           data-success="O custo reduzido é o desconto necessário para o alimento entrar. Se o preço de mercado estiver acima do preço de indiferença, ele fica fora.">
+        <p class="quiz-kicker">Checagem · Portão 08</p>
+        <p class="quiz-q">O custo reduzido de um alimento fora da dieta indica...</p>
+        <div class="options">
+          <button class="option" data-opt="a" data-feedback="Não é lucro. É uma comparação de custo: quanto o preço precisa cair para o alimento ser competitivo."><span class="letter">A</span><span>O lucro que ele gera.</span></button>
+          <button class="option" data-opt="b"><span class="letter">B</span><span>Quanto o preço dele precisa cair para entrar na solução.</span></button>
+          <button class="option" data-opt="c" data-feedback="Custo de mistura é operacional e não entra no PL. O custo reduzido é sobre o preço do alimento."><span class="letter">C</span><span>O custo de misturar.</span></button>
+          <button class="option" data-opt="d" data-feedback="A quantidade é a variável de decisão. O custo reduzido é uma informação de preço, não de consumo."><span class="letter">D</span><span>A quantidade que a vaca come.</span></button>
+        </div>
+        <div class="quiz-feedback" aria-live="polite"></div>
+        <button class="next-btn" type="button" hidden>Abrir o portão 09 →</button>
+      </div>
+    </section>
+
+    <!-- ================= DROP 9 ================= -->
+    <section class="drop" data-drop="9" aria-labelledby="d9-title">
+      <div class="drop-head">
+        <div class="drop-number" aria-hidden="true">09</div>
+        <div>
+          <div class="drop-kicker">Portão 09 · Sensibilidade e cenários</div>
+          <h1 id="d9-title">O que muda a decisão: preço, preço e preço (e o leite).</h1>
+          <p class="drop-sub">A análise de sensibilidade mostra quais preços realmente importam e como os cenários se comparam.</p>
+        </div>
+      </div>
+
+      <div class="lesson-grid">
+        <article class="card lesson">
+          <h3>Três lentes</h3>
+          <p><strong>Local (OAT):</strong> varia um preço por vez. Mostra o impacto isolado.</p>
+          <p><strong>Global (Sobol):</strong> varia todos os preços ao mesmo tempo. Mostra a contribuição de cada um para a variância do custo.</p>
+          <p><strong>Pairwise:</strong> compara cenários sob os mesmos choques de preço, com teste pareado.</p>
+          <p>Resultados: silagem de milho ST ≈ 0,39; farelo de soja ≈ 0,23; sorgo ≈ 0,19. No IOFC, o preço do leite domina (ST ≈ 0,98).</p>
+          <div class="farm-note">
+            <b>Cenários</b>
+            Basal R$ 32,17 · Iso R$ 26,07 (−19,0%) · NASEM R$ 31,60 (−1,8%) · Com milho R$ 26,72 · Com linhaça R$ 27,28 · Sem sorgo R$ 27,14 · Máxima economia R$ 24,83.
+          </div>
+        </article>
+
+        <article class="card bench">
+          <div class="bench-head">
+            <p class="bench-title">Bancada · comparar cenários</p>
+            <span class="bench-note">R$/vaca/dia</span>
+          </div>
+          <div class="choice-row" role="group" aria-label="Métrica dos cenários">
+            <button class="choice is-active" type="button" data-metric="cost"><b>Custo</b>Quanto custa a ração<span>menor é melhor</span></button>
+            <button class="choice" type="button" data-metric="saving"><b>Economia anual</b>Vs. dieta basal<span>maior é melhor</span></button>
+          </div>
+          <div class="scenario-bars" id="scenarioBars"></div>
+          <div class="status-line" style="margin-top:10px"><span class="dot ok"></span><span><strong>Leitura:</strong> a iso-energética é a recomendação econômica; a NASEM é a opção conservadora.</span></div>
+          <div class="prompt"><strong>Nuance:</strong> ~61% da economia vem da linha mineral. Se a fazenda já usa mistura mais barata, a economia cai.</div>
+        </article>
+      </div>
+
+      <div class="quiz" data-drop="9" data-correct="d" data-locked="false"
+           data-success="No IOFC, a receita do leite domina. A ração é uma alavanca de custo; o preço do leite é a alavanca de receita.">
+        <p class="quiz-kicker">Checagem · Portão 09</p>
+        <p class="quiz-q">No IOFC, qual variável explica quase toda a variação?</p>
+        <div class="options">
+          <button class="option" data-opt="a" data-feedback="A silagem é o maior driver do custo da ração, mas não do IOFC. A receita do leite pesa muito mais."><span class="letter">A</span><span>Preço da silagem.</span></button>
+          <button class="option" data-opt="b" data-feedback="O farelo de soja importa no custo, mas o preço do leite domina a receita e, portanto, o IOFC."><span class="letter">B</span><span>Preço do farelo de soja.</span></button>
+          <button class="option" data-opt="c" data-feedback="A ureia é uma fração pequena do custo. Não é ela que explica a variância do IOFC."><span class="letter">C</span><span>Preço da ureia.</span></button>
+          <button class="option" data-opt="d"><span class="letter">D</span><span>Preço do leite.</span></button>
+        </div>
+        <div class="quiz-feedback" aria-live="polite"></div>
+        <button class="next-btn" type="button" hidden>Abrir o portão 10 →</button>
+      </div>
+    </section>
+
+    <!-- ================= DROP 10 ================= -->
+    <section class="drop" data-drop="10" aria-labelledby="d10-title">
+      <div class="drop-head">
+        <div class="drop-number" aria-hidden="true">10</div>
+        <div>
+          <div class="drop-kicker">Portão 10 · Validação e leitura crítica</div>
+          <h1 id="d10-title">O que o RuFaS confirma — e o que ainda não podemos afirmar.</h1>
+          <p class="drop-sub">A simulação é um sinal, não uma prova. O trabalho fica mais forte quando sabemos separar o que é resultado do que é hipótese.</p>
+        </div>
+      </div>
+
+      <div class="lesson-grid">
+        <article class="card lesson">
+          <h3>O que foi validado</h3>
+          <p>Dieta iso-energética no RuFaS, modo <code>animals_only</code>, 1 ano, seeds 44–46:</p>
+          <ul>
+            <li>Leite: <strong>3.720 vs. 3.707 kg/dia</strong> (estável);</li>
+            <li>CMS: <strong>−1,2%</strong>;</li>
+            <li>Metano entérico por kg de leite: <strong>−8,8%</strong>.</li>
+          </ul>
+          <p>A dieta NASEM também manteve o leite e reduziu levemente a intensidade de metano (−1,6% no seed 44), mas custa mais.</p>
+          <div class="farm-note">
+            <b>O que não é</b>
+            Não é lucro líquido, não é CO₂e total da fazenda, não é prova de longo prazo e não vale para qualquer fazenda. É uma fazenda sintética, 1 ano, 3 seeds.
+          </div>
+        </article>
+
+        <article class="card bench">
+          <div class="bench-head">
+            <p class="bench-title">Semáforo das afirmações</p>
+            <span class="bench-note">o que pode entrar no slide</span>
+          </div>
+          <div class="claim-grid">
+            <div class="claim green"><b>Pode afirmar</b>Custo −19% e leite estável em 1 ano no RuFaS.</div>
+            <div class="claim green"><b>Pode afirmar</b>Metano entérico por kg de leite −8,8% na validação.</div>
+            <div class="claim yellow"><b>Com ressalva</b>~61% da economia vem da linha mineral; depende da prática da fazenda.</div>
+            <div class="claim yellow"><b>Com ressalva</b>O cenário iso mantém o TDN da basal; não corrige o déficit NASEM.</div>
+            <div class="claim red"><b>Não pode</b>“Aumenta o lucro em R$ 197 mil.” É economia de custo/IOFC, não lucro.</div>
+            <div class="claim red"><b>Não pode</b>“Reduz o CO₂e total em 8,8%.” É só metano entérico no animals_only.</div>
+          </div>
+        </article>
+      </div>
+
+      <div class="quiz" data-drop="10" data-correct="a" data-locked="false"
+           data-success="Essa é a afirmação defensável: custo −19% e leite estável em 1 ano no RuFaS. O resto exige mais validação ou é outra métrica.">
+        <p class="quiz-kicker">Checagem · Portão 10</p>
+        <p class="quiz-q">Qual afirmação é defensável com o que temos?</p>
+        <div class="options">
+          <button class="option" data-opt="a"><span class="letter">A</span><span>A dieta reduz o custo em 19% e manteve o leite estável em 1 ano no RuFaS.</span></button>
+          <button class="option" data-opt="b" data-feedback="R$ 197 mil é economia de custo de ração/IOFC, não lucro líquido. Faltam custos fixos, outros lotes e a fazenda inteira."><span class="letter">B</span><span>A dieta aumenta o lucro da fazenda em R$ 197 mil.</span></button>
+          <button class="option" data-opt="c" data-feedback="O −8,8% é metano entérico por kg de leite no modo animals_only. Não é o CO₂e total da fazenda."><span class="letter">C</span><span>A dieta reduz o CO₂e total da fazenda em 8,8%.</span></button>
+          <button class="option" data-opt="d" data-feedback="A validação é uma fazenda sintética, 1 ano, 3 seeds. Não é generalizável para qualquer fazenda do Brasil."><span class="letter">D</span><span>A dieta é válida para qualquer fazenda do Brasil.</span></button>
+        </div>
+        <div class="quiz-feedback" aria-live="polite"></div>
+        <button class="next-btn" type="button" hidden>Ver o resumo da trilha →</button>
+      </div>
+    </section>
+
+    <!-- ================= FINAL ================= -->
+    <section class="final" id="finalPanel" aria-labelledby="final-title">
+      <p class="eyebrow">Trilha concluída · 10/10</p>
+      <h2 id="final-title">Você atravessou a fazenda.</h2>
+      <p>Agora você consegue explicar o projeto sem decorar código: a dieta é uma mistura com travas; o PL minimiza o custo; o simplex resolve; o preço sombra e o custo reduzido dão a leitura de negócio; a sensibilidade mostra o que importa; e a validação no RuFaS separa resultado de hipótese.</p>
+      <div class="final-grid">
+        <div class="final-card"><b>Dieta basal</b><span>R$ 32,17</span></div>
+        <div class="final-card"><b>Iso-energética</b><span>R$ 26,07</span></div>
+        <div class="final-card"><b>Economia</b><span>−19,0%</span></div>
+        <div class="final-card"><b>Leite validado</b><span>3.720 kg/dia</span></div>
+        <div class="final-card"><b>Metano/kg leite</b><span>−8,8%</span></div>
+        <div class="final-card"><b>Anual</b><span>R$ 197 mil</span></div>
+      </div>
+      <div class="final-actions">
+        <button class="primary" type="button" id="reviewBtn">Revisar do começo</button>
+        <button type="button" id="resetFinalBtn">Reiniciar trilha</button>
+      </div>
+    </section>
+  </main>
 </div>
 
 <script>
   "use strict";
 
+  /* ================= DADOS E ESTADO ================= */
+
   const DMI = 25.3;
   const FEEDS = {
-    silagem: { name: "silagem de milho", price: 0.622154, cp: 7.707, ndf: 40.931 },
-    farelo: { name: "farelo de soja", price: 2.262874, cp: 52.644, ndf: 11.065 }
+    silagem: { price: 0.622154, cp: 7.707, ndf: 40.931 },
+    farelo: { price: 2.262874, cp: 52.644, ndf: 11.065 }
   };
   const CP_MIN = 17.5;
   const NDF_MIN = 28.0;
   const NDF_MAX = 33.0;
-  const FULL_MODEL_COST = 26.07;
   const OPTIMAL_2 = 18.58;
+  const CORN_BREAKEVEN = 56.28;
+  const STORAGE_KEY = "rufas-campo-dourado-trilha-v2";
 
   const $ = (id) => document.getElementById(id);
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const fmtBRL = (v) => "R$ " + v.toFixed(2).replace(".", ",");
   const fmtPct = (v) => v.toFixed(1).replace(".", ",") + "%";
   const fmtKg = (v) => v.toFixed(1).replace(".", ",") + " kg";
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return { current: 1, completed: [] };
+      const parsed = JSON.parse(raw);
+      const completed = Array.isArray(parsed.completed)
+        ? [...new Set(parsed.completed.map(Number).filter((n) => n >= 1 && n <= 10))].sort((a, b) => a - b)
+        : [];
+      const current = clamp(Number(parsed.current) || 1, 1, 10);
+      return { current, completed };
+    } catch {
+      return { current: 1, completed: [] };
+    }
+  }
+
+  const state = loadState();
+
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch { /* ignore */ }
+  }
+
+  function maxUnlocked() {
+    if (!state.completed.length) return 1;
+    return Math.min(10, Math.max(...state.completed) + 1);
+  }
+
+  /* ================= MAPA ================= */
+
+  const STOPS = [
+    { n: 1, x: 62, y: 500 },
+    { n: 2, x: 95, y: 460 },
+    { n: 3, x: 140, y: 430 },
+    { n: 4, x: 185, y: 400 },
+    { n: 5, x: 220, y: 360 },
+    { n: 6, x: 200, y: 320 },
+    { n: 7, x: 160, y: 285 },
+    { n: 8, x: 120, y: 250 },
+    { n: 9, x: 150, y: 200 },
+    { n: 10, x: 220, y: 150 }
+  ];
+
+  function stopState(n) {
+    if (state.completed.includes(n)) return "done";
+    if (n === maxUnlocked() && n === state.current) return "current";
+    if (n <= maxUnlocked()) return "available";
+    return "locked";
+  }
+
+  function renderMap() {
+    const layer = $("trailStops");
+    if (!layer) return;
+    layer.innerHTML = "";
+    STOPS.forEach((stop) => {
+      const st = stopState(stop.n);
+      const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("class", `stop ${st}`);
+      g.setAttribute("data-drop", String(stop.n));
+      g.setAttribute("role", "button");
+      g.setAttribute("tabindex", st === "locked" ? "-1" : "0");
+      g.setAttribute("aria-label", `Drop ${stop.n}${st === "done" ? " concluído" : st === "current" ? " atual" : ""}`);
+
+      if (st === "current") {
+        const pulse = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        pulse.setAttribute("cx", stop.x);
+        pulse.setAttribute("cy", stop.y);
+        pulse.setAttribute("r", "13");
+        pulse.setAttribute("fill", "none");
+        pulse.setAttribute("stroke", "#a64b3c");
+        pulse.setAttribute("stroke-width", "2");
+        pulse.setAttribute("class", "pulse");
+        g.appendChild(pulse);
+      }
+
+      const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      circle.setAttribute("cx", stop.x);
+      circle.setAttribute("cy", stop.y);
+      circle.setAttribute("r", "9");
+      circle.setAttribute("stroke", "#f6f1e4");
+      circle.setAttribute("stroke-width", "1.5");
+      g.appendChild(circle);
+
+      const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      text.setAttribute("x", stop.x);
+      text.setAttribute("y", stop.y + 3);
+      text.setAttribute("text-anchor", "middle");
+      text.textContent = String(stop.n);
+      g.appendChild(text);
+
+      g.addEventListener("click", () => {
+        if (st !== "locked") showDrop(stop.n);
+      });
+      g.addEventListener("keydown", (event) => {
+        if ((event.key === "Enter" || event.key === " ") && st !== "locked") {
+          event.preventDefault();
+          showDrop(stop.n);
+        }
+      });
+      layer.appendChild(g);
+    });
+
+    const cow = $("cowMarker");
+    if (cow) {
+      const current = STOPS.find((s) => s.n === state.current) || STOPS[0];
+      cow.setAttribute("transform", `translate(${current.x - 20}, ${current.y - 18})`);
+    }
+
+    $("brandCount").textContent = `${state.completed.length}/10`;
+    $("mobileBrandCount").textContent = `${state.completed.length}/10`;
+    const label = String(state.current).padStart(2, "0");
+    $("currentDropLabel").textContent = label;
+    $("mobileCurrentDropLabel").textContent = label;
+
+    const mobileTrail = $("mobileTrail");
+    if (mobileTrail) {
+      mobileTrail.innerHTML = "";
+      for (let n = 1; n <= 10; n += 1) {
+        const st = stopState(n);
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = `mobile-stop ${st}`;
+        btn.textContent = String(n);
+        btn.disabled = st === "locked";
+        btn.setAttribute("aria-label", `Drop ${n}`);
+        btn.addEventListener("click", () => { if (st !== "locked") showDrop(n); });
+        mobileTrail.appendChild(btn);
+      }
+    }
+  }
+
+  /* ================= DROPS / QUIZ ================= */
+
+  function hydrateQuiz(dropNumber) {
+    const quiz = document.querySelector(`.quiz[data-drop="${dropNumber}"]`);
+    if (!quiz) return;
+    const completed = state.completed.includes(dropNumber);
+    const options = quiz.querySelectorAll(".option");
+    const feedback = quiz.querySelector(".quiz-feedback");
+    const next = quiz.querySelector(".next-btn");
+
+    if (completed) {
+      quiz.dataset.locked = "true";
+      options.forEach((opt) => {
+        opt.disabled = true;
+        if (opt.dataset.opt === quiz.dataset.correct) opt.classList.add("is-correct");
+      });
+      feedback.innerHTML = `<div class="feedback ok"><strong>Portão já aberto.</strong> ${quiz.dataset.success || ""}</div>`;
+      next.hidden = false;
+      next.textContent = dropNumber < 10 ? `Abrir o portão ${String(dropNumber + 1).padStart(2, "0")} →` : "Ver o resumo da trilha →";
+    } else {
+      quiz.dataset.locked = "false";
+      options.forEach((opt) => {
+        opt.disabled = false;
+        opt.classList.remove("is-correct", "is-wrong");
+      });
+      feedback.innerHTML = "";
+      next.hidden = true;
+    }
+  }
+
+  function showDrop(n, options = {}) {
+    const number = clamp(Number(n) || 1, 1, 10);
+    if (number > maxUnlocked()) return;
+    state.current = number;
+    saveState();
+
+    document.querySelectorAll(".drop").forEach((section) => {
+      section.classList.toggle("is-active", Number(section.dataset.drop) === number);
+    });
+    $("finalPanel").classList.remove("is-active");
+    hydrateQuiz(number);
+    renderMap();
+
+    if (options.scroll !== false) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+
+  function completeDrop(n) {
+    if (!state.completed.includes(n)) {
+      state.completed.push(n);
+      state.completed.sort((a, b) => a - b);
+    }
+    saveState();
+    renderMap();
+  }
+
+  function showFinal() {
+    document.querySelectorAll(".drop").forEach((section) => section.classList.remove("is-active"));
+    $("finalPanel").classList.add("is-active");
+    state.current = 10;
+    saveState();
+    renderMap();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function bindQuiz(quiz) {
+    const dropNumber = Number(quiz.dataset.drop);
+    const correct = quiz.dataset.correct;
+    const options = quiz.querySelectorAll(".option");
+    const feedback = quiz.querySelector(".quiz-feedback");
+    const next = quiz.querySelector(".next-btn");
+
+    options.forEach((option) => {
+      option.addEventListener("click", () => {
+        if (quiz.dataset.locked === "true") return;
+        const opt = option.dataset.opt;
+        if (opt === correct) {
+          option.classList.add("is-correct");
+          option.classList.remove("is-wrong");
+          options.forEach((o) => { o.disabled = true; });
+          quiz.dataset.locked = "true";
+          feedback.innerHTML = `<div class="feedback ok"><strong>Portão aberto.</strong> ${quiz.dataset.success || "Você acertou."}</div>`;
+          next.hidden = false;
+          next.textContent = dropNumber < 10 ? `Abrir o portão ${String(dropNumber + 1).padStart(2, "0")} →` : "Ver o resumo da trilha →";
+          completeDrop(dropNumber);
+        } else {
+          option.classList.add("is-wrong");
+          feedback.innerHTML = `<div class="feedback bad"><strong>Ainda não.</strong> ${option.dataset.feedback || "Essa alternativa não explica o conceito."} Tente outra.</div>`;
+        }
+      });
+    });
+
+    next.addEventListener("click", () => {
+      if (dropNumber < 10) showDrop(dropNumber + 1);
+      else showFinal();
+    });
+  }
+
+  document.querySelectorAll(".quiz").forEach(bindQuiz);
+
+  /* ================= DROP 2: TRÊS MISTURAS ================= */
 
   function calc(xSilage) {
     const xSoy = DMI - xSilage;
@@ -1191,210 +1838,194 @@
     return { cpOk, ndfOk, ok: cpOk && ndfOk, label };
   }
 
-  function setStatus(dotId, statusId, cp, ndf) {
-    const st = statusOf(cp, ndf);
-    const dot = $(dotId);
-    const line = $(statusId);
-    dot.className = "dot " + (st.ok ? "ok" : "bad");
-    line.innerHTML = `<span class="dot ${st.ok ? "ok" : "bad"}" id="${dotId}"></span><span><strong>${st.ok ? "A conta fecha." : "A conta não fecha."}</strong> ${st.label}</span>`;
-  }
-
-  /* ---------------- DROP 1 ---------------- */
-
-  const D1_CHOICES = {
-    silagem: { x: DMI, label: "só silagem de milho" },
-    farelo: { x: 0, label: "só farelo de soja" },
-    mistura: { x: OPTIMAL_2, label: "silagem + farelo" }
+  const D2_CHOICES = {
+    silagem: DMI,
+    farelo: 0,
+    mistura: OPTIMAL_2
   };
 
-  function updateDrop1(choice) {
-    const item = D1_CHOICES[choice] || D1_CHOICES.mistura;
-    const r = calc(item.x);
-    const pctSilage = (r.xSilage / DMI) * 100;
-    const pctSoy = 100 - pctSilage;
-
-    $("d1Silage").style.width = pctSilage + "%";
-    $("d1Soy").style.width = pctSoy + "%";
-    $("d1MixLabel").textContent = `${fmtKg(r.xSilage)} silagem + ${fmtKg(r.xSoy)} farelo`;
-    $("d1Cost").textContent = fmtBRL(r.cost);
-    $("d1Cp").textContent = fmtPct(r.cp);
-    $("d1Ndf").textContent = fmtPct(r.ndf);
-
-    const st = statusOf(r.cp, r.ndf);
-    const line = $("d1Status");
-    line.innerHTML = `<span class="dot ${st.ok ? "ok" : "bad"}"></span><span><strong>${st.ok ? "A conta fecha." : "A conta não fecha."}</strong> ${st.label}</span>`;
-
-    document.querySelectorAll("[data-choice]").forEach((btn) => {
-      btn.classList.toggle("is-active", btn.dataset.choice === choice);
-    });
-  }
-
-  document.querySelectorAll("[data-choice]").forEach((btn) => {
-    btn.addEventListener("click", () => updateDrop1(btn.dataset.choice));
-  });
-
-  /* ---------------- DROP 2 ---------------- */
-
-  const costPath = [];
-  for (let x = 0; x <= DMI + 1e-9; x += 0.25) {
-    costPath.push({ x, y: calc(x).cost });
-  }
-
-  function solveFeasibleRange() {
-    let lo = null;
-    let hi = null;
-    for (let x = 0; x <= DMI; x += 0.01) {
-      const r = calc(x);
-      const st = statusOf(r.cp, r.ndf);
-      if (st.ok) {
-        if (lo === null) lo = x;
-        hi = x;
-      }
-    }
-    return { lo: lo === null ? 0 : lo, hi: hi === null ? 0 : hi, exists: lo !== null };
-  }
-
-  const FEASIBLE = solveFeasibleRange();
-
-  function chartFrame(svg, { left = 42, right = 12, top = 16, bottom = 30, width = 520, height = 220 } = {}) {
-    return { left, right, top, bottom, width, height, plotW: width - left - right, plotH: height - top - bottom };
-  }
-
-  function xScale(x, f) { return f.left + (x / DMI) * f.plotW; }
-  function yScaleLinear(v, min, max, f) { return f.top + f.plotH - ((v - min) / (max - min)) * f.plotH; }
-
-  function linePath(points, sx, sy) {
-    return points.map((p, i) => `${i === 0 ? "M" : "L"}${sx(p.x).toFixed(2)},${sy(p.y).toFixed(2)}`).join(" ");
-  }
-
-  function drawCostChart(current) {
-    const svg = $("costChart");
-    const f = chartFrame(svg);
-    const sx = (x) => xScale(x, f);
-    const sy = (v) => yScaleLinear(v, 10, 60, f);
-
-    const grid = [10, 20, 30, 40, 50, 60].map((v) => {
-      const y = sy(v);
-      return `<line x1="${f.left}" x2="${f.width - f.right}" y1="${y}" y2="${y}" stroke="#dbe4d7" stroke-width="1"/>
-              <text x="${f.left - 7}" y="${y + 3}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="8" fill="#6b7f72">${v}</text>`;
-    }).join("");
-
-    const feasibleRect = FEASIBLE.exists
-      ? `<rect x="${sx(FEASIBLE.lo)}" y="${f.top}" width="${Math.max(2, sx(FEASIBLE.hi) - sx(FEASIBLE.lo))}" height="${f.plotH}" fill="#2f6b4f" opacity=".10"/>
-         <line x1="${sx(FEASIBLE.lo)}" x2="${sx(FEASIBLE.lo)}" y1="${f.top}" y2="${f.top + f.plotH}" stroke="#2f6b4f" stroke-dasharray="3 3" stroke-width="1" opacity=".45"/>
-         <line x1="${sx(FEASIBLE.hi)}" x2="${sx(FEASIBLE.hi)}" y1="${f.top}" y2="${f.top + f.plotH}" stroke="#2f6b4f" stroke-dasharray="3 3" stroke-width="1" opacity=".45"/>`
-      : "";
-
-    const costLine = linePath(costPath, sx, sy);
-    const fullY = sy(FULL_MODEL_COST);
-    const opt = calc(OPTIMAL_2);
-    const cur = calc(current);
-
-    const xTicks = [0, 6.3, 12.65, 18.95, 25.3].map((x) => {
-      return `<text x="${sx(x)}" y="${f.height - 10}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="#6b7f72">${x.toFixed(1).replace(".", ",")}</text>`;
-    }).join("");
-
-    svg.innerHTML = `
-      ${grid}
-      ${feasibleRect}
-      <line x1="${f.left}" x2="${f.width - f.right}" y1="${fullY}" y2="${fullY}" stroke="#14251f" stroke-dasharray="5 4" stroke-width="1" opacity=".55"/>
-      <text x="${f.width - f.right}" y="${fullY + 13}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="8" fill="#14251f" opacity=".75">19 alimentos: ${fmtBRL(FULL_MODEL_COST)}</text>
-      <path d="${costLine}" fill="none" stroke="#14251f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="${sx(opt.xSilage)}" cy="${sy(opt.cost)}" r="4.5" fill="#2f6b4f" stroke="#fbfcf7" stroke-width="2"/>
-      <text x="${sx(opt.xSilage) - 10}" y="${sy(opt.cost) - 9}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="8" fill="#2f6b4f">ótimo 2 alimentos</text>
-      <line x1="${sx(current)}" x2="${sx(current)}" y1="${f.top}" y2="${f.top + f.plotH}" stroke="#b96335" stroke-width="1.4" opacity=".75"/>
-      <circle cx="${sx(current)}" cy="${sy(cur.cost)}" r="5" fill="#b96335" stroke="#fbfcf7" stroke-width="2"/>
-      <text x="${f.left}" y="${f.top - 4}" font-family="IBM Plex Mono, monospace" font-size="8" fill="#6b7f72">R$/dia</text>
-      ${xTicks}
-      <text x="${f.left + f.plotW / 2}" y="${f.height - 1}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="#6b7f72">kg de MS de silagem de milho</text>
-    `;
-  }
-
-  function drawNutrientChart(current) {
-    const svg = $("nutrientChart");
-    const f = chartFrame(svg);
-    const sx = (x) => xScale(x, f);
-    const sy = (v) => yScaleLinear(v, 0, 55, f);
-
-    const grid = [0, 15, 30, 45, 55].map((v) => {
-      const y = sy(v);
-      return `<line x1="${f.left}" x2="${f.width - f.right}" y1="${y}" y2="${y}" stroke="#dbe4d7" stroke-width="1"/>
-              <text x="${f.left - 7}" y="${y + 3}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="8" fill="#6b7f72">${v}</text>`;
-    }).join("");
-
-    const ndfBand = `<rect x="${f.left}" y="${sy(NDF_MAX)}" width="${f.plotW}" height="${sy(NDF_MIN) - sy(NDF_MAX)}" fill="#2f6b4f" opacity=".11"/>`;
-    const cpLine = `<line x1="${f.left}" x2="${f.width - f.right}" y1="${sy(CP_MIN)}" y2="${sy(CP_MIN)}" stroke="#b96335" stroke-dasharray="5 4" stroke-width="1.2"/>`;
-    const cpText = `<text x="${f.width - f.right}" y="${sy(CP_MIN) - 5}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="8" fill="#b96335">PB mín. 17,5%</text>`;
-
-    const cpPoints = [];
-    const ndfPoints = [];
-    for (let x = 0; x <= DMI + 1e-9; x += 0.25) {
-      const r = calc(x);
-      cpPoints.push({ x, y: r.cp });
-      ndfPoints.push({ x, y: r.ndf });
-    }
-    const cpPath = linePath(cpPoints, sx, sy);
-    const ndfPath = linePath(ndfPoints, sx, sy);
-
-    const feasibleRect = FEASIBLE.exists
-      ? `<rect x="${sx(FEASIBLE.lo)}" y="${f.top}" width="${Math.max(2, sx(FEASIBLE.hi) - sx(FEASIBLE.lo))}" height="${f.plotH}" fill="#2f6b4f" opacity=".06"/>`
-      : "";
-
-    const cur = calc(current);
-    const xTicks = [0, 6.3, 12.65, 18.95, 25.3].map((x) => {
-      return `<text x="${sx(x)}" y="${f.height - 10}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="#6b7f72">${x.toFixed(1).replace(".", ",")}</text>`;
-    }).join("");
-
-    svg.innerHTML = `
-      ${grid}
-      ${ndfBand}
-      ${cpLine}
-      ${feasibleRect}
-      <path d="${ndfPath}" fill="none" stroke="#2f6b4f" stroke-width="2.1" stroke-linecap="round"/>
-      <path d="${cpPath}" fill="none" stroke="#b96335" stroke-width="2.1" stroke-linecap="round"/>
-      ${cpText}
-      <line x1="${sx(current)}" x2="${sx(current)}" y1="${f.top}" y2="${f.top + f.plotH}" stroke="#14251f" stroke-width="1.2" opacity=".45"/>
-      <circle cx="${sx(current)}" cy="${sy(cur.cp)}" r="4.5" fill="#b96335" stroke="#fbfcf7" stroke-width="2"/>
-      <circle cx="${sx(current)}" cy="${sy(cur.ndf)}" r="4.5" fill="#2f6b4f" stroke="#fbfcf7" stroke-width="2"/>
-      <text x="${f.left}" y="${f.top - 4}" font-family="IBM Plex Mono, monospace" font-size="8" fill="#6b7f72">% da MS</text>
-      ${xTicks}
-      <text x="${f.left + f.plotW / 2}" y="${f.height - 1}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" fill="#6b7f72">kg de MS de silagem de milho</text>
-    `;
-  }
-
-  function updateDrop2(xSilage) {
-    const x = clamp(Number(xSilage), 0, DMI);
+  function updateD2(choice) {
+    const x = D2_CHOICES[choice] ?? OPTIMAL_2;
     const r = calc(x);
     const pctSilage = (r.xSilage / DMI) * 100;
     const pctSoy = 100 - pctSilage;
 
-    $("d2Slider").value = x.toFixed(2);
-    $("d2Silage").style.width = pctSilage + "%";
-    $("d2Soy").style.width = pctSoy + "%";
+    $("d2SilageBar").style.width = pctSilage + "%";
+    $("d2SoyBar").style.width = pctSoy + "%";
     $("d2MixLabel").textContent = `${fmtKg(r.xSilage)} silagem + ${fmtKg(r.xSoy)} farelo`;
     $("d2Cost").textContent = fmtBRL(r.cost);
     $("d2Cp").textContent = fmtPct(r.cp);
     $("d2Ndf").textContent = fmtPct(r.ndf);
 
     const st = statusOf(r.cp, r.ndf);
-    $("d2Status").innerHTML = `<span class="dot ${st.ok ? "ok" : "bad"}"></span><span><strong>${st.ok ? "Dentro da região viável." : "Fora da região viável."}</strong> ${st.label}</span>`;
+    $("d2Status").innerHTML = `<span class="dot ${st.ok ? "ok" : "bad"}"></span><span><strong>${st.ok ? "A conta fecha." : "A conta não fecha."}</strong> ${st.label}</span>`;
 
-    drawCostChart(x);
-    drawNutrientChart(x);
+    document.querySelectorAll("[data-d2choice]").forEach((btn) => {
+      btn.classList.toggle("is-active", btn.dataset.d2choice === choice);
+    });
   }
 
-  $("d2Slider").addEventListener("input", (event) => updateDrop2(event.target.value));
-  $("d2OptimalBtn").addEventListener("click", () => updateDrop2(OPTIMAL_2));
-  $("d2CompareBtn").addEventListener("click", () => {
-    const panel = $("d2Comparison");
-    const open = panel.classList.toggle("is-open");
-    $("d2CompareBtn").setAttribute("aria-expanded", String(open));
+  document.querySelectorAll("[data-d2choice]").forEach((btn) => {
+    btn.addEventListener("click", () => updateD2(btn.dataset.d2choice));
   });
 
-  /* ---------------- INIT ---------------- */
+  /* ================= DROP 3: DM VS FRESCO ================= */
 
-  updateDrop1("mistura");
-  updateDrop2(OPTIMAL_2);
+  document.querySelectorAll("[data-dm]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const mode = btn.dataset.dm;
+      document.querySelectorAll("[data-dm]").forEach((b) => b.classList.toggle("is-active", b === btn));
+      if (mode === "fresco") {
+        $("dmSilage").textContent = "R$ 0,220";
+        $("dmSoy").textContent = "R$ 2,020";
+        $("dmRatio").textContent = "9,2×";
+      } else {
+        $("dmSilage").textContent = "R$ 0,622";
+        $("dmSoy").textContent = "R$ 2,263";
+        $("dmRatio").textContent = "3,6×";
+      }
+    });
+  });
+
+  /* ================= DROP 5: SLIDER 2 ALIMENTOS ================= */
+
+  function updateD5(value) {
+    const x = clamp(Number(value), 0, DMI);
+    const r = calc(x);
+    const pctSilage = (r.xSilage / DMI) * 100;
+    const pctSoy = 100 - pctSilage;
+
+    $("d5Slider").value = x.toFixed(2);
+    $("d5SilageBar").style.width = pctSilage + "%";
+    $("d5SoyBar").style.width = pctSoy + "%";
+    $("d5MixLabel").textContent = `${fmtKg(r.xSilage)} silagem + ${fmtKg(r.xSoy)} farelo`;
+    $("d5Cost").textContent = fmtBRL(r.cost);
+    $("d5Cp").textContent = fmtPct(r.cp);
+    $("d5Ndf").textContent = fmtPct(r.ndf);
+    $("d5Marker").style.left = `${pctSilage}%`;
+
+    const st = statusOf(r.cp, r.ndf);
+    $("d5Status").innerHTML = `<span class="dot ${st.ok ? "ok" : "bad"}"></span><span><strong>${st.ok ? "Dentro da região viável." : "Fora da região viável."}</strong> ${st.label}</span>`;
+  }
+
+  const feasibleLow = (() => {
+    for (let x = 0; x <= DMI; x += 0.01) {
+      const r = calc(x);
+      if (statusOf(r.cp, r.ndf).ok) return x;
+    }
+    return 0;
+  })();
+  const feasibleHigh = (() => {
+    for (let x = DMI; x >= 0; x -= 0.01) {
+      const r = calc(x);
+      if (statusOf(r.cp, r.ndf).ok) return x;
+    }
+    return DMI;
+  })();
+
+  const band = $("d5Band");
+  if (band) {
+    band.style.left = `${(feasibleLow / DMI) * 100}%`;
+    band.style.width = `${((feasibleHigh - feasibleLow) / DMI) * 100}%`;
+  }
+
+  $("d5Slider").addEventListener("input", (event) => updateD5(event.target.value));
+
+  /* ================= DROP 6: SIMPLEX VÉRTICES ================= */
+
+  function evaluateVertex(which) {
+    const result = $("simplexResult");
+    if (which === "A") {
+      result.innerHTML = "<strong>Vértice A:</strong> 14,35 kg de silagem, R$ 33,70/vaca/dia. Atende, mas é caro.";
+      $("vertexA").classList.add("best");
+      $("vertexB").classList.remove("best");
+    } else {
+      result.innerHTML = "<strong>Vértice B:</strong> 18,58 kg de silagem, R$ 26,77/vaca/dia. Atende e é mais barato. O simplex vai para B.";
+      $("vertexB").classList.add("best");
+      $("vertexA").classList.remove("best");
+    }
+  }
+  $("evalA").addEventListener("click", () => evaluateVertex("A"));
+  $("evalB").addEventListener("click", () => evaluateVertex("B"));
+
+  /* ================= DROP 8: MILHO BREAK-EVEN ================= */
+
+  function updateCorn(value) {
+    const price = Number(value);
+    $("cornPriceLabel").textContent = fmtBRL(price) + "/saca";
+    const pct = ((price - 40) / 40) * 100;
+    $("cornMarker").style.left = `${clamp(pct, 0, 100)}%`;
+    const inside = price <= CORN_BREAKEVEN;
+    $("cornStatus").innerHTML = inside
+      ? `<span class="dot ok"></span><span><strong>Milho entra na dieta.</strong> Abaixo de R$ 56,28/saca, ele passa a competir com o sorgo no modelo.</span>`
+      : `<span class="dot bad"></span><span><strong>Milho fora da dieta.</strong> Acima de R$ 56,28/saca, o sorgo e o glúten de milho entregam energia mais barata.</span>`;
+  }
+  $("cornSlider").addEventListener("input", (event) => updateCorn(event.target.value));
+
+  /* ================= DROP 9: CENÁRIOS ================= */
+
+  const SCENARIOS = [
+    { key: "base", label: "Basal", cost: 32.17, saving: 0, cls: "is-base" },
+    { key: "iso", label: "Iso-energética", cost: 26.07, saving: 197199, cls: "is-best" },
+    { key: "nasem", label: "NASEM", cost: 31.60, saving: 18206, cls: "is-nasem" },
+    { key: "milho", label: "Com milho 15%", cost: 26.72, saving: 176169, cls: "is-other" },
+    { key: "linhaca", label: "Com linhaça 5%", cost: 27.28, saving: 157845, cls: "is-other" },
+    { key: "sorgo", label: "Sem sorgo", cost: 27.14, saving: 162382, cls: "is-other" },
+    { key: "max", label: "Máx. economia", cost: 24.83, saving: 237224, cls: "is-max" }
+  ];
+
+  function renderScenarios(metric) {
+    const host = $("scenarioBars");
+    if (!host) return;
+    const values = SCENARIOS.map((s) => (metric === "cost" ? s.cost : s.saving));
+    const maxValue = Math.max(...values);
+    host.innerHTML = "";
+    SCENARIOS.forEach((s) => {
+      const value = metric === "cost" ? s.cost : s.saving;
+      const width = maxValue > 0 ? (value / maxValue) * 100 : 0;
+      const row = document.createElement("div");
+      row.className = `scenario-row ${s.cls}`;
+      row.innerHTML = `
+        <span>${s.label}</span>
+        <div class="scenario-track"><div class="scenario-fill" style="width:${Math.max(2, width)}%"></div></div>
+        <span class="scenario-value">${metric === "cost" ? fmtBRL(value) : "R$ " + Math.round(value / 1000) + " mil"}</span>
+      `;
+      host.appendChild(row);
+    });
+  }
+
+  document.querySelectorAll("[data-metric]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const metric = btn.dataset.metric;
+      document.querySelectorAll("[data-metric]").forEach((b) => b.classList.toggle("is-active", b === btn));
+      renderScenarios(metric);
+    });
+  });
+
+  /* ================= RESET / NAV ================= */
+
+  function resetTrail() {
+    state.current = 1;
+    state.completed = [];
+    saveState();
+    showDrop(1);
+  }
+
+  $("resetBtn").addEventListener("click", resetTrail);
+  $("resetFinalBtn").addEventListener("click", resetTrail);
+  $("reviewBtn").addEventListener("click", () => showDrop(1));
+
+  /* ================= INIT ================= */
+
+  // Garante que o drop atual é acessível.
+  if (state.current > maxUnlocked()) state.current = maxUnlocked();
+
+  renderScenarios("cost");
+  updateD2("mistura");
+  updateD5(OPTIMAL_2);
+  updateCorn(64.87);
+  renderMap();
+  showDrop(state.current);
 </script>
 </body>
 </html>
