@@ -9,6 +9,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from .config import PROJECT_ROOT
 from .lp_model import DietSolution
 
 
@@ -21,6 +22,15 @@ def _write(path: str | Path, data: dict[str, Any]) -> None:
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     with Path(path).open("w", encoding="utf-8") as handle:
         json.dump(data, handle, indent=2, ensure_ascii=False)
+
+
+def _repo_path(path: str | Path) -> str:
+    """Prefere caminhos relativos à raiz do RuFaS; usa absoluto se estiver fora."""
+    resolved = Path(path).resolve()
+    try:
+        return str(resolved.relative_to(PROJECT_ROOT)).replace("\\", "/")
+    except ValueError:
+        return str(resolved).replace("\\", "/")
 
 
 def _round_percentages(percentages: dict[int, float]) -> dict[int, float]:
@@ -138,7 +148,7 @@ def write_tasks(
             "tasks": {
                 "title": "Task manager data",
                 "description": "Validação da dieta otimizada",
-                "path": str(tasks_path).replace("\\", "/"),
+                "path": _repo_path(tasks_path),
                 "type": "json",
                 "properties": "tasks_properties",
             }
@@ -177,14 +187,14 @@ def generate_integration_files(
     write_farm_metadata(
         paths["rufas_farm_metadata"],
         metadata_path,
-        feed_path=str(feed_path).replace("\\", "/"),
-        config_path=str(config_path).replace("\\", "/"),
+        feed_path=_repo_path(feed_path),
+        config_path=_repo_path(config_path),
     )
 
     output_prefix = "GO_validacao_iso" if seed == 44 else f"GO_validacao_iso_s{seed}"
     tasks_path, tm_path = write_tasks(
         output_dir,
-        farm_metadata_path=str(metadata_path).replace("\\", "/"),
+        farm_metadata_path=_repo_path(metadata_path),
         output_prefix=output_prefix,
         seed=seed,
     )

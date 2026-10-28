@@ -3,7 +3,7 @@
     "tasks": {
       "title": "Task manager data",
       "description": "Validação da dieta otimizada",
-      "path": "C:/CC/RuFaS/GO_campo_dourado/otimizacao_dieta/_otimizacao_tasks.json",
+      "path": "GO_campo_dourado/otimizacao_dieta/_otimizacao_tasks.json",
       "type": "json",
       "properties": "tasks_properties"
     }
