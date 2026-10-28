@@ -3,6 +3,9 @@
 > **Ideia central:** não é para mostrar código nem o relatório de 20 páginas.
 > São 5 slides com o problema, o método, o resultado, a sensibilidade e a
 > validação. O resto fica como apêndice/backup.
+>
+> **Material interativo:** abra `drops_aprendizado.html` no navegador. Ele tem
+> os Drops 1 e 2 com sliders e gráficos; os Drops 3–6 entram depois.
 
 ---
 
