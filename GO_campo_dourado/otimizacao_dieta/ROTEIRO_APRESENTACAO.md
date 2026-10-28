@@ -4,17 +4,17 @@
 > São 5 slides com o problema, o método, o resultado, a sensibilidade e a
 > validação. O resto fica como apêndice/backup.
 >
-> **Material interativo:** abra `drops_aprendizado.html` no navegador. É uma
-> trilha de 10 drops com quiz: só abre o próximo portão quem acerta. Cada erro
-> explica por que aquela alternativa está errada.
+> **Material interativo:** abra `drops_aprendizado_v4.html` no navegador. É uma
+> trilha de 10 capítulos com trilho de progresso, índice e quiz: só abre o próximo
+> portão quem acerta. Cada erro explica por que aquela alternativa está errada.
 >
-> **Versão temática alternativa:** `drops_aprendizado_pirulito.html`, com uma
-> estética original de fazenda de doces inspirada no universo pop dos pirulitos
-> (sem uso de marca ou logo Chupa Chups).
+> **Versão editorial alternativa:** `drops_aprendizado_v3.html`, com estética de
+> caderno de campo, glossário clicável, anotações salvas e controle de tamanho do
+> texto.
 >
-> **Versão recomendada para estudar:** `drops_aprendizado_v3.html`, com fontes
-> maiores, glossário clicável, anotações salvas no navegador, controle de tamanho
-> do texto e revisão de 30 segundos entre capítulos.
+> **Versão temática:** `drops_aprendizado_pirulito.html`, com uma estética
+> original de fazenda de doces inspirada no universo pop dos pirulitos (sem uso
+> de marca ou logo Chupa Chups).
 
 ---
 
