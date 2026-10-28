@@ -141,7 +141,8 @@ O relatório completo está em `otimizacao_dieta/RELATORIO_OTIMIZACAO_DIETA.md`
 (versões para leitura: `RELATORIO_OTIMIZACAO_DIETA.html` e `.pdf`).
 Para entender o problema de forma interativa, abra
 `otimizacao_dieta/drops_aprendizado.html` no navegador: são 10 drops na
-fazenda, com quiz e avanço somente após acertar.
+fazenda, com quiz e avanço somente após acertar. Há também a versão temática
+`otimizacao_dieta/drops_aprendizado_pirulito.html` (fazenda de doces).
 A dieta recomendada foi validada no RuFaS (`animals_only`, 1 ano) e o
 `feed_otimizado.json` gerado pode ser usado no lugar do `feed.json` para
 reproduzir a simulação. Veja `diet_optimization/README.md` para o método,

@@ -7,6 +7,10 @@
 > **Material interativo:** abra `drops_aprendizado.html` no navegador. É uma
 > trilha de 10 drops com quiz: só abre o próximo portão quem acerta. Cada erro
 > explica por que aquela alternativa está errada.
+>
+> **Versão temática alternativa:** `drops_aprendizado_pirulito.html`, com uma
+> estética original de fazenda de doces inspirada no universo pop dos pirulitos
+> (sem uso de marca ou logo Chupa Chups).
 
 ---
 

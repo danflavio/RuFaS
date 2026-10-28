@@ -51,6 +51,7 @@ Saídas em `GO_campo_dourado/otimizacao_dieta/`:
 
 - `RELATORIO_OTIMIZACAO_DIETA.md`, `.html` e `.pdf` — relatório completo;
 - `drops_aprendizado.html` — trilha interativa de 10 drops com quiz e fazenda ilustrada;
+- `drops_aprendizado_pirulito.html` — versão temática “fazenda de doces” da mesma trilha;
 - `resultados.json` — resultados consolidados;
 - `dieta_iso.csv`, `dieta_nasem.csv`, `dieta_basal.csv`;
 - `quadro_simplex.csv`, `faixas_rhs.csv`, `faixas_preco.csv`;
