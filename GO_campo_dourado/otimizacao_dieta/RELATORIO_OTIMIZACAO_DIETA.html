@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Otimização da dieta e efeito econômico — Fazenda Campo Dourado (GO)</title>
+<style>
+  :root { --ink:#1d2733; --muted:#5b6775; --accent:#1f8a70; --line:#d9e0e7; --bg:#f7f9fb; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font-family: "Segoe UI", "DejaVu Sans", Arial, sans-serif;
+         line-height:1.55; font-size:15px; }
+  main { max-width: 1100px; margin: 0 auto; padding: 42px 34px 70px; background:white;
+          box-shadow: 0 8px 30px rgba(20,40,60,.08); }
+  h1 { font-size: 30px; line-height:1.2; margin: 0 0 8px; color:#123c33; }
+  h2 { font-size: 23px; margin: 38px 0 12px; padding-bottom:6px; border-bottom:2px solid var(--line); color:#123c33; }
+  h3 { font-size: 18px; margin: 26px 0 10px; color:#1f5f52; }
+  h4 { font-size: 16px; margin: 20px 0 8px; }
+  p { margin: 10px 0; }
+  strong { color:#102a24; }
+  a { color:#1f6f9f; }
+  code { background:#eef3f6; padding:1px 4px; border-radius:4px; font-size:.92em; }
+  pre { background:#102a24; color:#e8f5f0; padding:14px 16px; border-radius:8px; overflow-x:auto; }
+  pre code { background:none; color:inherit; padding:0; }
+  ul, ol { margin: 8px 0 8px 22px; padding:0; }
+  li { margin: 4px 0; }
+  blockquote { margin: 16px 0; padding: 12px 16px; border-left:4px solid var(--accent);
+                background:#f1f8f5; color:#25443b; border-radius:0 6px 6px 0; }
+  table { width:100%; border-collapse:collapse; margin: 14px 0 20px; font-size:13.5px; }
+  th { background:#eaf3f0; color:#123c33; font-weight:600; padding:8px 9px; border-bottom:2px solid #c9ddd7; }
+  td { padding:7px 9px; border-bottom:1px solid var(--line); vertical-align:top; }
+  tbody tr:nth-child(even) td { background:#f8fbfa; }
+  figure { margin: 18px 0 24px; text-align:center; }
+  figure img { max-width:100%; height:auto; border:1px solid var(--line); border-radius:8px; background:white; }
+  figcaption { color:var(--muted); font-size:12.5px; margin-top:6px; }
+  hr { border:0; border-top:1px solid var(--line); margin: 26px 0; }
+  nav.toc { position: fixed; top: 24px; left: 24px; width: 230px; max-height: 90vh; overflow:auto;
+             background:white; border:1px solid var(--line); border-radius:10px; padding:14px 16px;
+             box-shadow:0 6px 20px rgba(20,40,60,.08); font-size:12.5px; }
+  nav.toc h2 { font-size:14px; margin:0 0 8px; border:0; padding:0; }
+  nav.toc ul { list-style:none; margin:0; padding:0; }
+  nav.toc li { margin:4px 0; }
+  nav.toc a { text-decoration:none; color:#345; }
+  nav.toc a:hover { color:var(--accent); }
+  @media (max-width: 1450px) { nav.toc { display:none; } }
+  @media print { body { background:white; } main { box-shadow:none; padding:0; } nav.toc { display:none; } }
+</style>
+</head>
+<body>
+<nav class="toc"><h2>Sumário</h2><ul><li><a href="#1-resumo-executivo">1. Resumo executivo</a></li><li><a href="#2-contexto-e-problema">2. Contexto e problema</a></li><li><a href="#3-dados-e-m-todo">3. Dados e método</a></li><li><a href="#4-resultados">4. Resultados</a></li><li><a href="#5-an-lise-de-sensibilidade">5. Análise de sensibilidade</a></li><li><a href="#6-integra-o-com-o-rufas">6. Integração com o RuFaS</a></li><li><a href="#7-limita-es-e-riscos">7. Limitações e riscos</a></li><li><a href="#8-conclus-es-e-recomenda-es">8. Conclusões e recomendações</a></li><li><a href="#8-1-entreg-veis">8.1 Entregáveis</a></li><li><a href="#9-refer-ncias">9. Referências</a></li><li><a href="#10-ap-ndice-leitura-do-quadro-final-do-simplex">10. Apêndice — leitura do quadro final do simplex</a></li></ul></nav>
+<main>
+<h1 id="otimiza-o-da-dieta-e-efeito-econ-mico-fazenda-campo-dourado-go">Otimização da dieta e efeito econômico — Fazenda Campo Dourado (GO)</h1>
+<p><strong>Data:</strong> 2026-10-27</p>
+<p><strong>Autor:</strong> Análise integrada ao RuFaS</p>
+<p><strong>Fazenda:</strong> Fazenda Campo Dourado (GO)</p>
+<p><strong>Modelo:</strong> RuFaS 1.0.5 + módulo de otimização linear</p>
+<h2 id="1-resumo-executivo">1. Resumo executivo</h2>
+<p>Este trabalho desenvolve um módulo de <strong>programação linear (PL)</strong> acoplado aos arquivos de entrada e saída do <strong>RuFaS</strong> para formular a dieta da vaca em lactação da Fazenda Campo Dourado (GO) ao <strong>mínimo custo</strong>, com avaliação do efeito econômico, análise de sensibilidade local e global (Sobol) e validação biológica no simulador.</p>
+<p><strong>Resultado principal.</strong> A dieta iso-energética (mesmo aporte de energia, proteína e fibra da dieta basal) custa <strong>R$ 26,07/vaca/dia</strong>, contra <strong>R$ 32,17/vaca/dia</strong> da dieta basal avaliada com os mesmos preços de GO. Isso representa economia de <strong>R$ 6,10/vaca/dia (19,0%)</strong> e <strong>R$ 197.199,00/ano</strong> para as 88,56 vacas em lactação. A margem sobre o custo da ração (IOFC) sobe 7,0%.</p>
+<p><strong>Dieta recomendada (iso-energética):</strong> Silagem de milho 48,6%, Sorgo grão 23,2%, Glúten de milho (CGF) 12,6%, Farelo de soja 48% 9,2%, Farelo de algodão 4,3%, completando com minerais e ureia. A formulação substitui parte do milho e do farelo de soja por <strong>sorgo, glúten de milho e farelo de algodão</strong>, além de trocar a mistura mineral de 3% por calcário + mistura mineral em nível menor.</p>
+<p><strong>Custo de segurança nutricional.</strong> Se a fazenda quiser corrigir o déficit teórico de energia da dieta basal e atender à exigência NASEM (TDN 76,99% da MS), o custo sobe para <strong>R$ 31,60/vaca/dia</strong> — ainda 1,8% abaixo da basal, mas com economia muito menor. O cenário iso-energético é o de maior retorno econômico; o cenário NASEM é o mais conservador.</p>
+<p><strong>Decomposição da economia.</strong> Cerca de <strong>60,7%</strong> da economia vêm da substituição de fontes minerais caras (3% de mistura mineral) por calcário e por fósforo de alimentos como farelo de algodão e glúten de milho; os outros <strong>39,3%</strong> vêm da reformulação dos demais ingredientes. Esse ponto é importante: parte do ganho é correção de uma fórmula mineral possivelmente superdimensionada no cenário basal, não só “troca de milho por sorgo”. A decomposição é contábil: parte do fósforo foi transferida para farelo de algodão e glúten de milho, cujo custo aparece nas outras linhas; o ganho líquido é a diferença total.</p>
+<p><strong>Sensibilidade.</strong> O custo da ração é dominado pelo preço da <strong>silagem de milho</strong> (ST ≈ 0,39), seguido por <strong>farelo de soja</strong> (ST ≈ 0,23) e <strong>sorgo</strong> (ST ≈ 0,19). Na margem (IOFC), o <strong>preço do leite</strong> domina (ST ≈ 0,98); os preços dos alimentos têm efeito pequeno. O milho grão só entra na dieta se cair cerca de <strong>13,2%</strong>; o farelo de linhaça, se cair cerca de <strong>34,4%</strong>.</p>
+<p>Na validação de 1 ano no RuFaS (seeds 44–46), a produção de leite do lote ficou em 3.720 kg/dia com a dieta otimizada contra 3.707 kg/dia da basal; o CMS caiu 1,2% e a intensidade de metano entérico caiu 8,8%.</p>
+<blockquote><strong>Leitura crítica:</strong> o módulo é uma aproximação linear do modelo NASEM. Ele não substitui o RuFaS; serve para explorar o espaço de formulação, gerar hipóteses e orientar negociação de preços. A decisão final deve ser validada com o simulador completo (<code>full_farm</code>), com a dieta real da fazenda e com acompanhamento de consumo, leite, escore corporal e saúde ruminal.</blockquote>
+<h2 id="2-contexto-e-problema">2. Contexto e problema</h2>
+<p>O RuFaS é um simulador <em>whole-farm</em> de fazendas leiteiras. O cenário <code>GO_campo_dourado</code> representa uma fazenda de 100 vacas Holstein em Goiás, com 88,6 vacas em lactação em média, produção de 41,3 kg de leite/vaca/dia e consumo de 25,3 kg de MS/vaca/dia. A dieta basal do RuFaS é definida no arquivo <code>feed.json</code> e inclui silagem de milho, silagem de leguminosa, milho grão, farelo de soja, caroço de algodão e mistura mineral.</p>
+<p>O problema de pesquisa operacional é:</p>
+<blockquote>Dado um lote de vacas com exigências nutricionais conhecidas, um conjunto de alimentos com composição e preço, e limites práticos de inclusão, qual mistura de alimentos atende às exigências ao <strong>menor custo</strong>? Como o custo e a composição ótima reagem a mudanças de preço? A dieta ótima mantém a produção quando simulada no RuFaS?</blockquote>
+<p>O escopo é a <strong>ração da vaca em lactação</strong> (pen <code>LAC_COW_PEN_3</code>), não o rebanho total. Bezerras, novilhas e vacas secas têm outras dietas e não são otimizadas aqui. O custo é o da ração no cocho, sem armazenamento, perdas, mistura, mão de obra ou capital.</p>
+<p><strong>Dados de preço.</strong> Preços de milho, soja e leite vêm do CEPEA (27/10/2026 para grãos; leite GO de ago/2026). Farelo de soja em Anápolis/GO vem da Agrolink (27/10/2026). Subprodutos sem indicador público usam cotação regional ou estimativa declarada. O câmbio usado para converter os preços do RuFaS é R$ 5,35/US$ (Notícias Agrícolas, 27/10/2026).</p>
+<p><strong>Hipótese central.</strong> A dieta basal foi formulada com preços e ingredientes do exemplo do RuFaS (Nordeste dos EUA). Ao reavaliar a mesma dieta com preços de Goiás e permitir outros ingredientes, existe espaço para reduzir custo sem piorar o aporte nutricional.</p>
+<h2 id="3-dados-e-m-todo">3. Dados e método</h2>
+<h3 id="3-1-exig-ncias-nutricionais">3.1 Exigências nutricionais</h3>
+<p>As exigências foram calculadas com o próprio calculador NASEM do RuFaS para uma vaca de 650 kg, 150 dias em lactação, 41,3 kg de leite/dia, 4,0% de gordura e 3,2% de proteína:</p>
+<table>
+<thead><tr>
+<th style="text-align:left">Indicador</th>
+<th style="text-align:right">Valor</th>
+</tr></thead><tbody>
+<tr>
+<td style="text-align:left">Consumo de MS (DMI)</td>
+<td style="text-align:right">25,30 kg/dia</td>
+</tr>
+<tr>
+<td style="text-align:left">Energia líquida de lactação (NEl)</td>
+<td style="text-align:right">44,69 Mcal/dia</td>
+</tr>
+<tr>
+<td style="text-align:left">Proteína metabolizável (PM)</td>
+<td style="text-align:right">2.557 g/dia</td>
+</tr>
+<tr>
+<td style="text-align:left">Cálcio absorvível</td>
+<td style="text-align:right">66,8 g/dia</td>
+</tr>
+<tr>
+<td style="text-align:left">Fósforo absorvível</td>
+<td style="text-align:right">64,1 g/dia</td>
+</tr>
+<tr>
+<td style="text-align:left">TDN mínimo equivalente</td>
+<td style="text-align:right">76,99% da MS</td>
+</tr>
+</tbody></table>
+<p>Além das exigências NASEM, foram impostas restrições práticas de formulação: NDF entre 28,00% e 33,00%, NDF de forragem ≥ 18,00%, amido entre 25,00% e 35,00%, extrato etéreo entre 3,00% e 6,00%, proteína bruta ≥ 17,50%, RUP digestível ≥ 1,20 kg/dia, cálcio total ≥ 0,60% e relação Ca:P entre 1,50 e 2,50. O cálcio e o fósforo absorvíveis usam os fatores de digestibilidade do RuFaS (0,30 para forragem, 0,60 para concentrado e 0,95 para mineral).</p>
+<h3 id="3-2-formula-o-do-problema-de-programa-o-linear">3.2 Formulação do problema de programação linear</h3>
+<p>Variáveis de decisão: $x_i$ = kg de MS/dia do alimento $i$ (19 alimentos candidatos).</p>
+<pre><code>minimizar   Σ c_i x_i
+sujeito a   Σ x_i = 25,3                     (consumo de MS)
+            Σ a_ij x_i ≥ b_j                 (nutrientes mínimos)
+            Σ a_ij x_i ≤ b_j                 (limites máximos)
+            l_i ≤ x_i ≤ u_i                  (inclusão mínima e máxima)</code></pre>
+<p>O problema tem 19 variáveis e 37 restrições de desigualdade, além da igualdade de MS. Foi resolvido com <code>scipy.optimize.linprog</code>, método <strong>dual simplex</strong> (HiGHS). O quadro final do simplex foi reconstruído a partir da base ótima para leitura econômica (custos reduzidos e preços sombra).</p>
+<h3 id="3-3-dieta-basal-e-cen-rios">3.3 Dieta basal e cenários</h3>
+<p>A dieta basal é a ração <code>lac_cow</code> do <code>feed.json</code> do RuFaS, com 30% de silagem de milho, 18% de silagem de leguminosa, 24% de milho, 16% de farelo de soja, 9% de caroço de algodão e 3% de mistura mineral. Ela foi avaliada com a mesma tabela de preços da otimização, para separar efeito de formulação de efeito de preço.</p>
+<p>Cenários:</p>
+<ul>
+<li><strong>Iso-energético (recomendado):</strong> TDN mínimo igual ao da dieta basal (72,12% da MS), mantendo energia, proteína e fibra.</li>
+<li><strong>NASEM:</strong> TDN mínimo de 76,99% da MS, corrigindo o déficit teórico de energia; NDF mínimo de 27,5% e Ca:P mínimo de 1,2 para acomodar a alta densidade energética.</li>
+<li><strong>Intermediário:</strong> TDN de 74,0%.</li>
+<li><strong>Com milho 15%:</strong> força pelo menos 15% de milho grão.</li>
+<li><strong>Com linhaça 5%:</strong> força 5% de farelo de linhaça.</li>
+<li><strong>Sem sorgo:</strong> simula indisponibilidade de sorgo.</li>
+<li><strong>Máxima economia:</strong> remove a exigência de RUP e reduz a proteína bruta para 17,0%.</li>
+</ul>
+<h3 id="3-4-an-lise-de-sensibilidade">3.4 Análise de sensibilidade</h3>
+<ul>
+<li><strong>Local:</strong> preço sombra de cada restrição, custo reduzido de cada alimento, faixas de RHS que preservam a base ótima e preço de indiferença dos alimentos.</li>
+<li><strong>Global (Sobol):</strong> 10 preços de alimentos variando ±30% e preço do leite ±20%; índices de primeira ordem (S1) e total (ST), com 512 amostras e <em>bootstrap</em> de 100 reamostragens.</li>
+<li><strong>Testes pareados:</strong> os mesmos choques de preço são aplicados a todos os cenários; as diferenças são comparadas com Wilcoxon e IC bootstrap de 95%.</li>
+<li><strong>Pairwise de ingredientes:</strong> para pares como milho × sorgo, calcula-se o preço de indiferença do segundo ingrediente.</li>
+</ul>
+<h3 id="3-5-valida-o-no-rufas">3.5 Validação no RuFaS</h3>
+<p>A dieta iso-energética foi convertida em <code>feed_otimizado.json</code> e simulada no RuFaS em modo <code>animals_only</code>, 1 ano (2015), seeds 44, 45 e 46. A basal foi simulada nas mesmas seeds; a NASEM, na seed 44. Foram comparados leite, consumo de MS, metano entérico e intensidade de metano. O modo <code>animals_only</code> isola o efeito nutricional; não inclui dejetos, solo, culturas nem custos completos da fazenda.</p>
+<h2 id="4-resultados">4. Resultados</h2>
+<h3 id="4-1-dieta-tima">4.1 Dieta ótima</h3>
+<p>A dieta iso-energética de mínimo custo é:</p>
+<table>
+<thead><tr>
+<th style="text-align:left">Alimento</th>
+<th style="text-align:left">% MS</th>
+<th style="text-align:left">kg MS/dia</th>
+<th style="text-align:left">R$/kg MS</th>
+<th style="text-align:left">R$/dia</th>
+</tr></thead><tbody>
+<tr>
+<td style="text-align:left">Silagem de milho</td>
+<td style="text-align:left">48,6%</td>
+<td style="text-align:left">12,29</td>
+<td style="text-align:left">R$ 0,62</td>
+<td style="text-align:left">R$ 7,65</td>
+</tr>
+<tr>
+<td style="text-align:left">Sorgo grão</td>
+<td style="text-align:left">23,2%</td>
+<td style="text-align:left">5,88</td>
+<td style="text-align:left">R$ 1,01</td>
+<td style="text-align:left">R$ 5,95</td>
+</tr>
+<tr>
+<td style="text-align:left">Glúten de milho (CGF)</td>
+<td style="text-align:left">12,6%</td>
+<td style="text-align:left">3,18</td>
+<td style="text-align:left">R$ 1,23</td>
+<td style="text-align:left">R$ 3,92</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de soja 48%</td>
+<td style="text-align:left">9,2%</td>
+<td style="text-align:left">2,34</td>
+<td style="text-align:left">R$ 2,26</td>
+<td style="text-align:left">R$ 5,29</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de algodão</td>
+<td style="text-align:left">4,3%</td>
+<td style="text-align:left">1,08</td>
+<td style="text-align:left">R$ 2,00</td>
+<td style="text-align:left">R$ 2,16</td>
+</tr>
+<tr>
+<td style="text-align:left">Calcário calcítico</td>
+<td style="text-align:left">1,2%</td>
+<td style="text-align:left">0,32</td>
+<td style="text-align:left">R$ 0,30</td>
+<td style="text-align:left">R$ 0,09</td>
+</tr>
+<tr>
+<td style="text-align:left">Mistura mineral</td>
+<td style="text-align:left">0,5%</td>
+<td style="text-align:left">0,13</td>
+<td style="text-align:left">R$ 6,00</td>
+<td style="text-align:left">R$ 0,76</td>
+</tr>
+<tr>
+<td style="text-align:left">Ureia pecuária</td>
+<td style="text-align:left">0,4%</td>
+<td style="text-align:left">0,10</td>
+<td style="text-align:left">R$ 2,53</td>
+<td style="text-align:left">R$ 0,25</td>
+</tr>
+</tbody></table>
+<p>A dieta basal, para comparação, é:</p>
+<table>
+<thead><tr>
+<th style="text-align:left">Alimento</th>
+<th style="text-align:left">% MS</th>
+<th style="text-align:left">kg MS/dia</th>
+<th style="text-align:left">R$/kg MS</th>
+<th style="text-align:left">R$/dia</th>
+</tr></thead><tbody>
+<tr>
+<td style="text-align:left">Silagem de milho</td>
+<td style="text-align:left">30,0%</td>
+<td style="text-align:left">7,59</td>
+<td style="text-align:left">R$ 0,62</td>
+<td style="text-align:left">R$ 4,72</td>
+</tr>
+<tr>
+<td style="text-align:left">Milho grão</td>
+<td style="text-align:left">24,0%</td>
+<td style="text-align:left">6,07</td>
+<td style="text-align:left">R$ 1,24</td>
+<td style="text-align:left">R$ 7,55</td>
+</tr>
+<tr>
+<td style="text-align:left">Silagem de leguminosa</td>
+<td style="text-align:left">18,0%</td>
+<td style="text-align:left">4,55</td>
+<td style="text-align:left">R$ 0,70</td>
+<td style="text-align:left">R$ 3,19</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de soja 48%</td>
+<td style="text-align:left">16,0%</td>
+<td style="text-align:left">4,05</td>
+<td style="text-align:left">R$ 2,26</td>
+<td style="text-align:left">R$ 9,16</td>
+</tr>
+<tr>
+<td style="text-align:left">Caroço de algodão</td>
+<td style="text-align:left">9,0%</td>
+<td style="text-align:left">2,28</td>
+<td style="text-align:left">R$ 1,31</td>
+<td style="text-align:left">R$ 2,99</td>
+</tr>
+<tr>
+<td style="text-align:left">Mistura mineral</td>
+<td style="text-align:left">3,0%</td>
+<td style="text-align:left">0,76</td>
+<td style="text-align:left">R$ 6,00</td>
+<td style="text-align:left">R$ 4,55</td>
+</tr>
+</tbody></table>
+<p>Observações:</p>
+<ul>
+<li>A otimização <strong>não usa milho grão</strong> no cenário iso-energético: o sorgo e o glúten de milho entregam TDN e proteína a custo menor por unidade de energia. O milho só entra se seu preço cair (ver seção 5).</li>
+<li>O farelo de soja cai de 16% para cerca de 9%; parte da proteína é suprida por farelo de algodão, glúten de milho e ureia.</li>
+<li>A mistura mineral cai de 3% para 0,5%, com 1,2% de calcário. O fósforo é suprido por farelo de algodão e glúten de milho, que são fontes mais baratas por unidade de P.</li>
+<li>A dieta usa 0,4% de ureia, dentro do limite de 0,6% da MS. Ureia é uma fonte de nitrogênio não proteico; seu uso exige adaptação gradual e mistura uniforme.</li>
+</ul>
+<h3 id="4-2-adequa-o-nutricional">4.2 Adequação nutricional</h3>
+<table>
+<thead><tr>
+<th style="text-align:left">Indicador</th>
+<th style="text-align:left">Basal</th>
+<th style="text-align:left">Iso-energética</th>
+<th style="text-align:left">NASEM</th>
+<th style="text-align:left">Requisito</th>
+</tr></thead><tbody>
+<tr>
+<td style="text-align:left">Proteína bruta (% MS)</td>
+<td style="text-align:left">18,56</td>
+<td style="text-align:left">17,50</td>
+<td style="text-align:left">17,82</td>
+<td style="text-align:left">17,50</td>
+</tr>
+<tr>
+<td style="text-align:left">NDF (% MS)</td>
+<td style="text-align:left">28,72</td>
+<td style="text-align:left">28,00</td>
+<td style="text-align:left">27,50</td>
+<td style="text-align:left">28,00 (iso) / 27,50 (NASEM) – 33,00</td>
+</tr>
+<tr>
+<td style="text-align:left">Amido (% MS)</td>
+<td style="text-align:left">27,47</td>
+<td style="text-align:left">35,00</td>
+<td style="text-align:left">31,53</td>
+<td style="text-align:left">25,00–35,00</td>
+</tr>
+<tr>
+<td style="text-align:left">Extrato etéreo (% MS)</td>
+<td style="text-align:left">4,28</td>
+<td style="text-align:left">3,18</td>
+<td style="text-align:left">4,79</td>
+<td style="text-align:left">3,00–6,00</td>
+</tr>
+<tr>
+<td style="text-align:left">TDN (% MS)</td>
+<td style="text-align:left">72,12</td>
+<td style="text-align:left">72,12</td>
+<td style="text-align:left">76,99</td>
+<td style="text-align:left">72,12 (iso) / 76,99 (NASEM)</td>
+</tr>
+<tr>
+<td style="text-align:left">NEl (Mcal/dia)</td>
+<td style="text-align:left">41,67</td>
+<td style="text-align:left">41,67</td>
+<td style="text-align:left">44,69</td>
+<td style="text-align:left">41,67 (iso = basal) / 44,69 (NASEM)</td>
+</tr>
+<tr>
+<td style="text-align:left">RUP digestível (kg/dia)</td>
+<td style="text-align:left">1,20</td>
+<td style="text-align:left">1,20</td>
+<td style="text-align:left">1,20</td>
+<td style="text-align:left">1,20</td>
+</tr>
+<tr>
+<td style="text-align:left">Ca absorvível (g/dia)</td>
+<td style="text-align:left">147,14</td>
+<td style="text-align:left">144,11</td>
+<td style="text-align:left">109,83</td>
+<td style="text-align:left">66,76</td>
+</tr>
+<tr>
+<td style="text-align:left">P absorvível (g/dia)</td>
+<td style="text-align:left">64,51</td>
+<td style="text-align:left">64,06</td>
+<td style="text-align:left">64,06</td>
+<td style="text-align:left">64,06</td>
+</tr>
+</tbody></table>
+<p>A dieta iso-energética atende às restrições impostas. O TDN é igual ao da basal (72,12%), o que é coerente com a hipótese de manter a produção. A dieta NASEM eleva o TDN para 76,99%, mas custa mais. O cálcio absorvível da basal é cerca de 147 g/dia, muito acima dos 66,8 g/dia exigidos; a dieta otimizada mantém cerca de 144 g/dia, porque o mínimo de cálcio total (0,60%) e a relação Ca:P mínima (1,5) impedem uma redução maior. Se o objetivo fosse reduzir o excesso de cálcio, seria necessário relaxar essas restrições e buscar outra fonte de fósforo; o ganho econômico e ambiental não foi incluído nesta análise.</p>
+<h3 id="4-3-efeito-econ-mico">4.3 Efeito econômico</h3>
+<table>
+<thead><tr>
+<th style="text-align:left">Indicador</th>
+<th style="text-align:left">Basal</th>
+<th style="text-align:left">Iso-energética</th>
+<th style="text-align:left">NASEM</th>
+</tr></thead><tbody>
+<tr>
+<td style="text-align:left">Custo da ração (R$/vaca/dia)</td>
+<td style="text-align:left">R$ 32,17</td>
+<td style="text-align:left">R$ 26,07</td>
+<td style="text-align:left">R$ 31,60</td>
+</tr>
+<tr>
+<td style="text-align:left">Custo por kg de leite (R$/kg)</td>
+<td style="text-align:left">R$ 0,779</td>
+<td style="text-align:left">R$ 0,631</td>
+<td style="text-align:left">R$ 0,765</td>
+</tr>
+<tr>
+<td style="text-align:left">IOFC (R$/vaca/dia)</td>
+<td style="text-align:left">R$ 86,89</td>
+<td style="text-align:left">R$ 92,99</td>
+<td style="text-align:left">R$ 87,45</td>
+</tr>
+<tr>
+<td style="text-align:left">Custo da ração (% da receita)</td>
+<td style="text-align:left">27,0%</td>
+<td style="text-align:left">21,9%</td>
+<td style="text-align:left">26,5%</td>
+</tr>
+<tr>
+<td style="text-align:left">Economia anual (R$)</td>
+<td style="text-align:left">—</td>
+<td style="text-align:left">R$ 197.199</td>
+<td style="text-align:left">R$ 18.206</td>
+</tr>
+</tbody></table>
+<p>O custo da ração da vaca em lactação cai de <strong>R$ 32,17</strong> para <strong>R$ 26,07/dia</strong>, uma economia de <strong>19,0%</strong>. Para 88,6 vacas, isso equivale a <strong>R$ 197.199,00/ano</strong>. A margem sobre o custo da ração sobe de R$ 86,89 para R$ 92,99/vaca/dia (+7,0%). O custo da ração como proporção da receita cai de 27,0% para 21,9%.</p>
+<h3 id="4-4-compara-o-de-cen-rios">4.4 Comparação de cenários</h3>
+<table>
+<thead><tr>
+<th style="text-align:left">Cenário</th>
+<th style="text-align:left">R$/vaca/dia</th>
+<th style="text-align:left">R$/kg leite</th>
+<th style="text-align:left">Economia vs. basal</th>
+<th style="text-align:left">IOFC (R$/vaca/dia)</th>
+<th style="text-align:left">Economia anual (R$)</th>
+</tr></thead><tbody>
+<tr>
+<td style="text-align:left">Basal (RuFaS)</td>
+<td style="text-align:left">R$ 32,17</td>
+<td style="text-align:left">R$ 0,78</td>
+<td style="text-align:left">0,0%</td>
+<td style="text-align:left">R$ 86,89</td>
+<td style="text-align:left">R$ 0</td>
+</tr>
+<tr>
+<td style="text-align:left">Iso-energético (recomendado)</td>
+<td style="text-align:left">R$ 26,07</td>
+<td style="text-align:left">R$ 0,63</td>
+<td style="text-align:left">+19,0%</td>
+<td style="text-align:left">R$ 92,99</td>
+<td style="text-align:left">R$ 197.199</td>
+</tr>
+<tr>
+<td style="text-align:left">Atende NASEM (segurança nutricional)</td>
+<td style="text-align:left">R$ 31,60</td>
+<td style="text-align:left">R$ 0,77</td>
+<td style="text-align:left">+1,8%</td>
+<td style="text-align:left">R$ 87,45</td>
+<td style="text-align:left">R$ 18.206</td>
+</tr>
+<tr>
+<td style="text-align:left">Intermediário (74% TDN)</td>
+<td style="text-align:left">R$ 27,92</td>
+<td style="text-align:left">R$ 0,68</td>
+<td style="text-align:left">+13,2%</td>
+<td style="text-align:left">R$ 91,13</td>
+<td style="text-align:left">R$ 137.173</td>
+</tr>
+<tr>
+<td style="text-align:left">Iso-energético com 15% de milho</td>
+<td style="text-align:left">R$ 26,72</td>
+<td style="text-align:left">R$ 0,65</td>
+<td style="text-align:left">+16,9%</td>
+<td style="text-align:left">R$ 92,34</td>
+<td style="text-align:left">R$ 176.169</td>
+</tr>
+<tr>
+<td style="text-align:left">Iso-energético com 5% de linhaça</td>
+<td style="text-align:left">R$ 27,28</td>
+<td style="text-align:left">R$ 0,66</td>
+<td style="text-align:left">+15,2%</td>
+<td style="text-align:left">R$ 91,77</td>
+<td style="text-align:left">R$ 157.845</td>
+</tr>
+<tr>
+<td style="text-align:left">Iso-energético sem sorgo</td>
+<td style="text-align:left">R$ 27,14</td>
+<td style="text-align:left">R$ 0,66</td>
+<td style="text-align:left">+15,6%</td>
+<td style="text-align:left">R$ 91,91</td>
+<td style="text-align:left">R$ 162.382</td>
+</tr>
+<tr>
+<td style="text-align:left">Máxima economia (sem RUP mínimo)</td>
+<td style="text-align:left">R$ 24,83</td>
+<td style="text-align:left">R$ 0,60</td>
+<td style="text-align:left">+22,8%</td>
+<td style="text-align:left">R$ 94,23</td>
+<td style="text-align:left">R$ 237.224</td>
+</tr>
+</tbody></table>
+<p>O cenário de <strong>máxima economia</strong> chega a R$ 24,83/vaca/dia, mas remove a exigência de RUP e reduz a proteína bruta; é um limite superior teórico, não uma recomendação direta. O cenário <strong>com milho 15%</strong> custa R$ 26,72/vaca/dia (+2,5% vs. iso), mostrando o custo de manter o milho por razões operacionais. O cenário <strong>com linhaça 5%</strong> custa R$ 27,28/vaca/dia; o prêmio sobre a iso é de R$ 1,22/vaca/dia.</p>
+<h3 id="4-5-valida-o-biol-gica-no-rufas">4.5 Validação biológica no RuFaS</h3>
+<table>
+<thead><tr>
+<th style="text-align:left">Cenário</th>
+<th style="text-align:left">Seed</th>
+<th style="text-align:left">Leite (kg/dia)</th>
+<th style="text-align:left">Vacas</th>
+<th style="text-align:left">Leite/vaca (kg/dia)</th>
+<th style="text-align:left">CMS (kg/vaca/dia)</th>
+<th style="text-align:left">CH₄ (kg/dia)</th>
+<th style="text-align:left">CH₄ (g/kg leite)</th>
+</tr></thead><tbody>
+<tr>
+<td style="text-align:left">Basal (RuFaS)</td>
+<td style="text-align:left">44</td>
+<td style="text-align:left">3.657</td>
+<td style="text-align:left">88,56</td>
+<td style="text-align:left">41,29</td>
+<td style="text-align:left">25,39</td>
+<td style="text-align:left">29,98</td>
+<td style="text-align:left">8,20</td>
+</tr>
+<tr>
+<td style="text-align:left">Basal (RuFaS)</td>
+<td style="text-align:left">45</td>
+<td style="text-align:left">3.726</td>
+<td style="text-align:left">89,70</td>
+<td style="text-align:left">41,54</td>
+<td style="text-align:left">25,47</td>
+<td style="text-align:left">30,45</td>
+<td style="text-align:left">8,17</td>
+</tr>
+<tr>
+<td style="text-align:left">Basal (RuFaS)</td>
+<td style="text-align:left">46</td>
+<td style="text-align:left">3.738</td>
+<td style="text-align:left">90,50</td>
+<td style="text-align:left">41,30</td>
+<td style="text-align:left">25,57</td>
+<td style="text-align:left">30,79</td>
+<td style="text-align:left">8,24</td>
+</tr>
+<tr>
+<td style="text-align:left">Iso-energético (recomendado)</td>
+<td style="text-align:left">44</td>
+<td style="text-align:left">3.715</td>
+<td style="text-align:left">89,20</td>
+<td style="text-align:left">41,65</td>
+<td style="text-align:left">25,11</td>
+<td style="text-align:left">27,80</td>
+<td style="text-align:left">7,48</td>
+</tr>
+<tr>
+<td style="text-align:left">Iso-energético (recomendado)</td>
+<td style="text-align:left">45</td>
+<td style="text-align:left">3.710</td>
+<td style="text-align:left">89,65</td>
+<td style="text-align:left">41,38</td>
+<td style="text-align:left">25,11</td>
+<td style="text-align:left">27,64</td>
+<td style="text-align:left">7,45</td>
+</tr>
+<tr>
+<td style="text-align:left">Iso-energético (recomendado)</td>
+<td style="text-align:left">46</td>
+<td style="text-align:left">3.734</td>
+<td style="text-align:left">89,67</td>
+<td style="text-align:left">41,64</td>
+<td style="text-align:left">25,28</td>
+<td style="text-align:left">28,02</td>
+<td style="text-align:left">7,50</td>
+</tr>
+<tr>
+<td style="text-align:left">Atende NASEM (segurança nutricional)</td>
+<td style="text-align:left">44</td>
+<td style="text-align:left">3.697</td>
+<td style="text-align:left">89,38</td>
+<td style="text-align:left">41,37</td>
+<td style="text-align:left">24,71</td>
+<td style="text-align:left">29,84</td>
+<td style="text-align:left">8,07</td>
+</tr>
+</tbody></table>
+<p>A validação é exploratória: 1 ano, sem repetição de curto prazo. Basal e iso-energética foram simuladas com 3 seeds; a NASEM, com 1 seed (44). Os efeitos de metano da iso são consistentes em sinal e magnitude, mas o teste de Wilcoxon com 3 seeds tem baixo poder estatístico (p = 0,25). O leite ficou estável; o CMS caiu levemente; o metano entérico por kg de leite caiu cerca de 9%.</p>
+<figure><img src="fig_validacao.png" alt="Validação no RuFaS"><figcaption>Validação no RuFaS</figcaption></figure>
+<figure><img src="fig_dieta.png" alt="Composição da dieta"><figcaption>Composição da dieta</figcaption></figure>
+<figure><img src="fig_custo.png" alt="Custo por cenário"><figcaption>Custo por cenário</figcaption></figure>
+<figure><img src="fig_fronteira.png" alt="Fronteira custo × energia"><figcaption>Fronteira custo × energia</figcaption></figure>
+<h2 id="5-an-lise-de-sensibilidade">5. Análise de sensibilidade</h2>
+<h3 id="5-1-pre-os-sombra-e-quadro-final-do-simplex">5.1 Preços sombra e quadro final do simplex</h3>
+<p>O quadro final do simplex mostra quais restrições estão ativas e quanto custaria apertá-las ou relaxá-las. A tabela abaixo traz as restrições com folga zero; o preço sombra é o acréscimo de custo (R$/vaca/dia) para <strong>aumentar em uma unidade</strong> a exigência (ou o valor de <strong>relaxar</strong> o limite, no caso de restrições de máximo).</p>
+<table>
+<thead><tr>
+<th style="text-align:left">Restrição ativa</th>
+<th style="text-align:left">Valor atual</th>
+<th style="text-align:left">Mínimo</th>
+<th style="text-align:left">Máximo</th>
+<th style="text-align:left">Preço sombra (R$/dia)</th>
+<th style="text-align:left">Unidade</th>
+</tr></thead><tbody>
+<tr>
+<td style="text-align:left">Proteína não degradável digestível mínima</td>
+<td style="text-align:left">1,20</td>
+<td style="text-align:left">1,13</td>
+<td style="text-align:left">1,20</td>
+<td style="text-align:left">R$ 6,407</td>
+<td style="text-align:left">kg</td>
+</tr>
+<tr>
+<td style="text-align:left">Inclusão mínima — Mistura mineral</td>
+<td style="text-align:left">0,13</td>
+<td style="text-align:left">0,00</td>
+<td style="text-align:left">0,13</td>
+<td style="text-align:left">R$ 6,052</td>
+<td style="text-align:left">kg MS</td>
+</tr>
+<tr>
+<td style="text-align:left">Energia (TDN) mínima</td>
+<td style="text-align:left">72,12</td>
+<td style="text-align:left">71,69</td>
+<td style="text-align:left">72,12</td>
+<td style="text-align:left">R$ 0,625</td>
+<td style="text-align:left">p.p.</td>
+</tr>
+<tr>
+<td style="text-align:left">Proteína bruta mínima</td>
+<td style="text-align:left">17,50</td>
+<td style="text-align:left">16,48</td>
+<td style="text-align:left">17,53</td>
+<td style="text-align:left">R$ 0,150</td>
+<td style="text-align:left">p.p.</td>
+</tr>
+<tr>
+<td style="text-align:left">Amido máximo</td>
+<td style="text-align:left">35,00</td>
+<td style="text-align:left">33,28</td>
+<td style="text-align:left">35,01</td>
+<td style="text-align:left">R$ 0,078</td>
+<td style="text-align:left">p.p.</td>
+</tr>
+<tr>
+<td style="text-align:left">Fósforo absorvível mínimo</td>
+<td style="text-align:left">64,06</td>
+<td style="text-align:left">62,08</td>
+<td style="text-align:left">64,21</td>
+<td style="text-align:left">R$ 0,027</td>
+<td style="text-align:left">g</td>
+</tr>
+</tbody></table>
+<p>Leitura de negócio:</p>
+<ul>
+<li><strong>Energia (TDN):</strong> cada ponto percentual adicional de TDN custa cerca de R$ 0,625/vaca/dia. Isso mostra o custo de buscar uma dieta mais energética.</li>
+<li><strong>Proteína bruta:</strong> cada ponto percentual adicional custa cerca de R$ 0,150/vaca/dia.</li>
+<li><strong>RUP:</strong> cada kg adicional de RUP digestível custa cerca de R$ 6,407/vaca/dia; é a restrição mais cara da formulação.</li>
+<li><strong>Mistura mineral:</strong> o mínimo de 0,5% custa cerca de R$ 6,052/vaca/dia por kg adicional de MS. Isso reforça que a mistura mineral é um item de alto custo unitário.</li>
+</ul>
+<p>As faixas de RHS mostram até onde a base ótima não muda. Por exemplo, a exigência de TDN pode cair de 72,12% até 71,69% sem trocar a base; acima disso, a composição muda.</p>
+<h3 id="5-2-pre-o-de-indiferen-a-dos-alimentos">5.2 Preço de indiferença dos alimentos</h3>
+<p>A tabela abaixo mostra quanto cada alimento <strong>fora da dieta</strong> precisaria cair para entrar na solução ótima:</p>
+<table>
+<thead><tr>
+<th style="text-align:left">Alimento</th>
+<th style="text-align:left">Preço atual (R$/kg MS)</th>
+<th style="text-align:left">Preço de entrada (R$/kg MS)</th>
+<th style="text-align:left">Redução necessária</th>
+</tr></thead><tbody>
+<tr>
+<td style="text-align:left">Farelo de girassol</td>
+<td style="text-align:left">R$ 1,55</td>
+<td style="text-align:left">R$ 1,02</td>
+<td style="text-align:left">-34,5%</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de linhaça</td>
+<td style="text-align:left">R$ 2,79</td>
+<td style="text-align:left">R$ 1,83</td>
+<td style="text-align:left">-34,4%</td>
+</tr>
+<tr>
+<td style="text-align:left">Casca de soja</td>
+<td style="text-align:left">R$ 1,15</td>
+<td style="text-align:left">R$ 0,81</td>
+<td style="text-align:left">-29,3%</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de canola</td>
+<td style="text-align:left">R$ 2,24</td>
+<td style="text-align:left">R$ 1,60</td>
+<td style="text-align:left">-28,8%</td>
+</tr>
+<tr>
+<td style="text-align:left">Soja em grão</td>
+<td style="text-align:left">R$ 2,94</td>
+<td style="text-align:left">R$ 2,30</td>
+<td style="text-align:left">-21,9%</td>
+</tr>
+<tr>
+<td style="text-align:left">Polpa cítrica seca</td>
+<td style="text-align:left">R$ 1,25</td>
+<td style="text-align:left">R$ 1,06</td>
+<td style="text-align:left">-15,0%</td>
+</tr>
+<tr>
+<td style="text-align:left">Milho grão</td>
+<td style="text-align:left">R$ 1,24</td>
+<td style="text-align:left">R$ 1,08</td>
+<td style="text-align:left">-13,2%</td>
+</tr>
+<tr>
+<td style="text-align:left">Melaço de cana</td>
+<td style="text-align:left">R$ 1,22</td>
+<td style="text-align:left">R$ 1,08</td>
+<td style="text-align:left">-11,5%</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de trigo</td>
+<td style="text-align:left">R$ 1,00</td>
+<td style="text-align:left">R$ 0,91</td>
+<td style="text-align:left">-9,3%</td>
+</tr>
+<tr>
+<td style="text-align:left">Caroço de algodão</td>
+<td style="text-align:left">R$ 1,31</td>
+<td style="text-align:left">R$ 1,21</td>
+<td style="text-align:left">-7,8%</td>
+</tr>
+<tr>
+<td style="text-align:left">Silagem de leguminosa</td>
+<td style="text-align:left">R$ 0,70</td>
+<td style="text-align:left">R$ 0,67</td>
+<td style="text-align:left">-3,9%</td>
+</tr>
+</tbody></table>
+<p>E quanto cada alimento <strong>na dieta</strong> pode subir antes de ser substituído:</p>
+<table>
+<thead><tr>
+<th style="text-align:left">Alimento na dieta</th>
+<th style="text-align:left">Preço atual (R$/kg MS)</th>
+<th style="text-align:left">Preço de saída (R$/kg MS)</th>
+<th style="text-align:left">Aumento suportado</th>
+</tr></thead><tbody>
+<tr>
+<td style="text-align:left">Silagem de milho</td>
+<td style="text-align:left">R$ 0,62</td>
+<td style="text-align:left">R$ 0,64</td>
+<td style="text-align:left">+3,0%</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de algodão</td>
+<td style="text-align:left">R$ 2,00</td>
+<td style="text-align:left">R$ 2,07</td>
+<td style="text-align:left">+3,3%</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de soja 48%</td>
+<td style="text-align:left">R$ 2,26</td>
+<td style="text-align:left">R$ 2,41</td>
+<td style="text-align:left">+6,4%</td>
+</tr>
+<tr>
+<td style="text-align:left">Glúten de milho (CGF)</td>
+<td style="text-align:left">R$ 1,23</td>
+<td style="text-align:left">R$ 1,31</td>
+<td style="text-align:left">+6,4%</td>
+</tr>
+<tr>
+<td style="text-align:left">Sorgo grão</td>
+<td style="text-align:left">R$ 1,01</td>
+<td style="text-align:left">R$ 1,18</td>
+<td style="text-align:left">+17,0%</td>
+</tr>
+<tr>
+<td style="text-align:left">Ureia pecuária</td>
+<td style="text-align:left">R$ 2,53</td>
+<td style="text-align:left">R$ 3,37</td>
+<td style="text-align:left">+33,4%</td>
+</tr>
+<tr>
+<td style="text-align:left">Calcário calcítico</td>
+<td style="text-align:left">R$ 0,30</td>
+<td style="text-align:left">R$ 1,34</td>
+<td style="text-align:left">+345,6%</td>
+</tr>
+<tr>
+<td style="text-align:left">Mistura mineral</td>
+<td style="text-align:left">R$ 6,00</td>
+<td style="text-align:left">∞</td>
+<td style="text-align:left">∞</td>
+</tr>
+</tbody></table>
+<p>O caso do <strong>milho</strong> é o mais didático: aos preços de 27/10/2026 (R$ 64,87/saca), ele não entra. O preço de indiferença é cerca de <strong>R$ 1,08/kg MS</strong>, equivalente a uma queda de <strong>13,2%</strong> (cerca de R$ 56/saca). A <strong>linhaça</strong> só entra se cair <strong>34,4%</strong>, para cerca de R$ 1,83/kg MS. O preço de referência é o Indicador CEPEA Campinas; para uma fazenda em Goiás, o preço posto na fazenda pode ser diferente. O critério prático é: <strong>se o milho posto estiver abaixo de ~R$ 56/saca, ele passa a competir</strong>; acima disso, o sorgo tende a dominar.</p>
+<h3 id="5-3-compara-es-pareadas-de-ingredientes">5.3 Comparações pareadas de ingredientes</h3>
+<table>
+<thead><tr>
+<th style="text-align:left">Alimento A</th>
+<th style="text-align:left">Alimento B</th>
+<th style="text-align:left">Preço atual de B (R$/kg MS)</th>
+<th style="text-align:left">Preço de indiferença de B (R$/kg MS)</th>
+<th style="text-align:left">Variação de B</th>
+</tr></thead><tbody>
+<tr>
+<td style="text-align:left">Milho grão</td>
+<td style="text-align:left">Sorgo grão</td>
+<td style="text-align:left">R$ 1,01</td>
+<td style="text-align:left">R$ 1,18</td>
+<td style="text-align:left">+17,0%</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de soja 48%</td>
+<td style="text-align:left">Farelo de algodão</td>
+<td style="text-align:left">R$ 2,00</td>
+<td style="text-align:left">R$ 2,07</td>
+<td style="text-align:left">+3,3%</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de soja 48%</td>
+<td style="text-align:left">Soja em grão</td>
+<td style="text-align:left">R$ 2,94</td>
+<td style="text-align:left">R$ 2,30</td>
+<td style="text-align:left">-21,9%</td>
+</tr>
+<tr>
+<td style="text-align:left">Silagem de milho</td>
+<td style="text-align:left">Silagem de leguminosa</td>
+<td style="text-align:left">R$ 0,70</td>
+<td style="text-align:left">R$ 0,67</td>
+<td style="text-align:left">-3,9%</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de soja 48%</td>
+<td style="text-align:left">Farelo de linhaça</td>
+<td style="text-align:left">R$ 2,79</td>
+<td style="text-align:left">R$ 1,83</td>
+<td style="text-align:left">-34,4%</td>
+</tr>
+<tr>
+<td style="text-align:left">Glúten de milho (CGF)</td>
+<td style="text-align:left">Farelo de trigo</td>
+<td style="text-align:left">R$ 1,00</td>
+<td style="text-align:left">R$ 0,91</td>
+<td style="text-align:left">-9,3%</td>
+</tr>
+</tbody></table>
+<p>Exemplo: o sorgo pode subir cerca de <strong>+17,0%</strong> antes de o milho assumir seu espaço. O farelo de algodão pode subir cerca de <strong>+3,3%</strong> antes de o farelo de soja voltar. O farelo de linhaça precisaria cair <strong>34,4%</strong> para competir com o farelo de soja.</p>
+<h3 id="5-4-sensibilidade-local-tornado">5.4 Sensibilidade local (tornado)</h3>
+<table>
+<thead><tr>
+<th style="text-align:left">Alimento</th>
+<th style="text-align:left">Custo &minus;20%</th>
+<th style="text-align:left">Custo +20%</th>
+<th style="text-align:left">Amplitude (R$/dia)</th>
+</tr></thead><tbody>
+<tr>
+<td style="text-align:left">Silagem de milho</td>
+<td style="text-align:left">-5,9%</td>
+<td style="text-align:left">+5,7%</td>
+<td style="text-align:left">R$ 3,01</td>
+</tr>
+<tr>
+<td style="text-align:left">Sorgo grão</td>
+<td style="text-align:left">-4,7%</td>
+<td style="text-align:left">+4,1%</td>
+<td style="text-align:left">R$ 2,29</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de soja 48%</td>
+<td style="text-align:left">-5,2%</td>
+<td style="text-align:left">+2,2%</td>
+<td style="text-align:left">R$ 1,94</td>
+</tr>
+<tr>
+<td style="text-align:left">Glúten de milho (CGF)</td>
+<td style="text-align:left">-3,2%</td>
+<td style="text-align:left">+1,0%</td>
+<td style="text-align:left">R$ 1,11</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de algodão</td>
+<td style="text-align:left">-3,2%</td>
+<td style="text-align:left">+0,8%</td>
+<td style="text-align:left">R$ 1,04</td>
+</tr>
+<tr>
+<td style="text-align:left">Milho grão</td>
+<td style="text-align:left">-1,5%</td>
+<td style="text-align:left">0,0%</td>
+<td style="text-align:left">R$ 0,40</td>
+</tr>
+<tr>
+<td style="text-align:left">Caroço de algodão</td>
+<td style="text-align:left">-1,4%</td>
+<td style="text-align:left">0,0%</td>
+<td style="text-align:left">R$ 0,37</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de trigo</td>
+<td style="text-align:left">-1,0%</td>
+<td style="text-align:left">0,0%</td>
+<td style="text-align:left">R$ 0,26</td>
+</tr>
+<tr>
+<td style="text-align:left">Soja em grão</td>
+<td style="text-align:left">0,0%</td>
+<td style="text-align:left">0,0%</td>
+<td style="text-align:left">R$ 0,00</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de linhaça</td>
+<td style="text-align:left">0,0%</td>
+<td style="text-align:left">0,0%</td>
+<td style="text-align:left">R$ 0,00</td>
+</tr>
+</tbody></table>
+<p>A silagem de milho é o item de maior impacto: ±20% no seu preço move o custo da ração em cerca de ±5,7%. Sorgo e farelo de soja vêm em seguida. A linhaça tem impacto praticamente nulo porque não está na dieta.</p>
+<figure><img src="fig_tornado.png" alt="Tornado"><figcaption>Tornado</figcaption></figure>
+<h3 id="5-5-sensibilidade-global-sobol">5.5 Sensibilidade global (Sobol)</h3>
+<p><strong>Custo da ração.</strong> Índices de Sobol para os 10 preços de alimentos variando ±30%:</p>
+<table>
+<thead><tr>
+<th style="text-align:left">Alimento</th>
+<th style="text-align:left">S1</th>
+<th style="text-align:left">IC 95%</th>
+<th style="text-align:left">ST</th>
+<th style="text-align:left">IC 95%</th>
+</tr></thead><tbody>
+<tr>
+<td style="text-align:left">Silagem de milho</td>
+<td style="text-align:left">0,381</td>
+<td style="text-align:left">0,068</td>
+<td style="text-align:left">0,392</td>
+<td style="text-align:left">0,052</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de soja 48%</td>
+<td style="text-align:left">0,167</td>
+<td style="text-align:left">0,057</td>
+<td style="text-align:left">0,226</td>
+<td style="text-align:left">0,041</td>
+</tr>
+<tr>
+<td style="text-align:left">Sorgo grão</td>
+<td style="text-align:left">0,174</td>
+<td style="text-align:left">0,043</td>
+<td style="text-align:left">0,189</td>
+<td style="text-align:left">0,030</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de algodão</td>
+<td style="text-align:left">0,091</td>
+<td style="text-align:left">0,046</td>
+<td style="text-align:left">0,129</td>
+<td style="text-align:left">0,025</td>
+</tr>
+<tr>
+<td style="text-align:left">Milho grão</td>
+<td style="text-align:left">0,044</td>
+<td style="text-align:left">0,035</td>
+<td style="text-align:left">0,082</td>
+<td style="text-align:left">0,022</td>
+</tr>
+<tr>
+<td style="text-align:left">Glúten de milho (CGF)</td>
+<td style="text-align:left">0,047</td>
+<td style="text-align:left">0,029</td>
+<td style="text-align:left">0,051</td>
+<td style="text-align:left">0,009</td>
+</tr>
+<tr>
+<td style="text-align:left">Caroço de algodão</td>
+<td style="text-align:left">0,001</td>
+<td style="text-align:left">0,012</td>
+<td style="text-align:left">0,012</td>
+<td style="text-align:left">0,003</td>
+</tr>
+<tr>
+<td style="text-align:left">Soja em grão</td>
+<td style="text-align:left">0,005</td>
+<td style="text-align:left">0,013</td>
+<td style="text-align:left">0,009</td>
+<td style="text-align:left">0,003</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de trigo</td>
+<td style="text-align:left">0,004</td>
+<td style="text-align:left">0,012</td>
+<td style="text-align:left">0,009</td>
+<td style="text-align:left">0,002</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de linhaça</td>
+<td style="text-align:left">0,001</td>
+<td style="text-align:left">0,001</td>
+<td style="text-align:left">0,000</td>
+<td style="text-align:left">0,000</td>
+</tr>
+</tbody></table>
+<p><strong>Margem sobre o custo da ração (IOFC).</strong> Inclui o preço do leite variando ±20%:</p>
+<table>
+<thead><tr>
+<th style="text-align:left">Variável</th>
+<th style="text-align:left">S1</th>
+<th style="text-align:left">IC 95%</th>
+<th style="text-align:left">ST</th>
+<th style="text-align:left">IC 95%</th>
+</tr></thead><tbody>
+<tr>
+<td style="text-align:left">Preço do leite</td>
+<td style="text-align:left">0,984</td>
+<td style="text-align:left">0,100</td>
+<td style="text-align:left">0,982</td>
+<td style="text-align:left">0,092</td>
+</tr>
+<tr>
+<td style="text-align:left">Silagem de milho</td>
+<td style="text-align:left">0,007</td>
+<td style="text-align:left">0,011</td>
+<td style="text-align:left">0,007</td>
+<td style="text-align:left">0,001</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de soja 48%</td>
+<td style="text-align:left">0,002</td>
+<td style="text-align:left">0,008</td>
+<td style="text-align:left">0,004</td>
+<td style="text-align:left">0,001</td>
+</tr>
+<tr>
+<td style="text-align:left">Sorgo grão</td>
+<td style="text-align:left">0,004</td>
+<td style="text-align:left">0,007</td>
+<td style="text-align:left">0,003</td>
+<td style="text-align:left">0,000</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de algodão</td>
+<td style="text-align:left">0,000</td>
+<td style="text-align:left">0,006</td>
+<td style="text-align:left">0,002</td>
+<td style="text-align:left">0,000</td>
+</tr>
+<tr>
+<td style="text-align:left">Milho grão</td>
+<td style="text-align:left">-0,000</td>
+<td style="text-align:left">0,004</td>
+<td style="text-align:left">0,001</td>
+<td style="text-align:left">0,000</td>
+</tr>
+<tr>
+<td style="text-align:left">Glúten de milho (CGF)</td>
+<td style="text-align:left">0,001</td>
+<td style="text-align:left">0,003</td>
+<td style="text-align:left">0,001</td>
+<td style="text-align:left">0,000</td>
+</tr>
+<tr>
+<td style="text-align:left">Caroço de algodão</td>
+<td style="text-align:left">0,001</td>
+<td style="text-align:left">0,002</td>
+<td style="text-align:left">0,000</td>
+<td style="text-align:left">0,000</td>
+</tr>
+<tr>
+<td style="text-align:left">Farelo de trigo</td>
+<td style="text-align:left">-0,000</td>
+<td style="text-align:left">0,002</td>
+<td style="text-align:left">0,000</td>
+<td style="text-align:left">0,000</td>
+</tr>
+<tr>
+<td style="text-align:left">Soja em grão</td>
+<td style="text-align:left">-0,000</td>
+<td style="text-align:left">0,002</td>
+<td style="text-align:left">0,000</td>
+<td style="text-align:left">0,000</td>
+</tr>
+</tbody></table>
+<p>Interpretação:</p>
+<ul>
+<li>No custo, a <strong>silagem de milho</strong> é o fator dominante (ST ≈ 0,39), seguida de <strong>farelo de soja</strong> (ST ≈ 0,23) e <strong>sorgo</strong> (ST ≈ 0,19). A linhaça tem ST ≈ 0,0000, praticamente zero.</li>
+<li>No IOFC, o <strong>preço do leite</strong> explica cerca de 98,2% da variância; os preços dos alimentos somam pouco. A mensagem de gestão é clara: <strong>negociar leite e manter a produção</strong> importa mais do que perseguir o último centavo na ração; a ração é alavanca de custo, mas o preço do leite é a alavanca de receita.</li>
+</ul>
+<figure><img src="fig_sobol_custo.png" alt="Sobol custo"><figcaption>Sobol custo</figcaption></figure>
+<figure><img src="fig_sobol_iofc.png" alt="Sobol IOFC"><figcaption>Sobol IOFC</figcaption></figure>
+<h3 id="5-6-testes-pareados-de-cen-rios">5.6 Testes pareados de cenários</h3>
+<table>
+<thead><tr>
+<th style="text-align:left">Cenário A</th>
+<th style="text-align:left">Cenário B</th>
+<th style="text-align:left">Δ médio (R$/dia)</th>
+<th style="text-align:left">Δ (%)</th>
+<th style="text-align:left">IC 95% inf.</th>
+<th style="text-align:left">IC 95% sup.</th>
+<th style="text-align:left">p (Wilcoxon)</th>
+</tr></thead><tbody>
+<tr>
+<td style="text-align:left">Iso-energético (recomendado)</td>
+<td style="text-align:left">Atende NASEM (segurança nutricional)</td>
+<td style="text-align:left">R$ 5,94</td>
+<td style="text-align:left">+23,3%</td>
+<td style="text-align:left">R$ 5,80</td>
+<td style="text-align:left">R$ 6,08</td>
+<td style="text-align:left">0,0000</td>
+</tr>
+<tr>
+<td style="text-align:left">Iso-energético (recomendado)</td>
+<td style="text-align:left">Intermediário (74% TDN)</td>
+<td style="text-align:left">R$ 1,79</td>
+<td style="text-align:left">+7,0%</td>
+<td style="text-align:left">R$ 1,73</td>
+<td style="text-align:left">R$ 1,86</td>
+<td style="text-align:left">0,0000</td>
+</tr>
+<tr>
+<td style="text-align:left">Iso-energético (recomendado)</td>
+<td style="text-align:left">Iso-energético com 15% de milho</td>
+<td style="text-align:left">R$ 0,73</td>
+<td style="text-align:left">+2,9%</td>
+<td style="text-align:left">R$ 0,65</td>
+<td style="text-align:left">R$ 0,80</td>
+<td style="text-align:left">0,0000</td>
+</tr>
+<tr>
+<td style="text-align:left">Iso-energético (recomendado)</td>
+<td style="text-align:left">Iso-energético com 5% de linhaça</td>
+<td style="text-align:left">R$ 1,30</td>
+<td style="text-align:left">+5,1%</td>
+<td style="text-align:left">R$ 1,25</td>
+<td style="text-align:left">R$ 1,36</td>
+<td style="text-align:left">0,0000</td>
+</tr>
+<tr>
+<td style="text-align:left">Iso-energético (recomendado)</td>
+<td style="text-align:left">Iso-energético sem sorgo</td>
+<td style="text-align:left">R$ 0,98</td>
+<td style="text-align:left">+3,9%</td>
+<td style="text-align:left">R$ 0,89</td>
+<td style="text-align:left">R$ 1,08</td>
+<td style="text-align:left">0,0000</td>
+</tr>
+<tr>
+<td style="text-align:left">Iso-energético (recomendado)</td>
+<td style="text-align:left">Máxima economia (sem RUP mínimo)</td>
+<td style="text-align:left">R$ -1,51</td>
+<td style="text-align:left">-5,9%</td>
+<td style="text-align:left">R$ -1,58</td>
+<td style="text-align:left">R$ -1,44</td>
+<td style="text-align:left">0,0000</td>
+</tr>
+</tbody></table>
+<p>Todos os cenários foram resolvidos sobre a mesma amostra de 256 choques de preço (±20%), o que controla o efeito comum de mercado. As diferenças são estatisticamente significativas. O cenário iso-energético é mais barato que o NASEM, o intermediário, o com milho, o com linhaça e o sem sorgo; o cenário de máxima economia é ainda mais barato, mas com risco nutricional.</p>
+<figure><img src="fig_break_even.png" alt="Preço de indiferença"><figcaption>Preço de indiferença</figcaption></figure>
+<h2 id="6-integra-o-com-o-rufas">6. Integração com o RuFaS</h2>
+<p>O módulo gera os seguintes arquivos para rodar a dieta no RuFaS:</p>
+<table>
+<thead><tr>
+<th style="text-align:left">Arquivo</th>
+<th style="text-align:left">Uso</th>
+</tr></thead><tbody>
+<tr>
+<td style="text-align:left"><code>feed_otimizado.json</code></td>
+<td style="text-align:left">Cópia do <code>feed.json</code> com a ração <code>lac_cow</code> substituída pela dieta ótima e os novos alimentos adicionados ao bloco <code>feeds</code>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>config_otimizado.json</code></td>
+<td style="text-align:left">Configuração de validação (<code>animals_only</code>, 1 ano) ou de simulação completa.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>farm_metadata_otimizado.json</code></td>
+<td style="text-align:left">Metadata da fazenda apontando para o feed e a config otimizados.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>_otimizacao_tasks.json</code></td>
+<td style="text-align:left">Task de execução com seed e prefixo de saída.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>_otimizacao_task_manager_metadata.json</code></td>
+<td style="text-align:left">Wrapper para rodar com <code>main.py -p</code>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>dieta_iso.csv</code>, <code>dieta_nasem.csv</code>, <code>quadro_simplex.csv</code></td>
+<td style="text-align:left">Tabelas de apoio.</td>
+</tr>
+</tbody></table>
+<p>Comando de validação (1 ano, <code>animals_only</code>):</p>
+<pre><code>.\.venv\Scripts\python.exe main.py -p .\GO_campo_dourado\otimizacao_dieta\_otimizacao_task_manager_metadata.json -v errors</code></pre>
+<p>Para simulação completa de 5 anos (<code>full_farm</code>), troque <code>config_otimizado.json</code> pelo <code>config.json</code> original e ajuste <code>simulation_type</code> para <code>full_farm</code>. O CSV de saída pode passar de 500 MB.</p>
+<p><strong>Validação realizada.</strong> A dieta iso-energética foi simulada em 1 ano com seeds 44, 45 e 46. O leite ficou em média em 3.720 kg/dia contra 3.707 kg/dia da basal (+0,3%); o CMS por vaca caiu 1,2% e a intensidade de metano entérico caiu 8,8%. A dieta NASEM (mais energética) também manteve o leite e reduziu levemente a intensidade de metano (-1,6% vs. basal no seed 44), mas custa cerca de R$ 5,53/vaca/dia mais que a iso-energética. O trade-off principal é econômico, não ambiental.</p>
+<p><strong>Ressalva importante.</strong> O RuFaS usa uma curva de lactação e um otimizador não linear internos. A dieta do módulo é imposta como ração definida pelo usuário (<code>user_input</code>), e o RuFaS verifica se ela atende às exigências. Se não atender, o modelo pode reduzir a produção. Nesta validação, o leite ficou estável, o que é um bom sinal, mas não prova que a dieta funcionará em qualquer fazenda.</p>
+<h2 id="7-limita-es-e-riscos">7. Limitações e riscos</h2>
+<ol>
+<li><strong>Linearização.</strong> O modelo NASEM é não linear: a energia metabolizável depende do consumo, do amido, do metano e do nitrogênio; a proteína metabolizável depende das frações de nitrogênio e da digestibilidade. O PL usa TDN, PB e RUP digestível como proxies lineares. A validação no RuFaS é a ponte entre a aproximação e o modelo completo.</li>
+<li><strong>Preços.</strong> Os preços são uma fotografia de 27/10/2026. Subprodutos como sorgo, glúten de milho, farelo de algodão e linhaça usam cotação regional ou estimativa; a incerteza é maior que a do milho e da soja. O preço do leite é de ago/2026 e varia por qualidade, volume e contrato.</li>
+<li><strong>Mistura mineral.</strong> A dieta basal usa 3% de mistura mineral, o que pode não refletir a prática da fazenda. Cerca de 61% da economia vem da troca dessa fonte mineral; se a fazenda já usa uma mistura mais barata ou parcialmente produzida na fazenda, a economia será menor. O cenário “basal ajustado” (1% mineral + 1% calcário) custa R$ 29,52/vaca/dia, mas fica deficiente em P absorvível; não é um comparativo válido sem uma fonte de fósforo.</li>
+<li><strong>Escopo.</strong> O custo é o da ração da vaca em lactação. Não inclui bezerras, novilhas, vacas secas, armazenamento, perdas, mistura, mão de obra, energia, capital ou custos fixos.</li>
+<li><strong>Validação.</strong> A validação é de 1 ano; basal e iso-energética com 3 seeds e a NASEM com 1 seed, em modo <code>animals_only</code>. O rebanho é sintético e o clima/solo são aproximações. Não houve acompanhamento de escore corporal, saúde ruminal, consumo individual ou qualidade do leite.</li>
+<li><strong>Metano.</strong> A dieta iso-energética reduziu o metano entérico por kg de leite na validação, mas o efeito no CO₂e total da fazenda depende de dejetos, solo, culturas e emissões de ração comprada. O modo <code>full_farm</code> é necessário para uma conclusão ambiental.</li>
+<li><strong>Ureia.</strong> A dieta usa 0,4% de ureia. Ureia mal misturada ou em excesso pode causar toxicidade; a adaptação deve ser gradual e acompanhada por nutricionista.</li>
+<li><strong>Câmbio e inflação.</strong> A conversão para US$ usa R$ 5,35/US$. Variações cambiais mudam a comparação com o RuFaS, mas não a otimização em reais.</li>
+</ol>
+<h2 id="8-conclus-es-e-recomenda-es">8. Conclusões e recomendações</h2>
+<ol>
+<li><strong>A dieta iso-energética é a recomendação econômica.</strong> Ela mantém o aporte de energia, proteína e fibra da dieta basal, custa R$ 26,07/vaca/dia contra R$ 32,17/vaca/dia da basal (19,0% de economia) e foi validada no RuFaS com leite estável. Para 88,6 vacas, a economia potencial é de R$ 197.199,00/ano.</li>
+<li><strong>A dieta NASEM é a opção conservadora.</strong> Atende à exigência formal de energia (TDN 76,99%) e custa R$ 31,60/vaca/dia, ainda 1,8% abaixo da basal. É indicada se a fazenda prefere segurança nutricional a economia máxima.</li>
+<li><strong>O milho não é competitivo aos preços atuais.</strong> Ele só entra se cair cerca de 13% (para ~R$ 56/saca). O sorgo é a principal fonte de energia da dieta ótima, seguido de glúten de milho. A fazenda deve monitorar a relação de preços milho/sorgo e contratar sorgo com antecedência.</li>
+<li><strong>A linhaça não se paga pelo valor nutricional.</strong> Ela só entra se cair cerca de 34%. Se a fazenda quiser leite com apelo funcional (ômega-3), o prêmio é de cerca de R$ 1,22/vaca/dia; é uma decisão de mercado, não de mínimo custo.</li>
+<li><strong>O maior risco é o preço da silagem de milho e do farelo de soja.</strong> A silagem de milho é o principal driver de custo (Sobol ST ≈ 0,39); o farelo de soja vem em seguida. Contratos de silagem e de farelo têm mais alavancagem que a busca por ingredientes exóticos.</li>
+<li><strong>O preço do leite domina a margem.</strong> No IOFC, o preço do leite explica cerca de 98,2% da variância. A gestão de receita (qualidade, volume, contrato) tem mais impacto que a otimização fina da ração.</li>
+<li><strong>Próximos passos:</strong> (a) rodar <code>full_farm</code> por 5 anos com a dieta iso e a basal; (b) validar com a dieta real e os preços praticados pela fazenda; (c) incluir escore corporal e saúde ruminal; (d) testar uma restrição de metano ou um preço de carbono; (e) atualizar os preços mensalmente e reotimizar; (f) negociar sorgo, glúten de milho e farelo de algodão, que são os pilares da dieta de mínimo custo.</li>
+</ol>
+<h2 id="8-1-entreg-veis">8.1 Entregáveis</h2>
+<table>
+<thead><tr>
+<th style="text-align:left">Entregável</th>
+<th style="text-align:left">Onde está</th>
+</tr></thead><tbody>
+<tr>
+<td style="text-align:left">Módulo de otimização (PL, duals, quadro simplex, Sobol, testes pareados)</td>
+<td style="text-align:left"><code>diet_optimization/</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Dieta integrada ao RuFaS</td>
+<td style="text-align:left"><code>GO_campo_dourado/otimizacao_dieta/feed_otimizado.json</code> + <code>farm_metadata_otimizado.json</code> + <code>_otimizacao_task_manager_metadata.json</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Avaliação do efeito econômico</td>
+<td style="text-align:left">Seção 4.3 e <code>cenarios.csv</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Análise de sensibilidade local</td>
+<td style="text-align:left">Seção 5.1–5.4, <code>faixas_rhs.csv</code>, <code>faixas_preco.csv</code>, <code>break_even.csv</code>, <code>sensibilidade_oat.csv</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Análise de sensibilidade global (Sobol)</td>
+<td style="text-align:left">Seção 5.5, <code>sobol_custo.csv</code>, <code>sobol_iofc.csv</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Testes pareados</td>
+<td style="text-align:left">Seção 5.6, <code>pairwise_cenarios.csv</code>, <code>pairwise_break_even.csv</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Validação biológica no RuFaS</td>
+<td style="text-align:left">Seção 4.5 e 6, <code>validacao_resumo.csv</code>, <code>validacao_testes.csv</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Relatório</td>
+<td style="text-align:left"><code>RELATORIO_OTIMIZACAO_DIETA.md</code>, <code>.html</code>, <code>.pdf</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Testes automatizados</td>
+<td style="text-align:left"><code>tests/test_diet_optimization/</code> (14 testes)</td>
+</tr>
+</tbody></table>
+<h2 id="9-refer-ncias">9. Referências</h2>
+<ul>
+<li>CEPEA/ESALQ/USP. <strong>Indicador do milho ESALQ/BM&amp;FBovespa</strong> — 27/10/2026: R$ 64,87/saca de 60 kg. https://www.cepea.org.br/br/indicador/milho.aspx</li>
+<li>CEPEA/ESALQ/USP. <strong>Indicador da soja CEPEA/ESALQ — Paranaguá</strong> — 27/10/2026: R$ 157,41/saca. https://www.cepea.org.br/br/indicador/soja.aspx</li>
+<li>CEPEA/ESALQ/USP. <strong>Leite ao produtor — Goiás</strong> — ago/2026: R$ 2,9692/L. https://www.cepea.org.br/br/indicador/leite.aspx</li>
+<li>Agrolink. <strong>Farelo de soja — Anápolis/GO</strong> — 27/10/2026: R$ 2.020/t. https://www.agrolink.com.br/cotacoes/diversos/farelo-de-soja</li>
+<li>Notícias Agrícolas. <strong>Farelo de soja — cotações</strong> — 27/10/2026. https://www.noticiasagricolas.com.br/cotacoes/soja/farelo-de-soja</li>
+<li>Scot Consultoria / Notícias Agrícolas. <strong>Caroço de algodão e silagem de milho</strong> — out/2026 (cotações regionais).</li>
+<li>National Academies of Sciences, Engineering, and Medicine. <strong>Nutrient Requirements of Dairy Cattle</strong>, 8th ed., 2021.</li>
+<li>National Research Council. <strong>Nutrient Requirements of Dairy Cattle</strong>, 7th ed., 2001.</li>
+<li>Ruminant Farm Systems (RuFaS). <strong>Documentação e código-fonte</strong>, versão 1.0.5. https://github.com/RuminantFarmSystems/RuFaS</li>
+<li>Herman, J., Usher, W. <strong>SALib: An open-source Python library for Sensitivity Analysis</strong>. Journal of Open Source Software, 2017.</li>
+<li>Virtanen, P. et al. <strong>SciPy 1.0: fundamental algorithms for scientific computing in Python</strong>. Nature Methods, 2020.</li>
+</ul>
+<h2 id="10-ap-ndice-leitura-do-quadro-final-do-simplex">10. Apêndice — leitura do quadro final do simplex</h2>
+<p>O quadro final completo está em <code>quadro_simplex.csv</code>. A linha <code>custo_reduzido</code> contém, para cada variável, quanto o custo aumentaria se ela fosse forçada a entrar na base. Para as variáveis fora da dieta, esse valor é o <strong>custo reduzido</strong>: quanto o preço do alimento precisa cair para que ele passe a ser competitivo.</p>
+<p>As colunas de folga (<code>s_*</code>) mostram o preço sombra das restrições. Quando a folga é zero, a restrição está ativa e o preço sombra é positivo (ou negativo, dependendo do sentido). Quando a folga é positiva, a restrição não está limitando e o preço sombra é zero.</p>
+<p><strong>Como ler o quadro na perspectiva do negócio:</strong></p>
+<ol>
+<li><strong>Coluna RHS:</strong> quantidade de cada variável básica na solução. As variáveis básicas são os alimentos que entram na dieta e as folgas das restrições não ativas.</li>
+<li><strong>Linha de custo reduzido:</strong> para um alimento fora da base, é o desconto de preço necessário para ele entrar. Para uma folga, é o preço sombra da restrição correspondente.</li>
+<li><strong>Base ótima:</strong> enquanto os preços e as exigências ficarem dentro das faixas calculadas, a composição da dieta não muda; só o custo muda. Isso dá à fazenda uma “zona de segurança” para negociar sem refazer a fórmula.</li>
+<li><strong>Preço sombra da energia:</strong> se o nutricionista quiser subir 1 ponto de TDN, o custo sobe aproximadamente o valor indicado. Se o ganho de leite esperado não cobrir esse custo, não vale apertar a energia.</li>
+<li><strong>Preço sombra da RUP:</strong> é a restrição mais cara; aumentar a proteína não degradável exige farelo de soja ou outra fonte protegida, e o custo marginal é alto.</li>
+</ol>
+<p><strong>Observação sobre a igualdade de MS.</strong> O dual da igualdade <code>soma x = DMI</code> não tem leitura econômica simples neste problema, porque o consumo é fixo e as exigências são proporcionais à MS. Por isso, a análise econômica foca nos preços sombra das restrições nutricionais e de inclusão, que são os instrumentos acionáveis pelo nutricionista.</p>
+<h3 id="reprodu-o">Reprodução</h3>
+<pre><code># Rodar toda a análise (sem validação no RuFaS)
+.\.venv\Scripts\python.exe -m diet_optimization --output-dir GO_campo_dourado/otimizacao_dieta
+
+# Rodar com Sobol reduzido (mais rápido)
+.\.venv\Scripts\python.exe -m diet_optimization --fast
+
+# Atualizar o resumo das validações já executadas
+.\.venv\Scripts\python.exe -m diet_optimization.validation --csv-dir output/CSVs</code></pre>
+</main>
+</body>
+</html>

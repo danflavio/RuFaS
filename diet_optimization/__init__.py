@@ -15,7 +15,7 @@ O pacote é um complemento ao RuFaS: não altera o núcleo do modelo e conversa 
 ele pelos arquivos de entrada e saída.
 """
 
-from .config import load_config, load_baseline, load_scenarios
+from .config import load_config, load_baseline, load_scenarios, scenario_items
 from .feed_library import Feed, load_feeds
 from .requirements import Requirements, build_requirements, compute_nasem_requirements
 from .lp_model import DietLP, DietSolution
@@ -31,4 +31,5 @@ __all__ = [
     "load_config",
     "load_baseline",
     "load_scenarios",
+    "scenario_items",
 ]

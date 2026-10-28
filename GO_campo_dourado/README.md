@@ -122,3 +122,24 @@ o estado e as pendências estão em `PENDENCIAS.md`.
 | `INFOGRAFICO_RESULTADOS.pdf` / `.png` | Infográfico com os resultados. |
 | `PENDENCIAS.md` | Estado da execução e o que falta validar. |
 | `README.md` | Este arquivo. |
+| `otimizacao_dieta/` | Módulo de otimização da dieta, relatório, gráficos e arquivos de integração. |
+
+---
+
+## Otimização da dieta (módulo novo)
+
+A pasta `otimizacao_dieta/` contém o relatório, os gráficos e os arquivos de
+integração gerados pelo módulo `diet_optimization/`, que formula a dieta da vaca
+em lactação ao mínimo custo, com análise econômica e de sensibilidade. Para
+rodar:
+
+```powershell
+.\.venv\Scripts\python.exe -m diet_optimization
+```
+
+O relatório completo está em `otimizacao_dieta/RELATORIO_OTIMIZACAO_DIETA.md`
+(versões para leitura: `RELATORIO_OTIMIZACAO_DIETA.html` e `.pdf`).
+A dieta recomendada foi validada no RuFaS (`animals_only`, 1 ano) e o
+`feed_otimizado.json` gerado pode ser usado no lugar do `feed.json` para
+reproduzir a simulação. Veja `diet_optimization/README.md` para o método,
+fontes de preço e limitações.

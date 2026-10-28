@@ -1,0 +1,7 @@
+﻿rufas_id,alimento,grupo,kg_ms_dia,pct_ms,preco_brl_kg_ms,custo_brl_dia,min_pct,max_pct,custo_reduzido,cenario
+51,Silagem de milho,Forragem,7.59,30.0,0.6221543508384945,4.722151522864173,15.0,50.0,,baseline
+44,Milho grão,Energia,6.072,24.0,1.2440885084055369,7.55410542303842,0.0,35.0,,baseline
+110,Silagem de leguminosa,Forragem,4.554,18.0,0.699577921320803,3.185877853694937,0.0,30.0,,baseline
+167,Farelo de soja 48%,Proteína,4.048,16.0,2.2628742984529557,9.160115160137565,0.0,25.0,,baseline
+58,Caroço de algodão,Proteína/gordura,2.277,9.0,1.3134276082483254,2.990674663981437,0.0,12.0,,baseline
+301,Mistura mineral,Mineral,0.759,3.0,6.0,4.554,0.5,2.5,,baseline

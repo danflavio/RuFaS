@@ -1,0 +1,35 @@
+﻿restricao,unidade,valor_atual,minimo,maximo,preco_sombra_brl_dia,folga_atual
+NDF mínimo,p.p.,28.0,-inf,28.00431323543703,4.664419146544383e-16,0.004313235437046912
+NDF máximo,p.p.,33.0,28.004313235437078,inf,0.0,4.9956867645629535
+NDF de forragem mínimo,p.p.,18.0,-inf,19.881008935940912,0.0,1.8810089359409794
+Proteína bruta mínima,p.p.,17.5,16.480903691245686,17.526660807343646,0.14996117132315415,2.246775449043795e-15
+Amido mínimo,p.p.,25.0,-inf,35.0,0.0,10.0
+Amido máximo,p.p.,35.0,33.28410042432281,35.00992614577093,0.07776369924519375,0.0
+Extrato etéreo mínimo,p.p.,3.0000000000000004,-inf,3.1784524276733257,0.0,0.178452427673323
+Extrato etéreo máximo,p.p.,6.000000000000001,3.1784524276733284,inf,0.0,2.8215475723266774
+Energia (TDN) mínima,p.p.,72.12,71.68774925004128,72.12391224392465,0.624721032993843,0.0
+Cálcio total mínimo,p.p.,0.6,-inf,0.7073904466689117,0.0,0.10739044666891362
+Cálcio absorvível mínimo,g,66.7588287944515,-inf,144.1074370847805,0.0,77.34860829032816
+Fósforo absorvível mínimo,g,64.06214531129118,62.08479728807441,64.21203260469953,0.02733206812782741,-1.3877787807814457e-14
+Proteína não degradável digestível mínima,kg,1.2,1.1346722904885405,1.2006967083022595,6.407081143935656,0.0
+Inclusão mínima — Silagem de milho,kg MS,3.795,-inf,12.288718235061566,0.0,8.493718235061612
+Inclusão máxima — Silagem de milho,kg MS,12.65,12.28871823506151,inf,0.0,0.36128176493838815
+Inclusão máxima — Silagem de leguminosa,kg MS,7.59,0.0,inf,0.0,7.59
+Inclusão máxima — Milho grão,kg MS,8.855,0.0,inf,0.0,8.855
+Inclusão máxima — Sorgo grão,kg MS,6.325,5.8795943618196596,inf,0.0,0.44540563818033174
+Inclusão máxima — Farelo de soja 48%,kg MS,6.325,2.337208847311129,inf,0.0,3.9877911526888483
+Inclusão máxima — Caroço de algodão,kg MS,3.036,0.0,inf,0.0,3.036
+Inclusão máxima — Soja em grão,kg MS,2.5300000000000002,0.0,inf,0.0,2.5300000000000002
+Inclusão máxima — Farelo de linhaça,kg MS,2.5300000000000002,0.0,inf,0.0,2.5300000000000002
+Inclusão máxima — Glúten de milho (CGF),kg MS,3.795,3.1755841956965156,inf,0.0,0.619415804303526
+Inclusão máxima — Farelo de trigo,kg MS,3.036,0.0,inf,0.0,3.036
+Inclusão máxima — Polpa cítrica seca,kg MS,2.5300000000000002,0.0,inf,0.0,2.5300000000000002
+Inclusão máxima — Farelo de girassol,kg MS,3.036,0.0,inf,0.0,3.036
+Inclusão máxima — Farelo de canola,kg MS,3.036,0.0,inf,0.0,3.036
+Inclusão máxima — Farelo de algodão,kg MS,3.036,1.0788330937369657,inf,0.0,1.957166906263043
+Inclusão máxima — Casca de soja,kg MS,3.036,0.0,inf,0.0,3.036
+Inclusão máxima — Melaço de cana,kg MS,1.012,0.0,inf,0.0,1.012
+Inclusão máxima — Ureia pecuária,kg MS,0.15180000000000002,0.09820442192052825,inf,0.0,0.053595578079470615
+Inclusão máxima — Calcário calcítico,kg MS,0.506,0.31535684445361034,inf,-8.030355205811882e-17,0.19064315554638867
+Inclusão mínima — Mistura mineral,kg MS,0.1265,-0.0,0.127998270023318,6.052379356339262,0.0
+Inclusão máxima — Mistura mineral,kg MS,0.6325000000000001,0.12650000000000006,inf,0.0,0.506

@@ -51,6 +51,13 @@
 5. **Não usar o carbono do solo:** caiu ~44% em 5 anos (156→86 t C/ha e 146→82 t C/ha), resultado implausível.
 6. **Completar emissões de ração:** faltam os feeds 216 (calf starter) e 301 (mineral mix).
 7. **Verificar o storage 108** (alfalfa hay) não mapeado para nenhum alimento disponível.
+8. **`feed_goias.json` não está ligado ao `farm_metadata.json`.** A simulação de
+   referência usa `feed.json` (biblioteca do Nordeste dos EUA, com preços em US$).
+   O arquivo `feed_goias.json` tem uma dieta e preços diferentes, mas não é
+   referenciado por nenhum metadata. O módulo `diet_optimization/` usa o
+   `feed.json` como dieta basal e aplica preços de Goiás na otimização; se a
+   intenção era rodar o RuFaS com `feed_goias.json`, é preciso trocar o caminho
+   em `farm_metadata.json` e validar a dieta no simulador.
 
 ## Comando para rerodar
 

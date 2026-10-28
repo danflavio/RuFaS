@@ -173,9 +173,15 @@ def load_feeds(config: dict[str, Any]) -> list[Feed]:
         else:
             price_brl_kg_dm = price_brl_kg
 
+        candidate_name = candidate.get("feed")
+        display_name = (
+            str(candidate_name).strip()
+            if candidate_name is not None and pd.notna(candidate_name) and str(candidate_name).strip()
+            else str(row["Name"]).strip()
+        )
         feed = Feed(
             rufas_id=int(rufas_id),
-            name=str(row["Name"]).strip(),
+            name=display_name,
             group=str(candidate["group"]),
             feed_type=str(row["feed_type"]).strip(),
             dm_pct=dm_pct,

@@ -22,5 +22,5 @@
     "301": 1.0,
     "234": 1.0
   },
-  "note": "A dieta 'adjusted' corrige a mistura mineral de 3% para 1% + 1% de calcário, mantendo o mesmo perfil de ingredientes. Serve para separar o efeito da formulação do efeito da correção mineral."
+  "note": "A dieta 'adjusted' é apenas um diagnóstico: troca 2 p.p. de mistura mineral por calcário e 1 p.p. de milho. Ela reduz o custo, mas fica deficiente em fósforo absorvível (~54 g/d vs. 64 g/d). Portanto, não deve ser usada como comparativo principal; o cenário otimizado supre o P com farelo de algodão e glúten de milho."
 }

@@ -1,0 +1,11 @@
+{
+  "files": {
+    "tasks": {
+      "title": "Task manager data",
+      "description": "Validação da dieta otimizada",
+      "path": "GO_campo_dourado/_validacao_nasem_tasks.json",
+      "type": "json",
+      "properties": "tasks_properties"
+    }
+  }
+}

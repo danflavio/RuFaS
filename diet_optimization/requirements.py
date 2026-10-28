@@ -85,9 +85,7 @@ def compute_nasem_requirements(cow: dict[str, Any]) -> NasemRequirements:
         distance=float(cow["distance_m"]),
         lactating=bool(cow["lactating"]),
         ndf_percentage=float(cow["ndf_percentage"]),
-        process_based_phosphorus_requirement=float(
-            cow.get("process_based_phosphorus_requirement", 0.0)
-        ),
+        process_based_phosphorus_requirement=float(cow.get("process_based_phosphorus_requirement", 0.0)),
     )
     return NasemRequirements(
         maintenance_energy_mcal=result.maintenance_energy,
@@ -120,20 +118,18 @@ def build_requirements(config: dict[str, Any]) -> Requirements:
     nasem = compute_nasem_requirements(cow)
 
     dmi = float(practical.get("dmi_kg") or nasem.dry_matter_kg)
+    # MP (g/d) -> CP (g/d) -> % da MS: dividir por (DMI kg * 1000 g/kg) e
+    # multiplicar por 100 para obter percentual.
     cp_from_mp = (
         nasem.metabolizable_protein_g
         / float(practical["cp_mp_conversion"])
-        / dmi
+        / (dmi * 1000.0)
         * 100.0
         * float(practical["cp_safety_factor"])
     )
     cp_min = max(float(practical["cp_min_pct"]), cp_from_mp)
     tdn_override = practical.get("tdn_min_pct")
-    tdn_min = (
-        float(tdn_override)
-        if tdn_override is not None
-        else tdn_min_pct_from_energy(nasem.net_energy_mcal, dmi)
-    )
+    tdn_min = float(tdn_override) if tdn_override is not None else tdn_min_pct_from_energy(nasem.net_energy_mcal, dmi)
 
     return Requirements(
         dmi_kg=dmi,
@@ -158,9 +154,7 @@ def build_requirements(config: dict[str, Any]) -> Requirements:
     )
 
 
-def apply_requirement_overrides(
-    requirements: Requirements, overrides: dict[str, Any] | None
-) -> Requirements:
+def apply_requirement_overrides(requirements: Requirements, overrides: dict[str, Any] | None) -> Requirements:
     """Aplica overrides de cenário sem alterar o objeto original."""
     if not overrides:
         return requirements

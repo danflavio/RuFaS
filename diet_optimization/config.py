@@ -47,3 +47,12 @@ def load_scenarios(path: str | Path | None = None) -> dict[str, Any]:
     scenarios = _read_json(scenarios_path)
     scenarios["_path"] = str(scenarios_path)
     return scenarios
+
+
+def scenario_items(scenarios: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    """Retorna apenas os cenários válidos (ignora metadados com '_')."""
+    return {
+        key: value
+        for key, value in scenarios.items()
+        if not key.startswith("_") and isinstance(value, dict) and "overrides" in value
+    }

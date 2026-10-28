@@ -55,7 +55,10 @@ Repository = "https://github.com/RuminantFarmSystems/RuFaS"
 Documentation = "https://ruminantfarmsystems.github.io/RuFaS/"
 
 [tool.setuptools]
-packages = ["RUFAS"]
+packages = ["RUFAS", "diet_optimization"]
+
+[tool.setuptools.package-data]
+diet_optimization = ["data/*.json", "data/*.csv"]
 
 [tool.black]
 target-version = ["py312"]

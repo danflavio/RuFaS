@@ -15,14 +15,15 @@
   },
   "nasem": {
     "label": "Atende NASEM (segurança nutricional)",
-    "description": "Exige a energia líquida calculada pelo NASEM para 41,3 kg de leite/dia. Corrige o déficit teórico da dieta basal, com economia menor.",
+    "description": "Exige a energia líquida calculada pelo NASEM para 41,3 kg de leite/dia (TDN 76,99% na MS). Corrige o déficit teórico da dieta basal, com economia menor. Para acomodar a alta densidade energética, o NDF mínimo cai para 27,5%, o Ca total para 0,56% e a relação Ca:P para 1,2; todos ainda em faixas usuais.",
     "overrides": {
       "requirements": {
-        "tdn_min_pct": null,
+        "tdn_min_pct": 76.99,
         "cp_min_pct": 17.5,
         "rup_min_kg": 1.20,
-        "ca_total_min_pct": 0.60,
-        "ca_p_min": 1.5,
+        "ndf_min_pct": 27.5,
+        "ca_total_min_pct": 0.56,
+        "ca_p_min": 1.2,
         "ca_p_max": 2.5
       }
     }
